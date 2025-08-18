@@ -1,0 +1,94 @@
+const String kSignIn = "Sign in";
+const String kEmail = "Email";
+const String kEmailHint = "Enter your email address";
+const String kPassword = "Password";
+const String kPasswordHint = "Enter your Password";
+const String kForgotPassword = "Forgot Password ?";
+const String kForgotPasswordDetail = "Enter your email address and we’ll send you a link to reset your password.";
+const String kLogin = "Login";
+const String kSendCode = "Send Code";
+const String kEnterOTPCode = "Enter OTP Code";
+const String kEnterOTPCodeDetail = "We’ve sent a 6-digit code to your email.";
+const String kResendCode = "Resend code in 15 Sec.";
+const String kVerifyOTP = "Verify OTP";
+const String kCreateNewPassword = "Create New Password";
+const String kCreateNewPasswordDetail = "Set a strong new password to secure your account.";
+const String kNewPassword = "New Password";
+const String kNewPasswordHint = "Enter your New Password";
+const String kConfirmNewPassword = "Confirm New Password";
+const String kConfirmNewPasswordHint = "Confirm your New Password";
+const String kUpdatePassword = "Update Password";
+const String kPasswordResetSuccessfully = "Password Reset Successfully!";
+const String kPasswordResetSuccessfullyDetail = "Your new password has been saved. You can now log in with your updated credentials.";
+const String kGoHome = "Go to home";
+const String kDashboard = "Dashboard";
+const String kStoreManagement = "Store Management";
+const String kUserManagement = "User Management";
+const String kRFQ = "RFQ’s";
+const String kClicksTracking = "Clicks Tracking";
+const String kPendingStoreRequests = "Pending Store Requests";
+const String kPendingRFQs = "Pending RFQs";
+const String kAddStore = "Add Store";
+const String kTotalUsers = "Total Users";
+const String kTotalRFQs = "Total RFQs";
+const String kTotalDownloads = "Total Downloads";
+const String kPendingStores = "Pending Stores";
+const String kLiveStores = "Live Stores";
+const String kLOGOUT = "LOGOUT";
+const String kRegisteredStores = "Registered Stores";
+const String kExportAsExcel = "Export as Excel";
+const String kFilterQuickSearch = "Filter Quick Search";
+const String kBack = "Back";
+const String kNext = "Next";
+const String kActive = "Active";
+const String kPending = "Pending";
+const String kRestricted = "Restricted";
+const String kStoreID = "Store ID";
+const String kRfqID = "RFQ ID";
+const String kCompanyName = "Company name";
+const String kRegisteredOn = "Registered On";
+const String kViews = "Views";
+const String kCompanyNumber = "Company Number";
+const String kLocation = "Location";
+const String kSpecialty = "Specialty";
+const String kStatus = "Status";
+const String kAction = "Action";
+const String kConfirmDelete = "Confirm Delete";
+const String kConfirmDeleteDetail = "Are you sure to Delete this?";
+const String kSubmittedRFQs = "Submitted RFQ’s";
+const String kSubmittedBy = "Submitted By";
+const String kCategory = "Category";
+const String kCity = "City";
+const String kSubmittedOn = "Submitted On";
+const String kResponses = "Responses";
+const String kPublished = "Published";
+const String kExpired = "Expired";
+const String kRegisteredUsers = "Registered Users";
+const String kUserID = "User ID";
+const String kUserName = "User Name";
+const String kPhoneNo = "Phone No";
+const String kOnlineUsers = "Online Users";
+const String kRFQIssuerTracking = "RFQ Issuer’s Click Tracking";
+const String kRFQIssuers = "RFQ Issuers";
+const String kClickedBy = "Clicked By";
+const String kClicks = "Clicks";
+const String kStoreClicksTracking = "Store Clicks Tracking";
+const String kStoreOwner = "Store Owner";
+const String kClickedBy1 = "Clicked By (/)";
+
+
+
+
+
+
+
+//Routs
+const String kAuthScreenRoute = "/AuthScreenRoute";
+const String kSendOtpScreenRoute = "/SendOtpScreenRoute";
+const String kVerifyOtpScreenRoute = "/VerifyOtpScreenRoute";
+const String kSetNewPassScreenRoute = "/SetNewPassScreenRoute";
+const String kDashboardScreenRoute = "/DashboardScreenRoute";
+const String kStoreManagementScreenRoute = "/StoreManagementScreenRoute";
+const String kRfqScreenRoute = "/RfqScreenRoute";
+const String kUserManagementScreenRoute = "/UserManagementScreenRoute";
+const String kClickTrackingScreenRoute = "/ClickTrackingScreenRoute";
