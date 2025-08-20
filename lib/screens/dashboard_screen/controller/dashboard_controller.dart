@@ -31,6 +31,7 @@ class DashboardController extends GetxController {
       "speciality": "Both",
     },
   ];
+  var selectedCountry = ''.obs;
 
   final List<Map<String, dynamic>> rfqs = [
     {

@@ -213,6 +213,7 @@ class StoreController extends GetxController {
       "status": "Active",
     },
   ];
+  var selectedStatus = ''.obs;
 
   var currentPage2 = 1.obs;
   final int itemsPerPage = 4;

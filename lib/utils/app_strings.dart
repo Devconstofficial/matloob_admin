@@ -75,6 +75,56 @@ const String kClicks = "Clicks";
 const String kStoreClicksTracking = "Store Clicks Tracking";
 const String kStoreOwner = "Store Owner";
 const String kClickedBy1 = "Clicked By (/)";
+const String kStoreDetails = "Store details";
+const String kContactNumber = "Contact number";
+const String kProductInformation = "Product Information";
+const String kDentalClinics = "Dental Clinics";
+const String kDentalBurs = "Dental Burs";
+const String kBrandName = "Brand Name";
+const String kManufacturingCountry = "Manufacturing Country";
+const String kContactForPrice = "Contact for price";
+const String kContactForPriceHint = "SAR X.XX";
+const String kProductImages = "Product images";
+const String kProjectDescription = "Project Description";
+const String kProjectDescriptionHint = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+const String kReject = "Reject";
+const String kEdit = "Edit";
+const String kApprove = "Approve";
+const String kEditApprove = "Edit & Approve";
+const String kCancel = "Cancel";
+const String kAddMoreProduct = "Add More Product";
+const String kCreateStore = "Create Store";
+const String kApproveDetail = "Are you sure to approve this?";
+const String kRejectionReason = "Rejection Reason";
+const String kEnterStoreDetails = "Enter Store Details";
+const String kMaxAllowed = "Max 10 MB files are allowed";
+const String kBrowse = "browse";
+const String kDragBrowse = "Drag your file(s) or";
+const String kServices = "Services";
+const String kProduct = "Product";
+const String kBoth = "Both";
+const String kRFQInformation = "RFQ Information";
+const String kRFQInformationDetail = "Product | Subcategory 1 | Subcategory 2 | Subcategory 2";
+const String kCondition = "Condition";
+const String kTargetedPrice = "Targeted price";
+const String kNew = "New";
+const String kTitle = "Title";
+const String kTitleHint = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod ";
+const String kCatalog = "Catalog";
+const String kCatalogDetails = "Catalog Details";
+const String kUpdateStoreStatus = "Update Store Status";
+const String kApplyChanges = "Apply Changes";
+const String kUserDetails = "User details";
+const String kRequestQuotation = "Request for Quotation";
+const String kRfqSupplierResponse = "RFQs with supplier responses.";
+const String kRfqNoResponse = "RFQs with no response yet.";
+const String kUserStatus = "User Status";
+const String kUpdateChanges = "Update Changes";
+const String kMedicalProducts = "Medical Products";
+const String kMedicalServices = "Medical Services";
+const String kLaboratoriesEquipment = "Laboratories and equipment";
+
+
 
 
 

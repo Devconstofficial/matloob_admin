@@ -10,8 +10,10 @@ import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../../../utils/app_images.dart';
+import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
+import '../../custom_widgets/user_detail_dialog.dart';
 import '../sidemenu/sidemenu.dart';
 import 'controller/user_controller.dart';
 
@@ -286,7 +288,9 @@ class UserManagementScreen extends GetView<UserController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-
+                    Get.dialog(CustomDialog(image: kDeleteDialogImage, title: kConfirmDeleteDetail,btnText: kConfirmDelete, onTap: (){
+                      Get.back();
+                    },btnColor: kRedColor,hideDetail: true,));
                   },
                   child: CircleAvatar(
                     radius: 14,
@@ -305,7 +309,9 @@ class UserManagementScreen extends GetView<UserController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-
+                    Get.dialog(UserDetailModel(
+                      selectedStatus: controller.selectedStatus,
+                    ));
                   },
                   child: CircleAvatar(
                     radius: 14,

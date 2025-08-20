@@ -271,15 +271,18 @@ class ClickTrackingController extends GetxController {
     return List.generate(endPage - startPage + 1, (index) => startPage + index);
   }
 
+
   void goToPage2(int page) {
     if (page >= 1 && page <= totalPages2) currentPage2.value = page;
   }
+
 
   void goToNextPage2() {
     if (currentPage2.value < totalPages2) {
       currentPage2.value++;
     }
   }
+
 
   void goToPreviousPage2() {
     if (currentPage2.value > 1) {

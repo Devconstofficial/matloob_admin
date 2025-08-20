@@ -50,6 +50,10 @@ dependencies:
   intl_phone_field: ^3.2.0
   country_picker: ^2.0.21
   file_picker: ^8.0.0
+  dropdown_button2: ^2.3.9
+  flutter_switch: ^0.3.2
+  dotted_border: ^2.0.0
+
 
 dev_dependencies:
   flutter_test:

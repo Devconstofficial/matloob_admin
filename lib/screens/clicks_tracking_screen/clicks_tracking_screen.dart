@@ -254,7 +254,7 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                       ),
                       SizedBox(height: 20.h,),
                       Obx(() => CustomPagination(
-                        currentPage: controller.currentPage2.value,
+                        currentPage: controller.currentPage.value,
                         visiblePages: controller.visiblePageNumbers,
                         onPrevious: controller.goToPreviousPage,
                         onNext: controller.goToNextPage,

@@ -10,8 +10,10 @@ import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../../../utils/app_images.dart';
+import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
+import '../../custom_widgets/view_details_dialog.dart';
 import '../sidemenu/sidemenu.dart';
 import 'controller/rfq_controller.dart';
 
@@ -183,35 +185,75 @@ class RfqScreen extends GetView<RfqController> {
 
     return DataRow(
       cells: [
-        DataCell(Text(
-          id,
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+        DataCell(MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Get.dialog(ViewDetailModel());
+            },
+            child: Text(
+              id,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackTextStyle()
+                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+            ),
+          ),
         )),
-        DataCell(Text(
-          submittedBy,
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+        DataCell(MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Get.dialog(ViewDetailModel());
+            },
+            child: Text(
+              submittedBy,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackTextStyle()
+                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+            ),
+          ),
         )),
-        DataCell(Text(
-          category,
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+        DataCell(MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Get.dialog(ViewDetailModel());
+            },
+            child: Text(
+              category,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackTextStyle()
+                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+            ),
+          ),
         )),
-        DataCell(Text(
-          city,
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+        DataCell(MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Get.dialog(ViewDetailModel());
+            },
+            child: Text(
+              city,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackTextStyle()
+                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+            ),
+          ),
         )),
-        DataCell(Text(
-          submitOn,
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+        DataCell(MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Get.dialog(ViewDetailModel());
+            },
+            child: Text(
+              submitOn,
+              textAlign: TextAlign.center,
+              style: AppStyles.blackTextStyle()
+                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+            ),
+          ),
         )),
         DataCell(Text(
           responses,
@@ -246,7 +288,9 @@ class RfqScreen extends GetView<RfqController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-
+                    Get.dialog(CustomDialog(image: kDeleteDialogImage, title: kConfirmDeleteDetail,btnText: kConfirmDelete, onTap: (){
+                      Get.back();
+                    },btnColor: kRedColor,hideDetail: true,));
                   },
                   child: CircleAvatar(
                     radius: 14,
@@ -265,7 +309,7 @@ class RfqScreen extends GetView<RfqController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-
+                    Get.dialog(ViewDetailModel());
                   },
                   child: CircleAvatar(
                     radius: 14,

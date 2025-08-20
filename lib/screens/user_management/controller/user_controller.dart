@@ -164,6 +164,7 @@ class UserController extends GetxController {
     },
   ];
 
+  var selectedStatus = ''.obs;
   var currentPage2 = 1.obs;
   final int itemsPerPage = 7;
   final int pagesPerGroup = 5;
