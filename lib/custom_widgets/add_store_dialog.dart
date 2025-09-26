@@ -18,7 +18,7 @@ import '../utils/app_colors.dart';
 import 'dart:html' as html;
 
 class AddStoreDialog extends StatefulWidget {
-  AddStoreDialog({super.key});
+  const AddStoreDialog({super.key});
 
   @override
   State<AddStoreDialog> createState() => _AddStoreDialogState();

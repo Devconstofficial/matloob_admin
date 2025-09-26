@@ -7,7 +7,6 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +18,6 @@ import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../utils/app_colors.dart';
-import 'custom_dropdown.dart';
 
 class AddProductDialog extends StatefulWidget {
   String storeId;

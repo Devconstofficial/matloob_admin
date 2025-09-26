@@ -11,7 +11,7 @@ import 'package:matloob_admin/utils/app_styles.dart';
 import '../utils/app_colors.dart';
 
 class AddUserDialog extends StatefulWidget {
-  AddUserDialog({super.key});
+  const AddUserDialog({super.key});
 
   @override
   State<AddUserDialog> createState() => _AddUserDialogState();
