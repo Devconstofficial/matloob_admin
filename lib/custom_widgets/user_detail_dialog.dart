@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
+import 'package:matloob_admin/models/user_analytics_model.dart';
 import 'package:matloob_admin/screens/auth/controller/auth_controller.dart';
+import 'package:matloob_admin/screens/user_management/controller/user_controller.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../utils/app_colors.dart';
@@ -15,10 +14,12 @@ import 'custom_dropdown.dart';
 
 class UserDetailModel extends StatefulWidget {
   RxString selectedStatus;
+  UserWithAnalytics user;
 
   UserDetailModel({
     super.key,
-    required this.selectedStatus
+    required this.selectedStatus,
+    required this.user,
   });
 
   @override
@@ -26,15 +27,30 @@ class UserDetailModel extends StatefulWidget {
 }
 
 class _UserDetailModelState extends State<UserDetailModel> {
-  customTextField(
-      hintText, {
-        int maxLines = 1,
-        EdgeInsets contentPadding = const EdgeInsets.symmetric(
-          vertical: 0,
-          horizontal: 20,
-        ),
-      }) {
+  late TextEditingController nameController;
+  late TextEditingController mobileController;
+  late TextEditingController companyController;
+  late TextEditingController emailController;
+  UserController userController = Get.put(UserController());
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.user.name ?? '');
+    mobileController = TextEditingController(text: widget.user.mobile ?? '');
+    companyController = TextEditingController(
+      text: widget.user.companyName ?? '',
+    );
+    emailController = TextEditingController(text: widget.user.email ?? '');
+    widget.selectedStatus.value = widget.user.status;
+  }
+
+  Widget customTextField(
+    TextEditingController controller,
+    String hintText, {
+    int maxLines = 1,
+  }) {
     return TextField(
+      controller: controller,
       style: GoogleFonts.roboto(
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
@@ -48,7 +64,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
           fontSize: 14.sp,
         ),
         hintText: hintText,
-        contentPadding: contentPadding,
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: kBlackColor.withOpacity(0.1)),
@@ -122,14 +138,14 @@ class _UserDetailModelState extends State<UserDetailModel> {
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField("Lakreen.M"),
+                  child: customTextField(nameController, "John Doe"),
                 ),
               ),
               SizedBox(width: 11.w),
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField("05546545641"),
+                  child: customTextField(mobileController, "+973001234567"),
                 ),
               ),
             ],
@@ -140,14 +156,14 @@ class _UserDetailModelState extends State<UserDetailModel> {
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField("MediCorp Distributors"),
+                  child: customTextField(companyController, "Lakreen"),
                 ),
               ),
               SizedBox(width: 11.w),
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField("lakreen.com"),
+                  child: customTextField(emailController, "abc@gmail.com"),
                 ),
               ),
             ],
@@ -167,9 +183,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: kBlackColor.withOpacity(0.1)
-                  )
+                  border: Border.all(color: kBlackColor.withOpacity(0.1)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -185,7 +199,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                         ),
                       ),
                       Text(
-                        "12",
+                        widget.user.totalRfqs.toString(),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -195,13 +209,11 @@ class _UserDetailModelState extends State<UserDetailModel> {
                   ),
                 ),
               ),
-              SizedBox(width: 15.w,),
+              SizedBox(width: 15.w),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: kBlackColor.withOpacity(0.1)
-                  )
+                  border: Border.all(color: kBlackColor.withOpacity(0.1)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -217,7 +229,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                         ),
                       ),
                       Text(
-                        "7",
+                        widget.user.rfqSupplierResponse.toString(),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -227,13 +239,11 @@ class _UserDetailModelState extends State<UserDetailModel> {
                   ),
                 ),
               ),
-              SizedBox(width: 15.w,),
+              SizedBox(width: 15.w),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: kBlackColor.withOpacity(0.1)
-                  )
+                  border: Border.all(color: kBlackColor.withOpacity(0.1)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -249,7 +259,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                         ),
                       ),
                       Text(
-                        "2",
+                        widget.user.rfqNoResponse.toString(),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -272,8 +282,8 @@ class _UserDetailModelState extends State<UserDetailModel> {
           SizedBox(height: 17.h),
           CustomDropdown(
             selected: widget.selectedStatus,
-            items: [kActive, kPending, kRestricted],
-            hint: kUpdateStoreStatus,
+            items: ["Active", "Suspended"],
+            hint: "Update User Status",
           ),
           SizedBox(height: 16.h),
           Row(
@@ -294,16 +304,32 @@ class _UserDetailModelState extends State<UserDetailModel> {
                 textColor: kBlackColor,
               ),
 
-              CustomButton(
-                title: kUpdateChanges,
-                onTap: () {
-                  Get.back();
-                },
-                height: 40.h,
-                width: 140.w,
-                borderRadius: 12,
-                textSize: 14,
-                fontWeight: FontWeight.w400,
+              Obx(
+                () =>
+                    userController.isUpdating.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButton(
+                          title: kUpdateChanges,
+                          onTap: () {
+                            userController.updateUserInController(
+                              userId: widget.user.id,
+                              name: nameController.text,
+                              mobile: mobileController.text,
+                              email: emailController.text,
+                              companyName: companyController.text,
+                              status: widget.selectedStatus.value,
+                            );
+                            nameController.clear();
+                            mobileController.clear();
+                            emailController.clear();
+                            companyController.clear();
+                          },
+                          height: 40.h,
+                          width: 140.w,
+                          borderRadius: 12,
+                          textSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
               ),
             ],
           ),

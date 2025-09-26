@@ -1,235 +1,233 @@
+import 'dart:developer';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/models/rfq_model.dart';
+import 'package:excel/excel.dart';
+import 'package:matloob_admin/screens/dashboard_screen/controller/dashboard_controller.dart';
+import 'package:matloob_admin/utils/app_colors.dart';
+import 'package:matloob_admin/web_services/rfq_services.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:intl/intl.dart';
+import 'dart:html' as html;
 
 class RfqController extends GetxController {
-  final List<Map<String, dynamic>> rfqs = [
-    {
-      "id": "RFQ1021",
-      "subBy": "Ahmed Al-Mutairi",
-      "category": "PPE Equipment",
-      "city": "Riyadh",
-      "subOn": "21 Jul 2025, 10:32",
-      "response": "3",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1022",
-      "subBy": "Sara Al-Dosari",
-      "category": "Ventilators",
-      "city": "Jeddah",
-      "subOn": "20 Jul 2025, 14:10",
-      "response": "5",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1023",
-      "subBy": "Mohammed Al-Qahtani",
-      "category": "Surgical Masks",
-      "city": "Dammam",
-      "subOn": "19 Jul 2025, 09:45",
-      "response": "2",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1024",
-      "subBy": "Faisal Al-Saadi",
-      "category": "Gloves",
-      "city": "Mecca",
-      "subOn": "18 Jul 2025, 11:00",
-      "response": "7",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1025",
-      "subBy": "Mona Al-Otaibi",
-      "category": "Thermometers",
-      "city": "Tabuk",
-      "subOn": "17 Jul 2025, 15:30",
-      "response": "4",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1026",
-      "subBy": "Hassan Al-Harbi",
-      "category": "Face Shields",
-      "city": "Abha",
-      "subOn": "16 Jul 2025, 08:20",
-      "response": "1",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1027",
-      "subBy": "Layla Al-Sabah",
-      "category": "Sanitizers",
-      "city": "Khobar",
-      "subOn": "15 Jul 2025, 13:15",
-      "response": "6",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1028",
-      "subBy": "Yasir Al-Rashid",
-      "category": "Disinfectants",
-      "city": "Najran",
-      "subOn": "14 Jul 2025, 17:50",
-      "response": "3",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1029",
-      "subBy": "Noura Al-Hamad",
-      "category": "Oxygen Cylinders",
-      "city": "Yanbu",
-      "subOn": "13 Jul 2025, 10:05",
-      "response": "4",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1030",
-      "subBy": "Saleh Al-Fahad",
-      "category": "Hospital Beds",
-      "city": "Buraidah",
-      "subOn": "12 Jul 2025, 09:00",
-      "response": "2",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1031",
-      "subBy": "Rania Al-Farsi",
-      "category": "Medical Monitors",
-      "city": "Jazan",
-      "subOn": "11 Jul 2025, 16:45",
-      "response": "3",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1032",
-      "subBy": "Tariq Al-Khalid",
-      "category": "Needles & Syringes",
-      "city": "Hail",
-      "subOn": "10 Jul 2025, 08:00",
-      "response": "5",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1033",
-      "subBy": "Huda Al-Mansour",
-      "category": "Medical Gowns",
-      "city": "Al-Kharj",
-      "subOn": "09 Jul 2025, 14:40",
-      "response": "7",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1034",
-      "subBy": "Nasser Al-Tamimi",
-      "category": "Medical Trolleys",
-      "city": "Riyadh",
-      "subOn": "08 Jul 2025, 11:30",
-      "response": "2",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1035",
-      "subBy": "Alya Al-Madi",
-      "category": "IV Stands",
-      "city": "Jeddah",
-      "subOn": "07 Jul 2025, 10:20",
-      "response": "3",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1036",
-      "subBy": "Adel Al-Ghamdi",
-      "category": "Ultrasound Devices",
-      "city": "Dammam",
-      "subOn": "06 Jul 2025, 15:10",
-      "response": "6",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1037",
-      "subBy": "Dalal Al-Saeed",
-      "category": "Defibrillators",
-      "city": "Mecca",
-      "subOn": "05 Jul 2025, 12:35",
-      "response": "1",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1038",
-      "subBy": "Ibrahim Al-Dabbagh",
-      "category": "Infusion Pumps",
-      "city": "Tabuk",
-      "subOn": "04 Jul 2025, 09:15",
-      "response": "2",
-      "status": "Expired",
-    },
-    {
-      "id": "RFQ1039",
-      "subBy": "Reem Al-Sultan",
-      "category": "ECG Machines",
-      "city": "Abha",
-      "subOn": "03 Jul 2025, 11:50",
-      "response": "5",
-      "status": "Published",
-    },
-    {
-      "id": "RFQ1040",
-      "subBy": "Ziyad Al-Zahrani",
-      "category": "Diagnostic Kits",
-      "city": "Khobar",
-      "subOn": "02 Jul 2025, 10:00",
-      "response": "4",
-      "status": "Pending",
-    },
-    {
-      "id": "RFQ1041",
-      "subBy": "Fatimah Al-Bassam",
-      "category": "Blood Pressure Monitors",
-      "city": "Najran",
-      "subOn": "01 Jul 2025, 13:25",
-      "response": "3",
-      "status": "Expired",
-    },
-  ];
+  final RxList<RfqModel> rfqList = <RfqModel>[].obs;
+  final RfqServices rfqServices = RfqServices();
+  TextEditingController searchController = TextEditingController();
+  var isLoading = false.obs;
+  var isUpdating = false.obs;
+  var isDeleting = false.obs;
+  var searchText = "".obs;
+  var isExporting = false.obs;
+  @override
+  void onInit() async {
+    super.onInit();
+    await fetchRFQs();
+    searchController.addListener(() {
+      searchText.value = searchController.text.trim().toLowerCase();
+      currentPage.value = 1;
+    });
+  }
 
-  var currentPage2 = 1.obs;
+  Future<void> exportRFQsToExcel() async {
+    try {
+      isExporting.value = true;
+      var excel = Excel.createExcel();
+      Sheet sheetObject = excel[excel.getDefaultSheet() ?? 'RFQs'];
+      final List<CellValue> headerValues = [
+        "RFQ ID",
+        "Submitted By",
+        "Category",
+        "Subcategory",
+        "SubSubcategory",
+        "City",
+        "Location",
+        "Condition",
+        "Status",
+        "Title",
+        "Description",
+        "Price",
+        "Clicks",
+        "Views",
+        "Phone Clicks",
+        "Created At",
+        "Updated At",
+        "Images",
+        "Files",
+      ].map((title) => TextCellValue(title)).toList();
+      sheetObject.appendRow(headerValues);
+      for (var rfq in rfqList) {
+        sheetObject.appendRow([
+          TextCellValue(rfq.rfqId),
+          TextCellValue(rfq.user?.name ?? ""),
+          TextCellValue(rfq.category),
+          TextCellValue(rfq.subcategory),
+          TextCellValue(rfq.subSubcategory),
+          TextCellValue(rfq.city ?? ""),
+          TextCellValue(rfq.location ?? ""),
+          TextCellValue(rfq.condition),
+          TextCellValue(rfq.status.name),
+          TextCellValue(rfq.title),
+          TextCellValue(rfq.description),
+          TextCellValue(rfq.price.toString()),
+          IntCellValue(rfq.clicks),
+          IntCellValue(rfq.views),
+          IntCellValue(rfq.phoneClicks),
+          TextCellValue(rfq.createdAt != null
+              ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.createdAt!)
+              : ""),
+          TextCellValue(rfq.updatedAt != null
+              ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.updatedAt!)
+              : ""),
+          TextCellValue(rfq.images.join(", ")),
+          TextCellValue(rfq.files.join(", ")),
+        ]);
+      }
+
+      final fileBytes = excel.encode();
+      if (fileBytes == null) throw Exception("Failed to encode Excel file.");
+      if (kIsWeb) {
+        final blob = html.Blob([fileBytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: url)
+          ..setAttribute(
+              "download", "RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx")
+          ..click();
+        html.Url.revokeObjectUrl(url);
+
+        showCustomSnackbar(
+          "Success",
+          "RFQs exported! Check your downloads folder.",
+          backgroundColor: const Color(0xFF00C851), 
+        );
+        log("Excel file downloaded in browser");
+      } 
+      else {
+        Directory directory = await getApplicationDocumentsDirectory();
+        String filePath =
+            "${directory.path}/RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+        File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes);
+
+        showCustomSnackbar(
+          "Success",
+          "RFQs exported to Excel at: ${filePath.replaceAll(directory.path, 'App Documents')}",
+          backgroundColor: const Color(0xFF00C851),
+        );
+        log("Excel file saved at: $filePath");
+      }
+    } catch (e) {
+      showCustomSnackbar("Error", "Failed to export RFQs");
+      log("Error exporting RFQs: $e");
+    } finally {
+      isExporting.value = false;
+    }
+  }
+
+  Future<void> fetchRFQs() async {
+    try {
+      isLoading.value = true;
+      rfqList.clear();
+
+      final response = await rfqServices.getRFQs();
+      final allRfqs = List<RfqModel>.from(response["items"]);
+
+      rfqList.assignAll(allRfqs);
+      log("RFQs fetched: ${rfqList.length}");
+    } catch (e) {
+      log("Error fetching rfqs: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> deleteRFQAction(String rfqId, int click) async {
+    if (click > 0) {
+      Get.back();
+      showCustomSnackbar("Error", "Cannot delete RFQ with responses");
+      return;
+    }
+    try {
+      isDeleting.value = true;
+      final successMessage = await rfqServices.deleteRFQ(rfqId);
+      rfqList.removeWhere((rfq) => rfq.rfqId == rfqId);
+      DashboardController dashboardController = Get.put(DashboardController());
+      await dashboardController.fetchRFQs();
+
+      Get.back();
+      showCustomSnackbar(
+        "Success",
+        "RFQ deleted successfully",
+        backgroundColor: kGreenColor,
+      );
+
+      log("SUCCESS: $successMessage");
+    } catch (e) {
+      log("Error deleting RFQ: $e");
+
+      String errorMessage =
+          e is Exception && e.toString().contains("Exception:")
+              ? e.toString().substring("Exception: ".length)
+              : "Failed to delete RFQ";
+      showCustomSnackbar("Error", errorMessage);
+      log("ERROR: $errorMessage");
+    } finally {
+      isDeleting.value = false;
+    }
+  }
+
+  var currentPage = 1.obs;
   final int itemsPerPage = 7;
   final int pagesPerGroup = 5;
 
-  int get totalPages => (rfqs.length / itemsPerPage).ceil();
+  List<RfqModel> get filteredRfqs {
+    if (searchText.value.isEmpty) return rfqList;
 
-  List get pagedUsers {
-    int start = (currentPage2.value - 1) * itemsPerPage;
+    return rfqList.where((rfq) {
+      final category = rfq.category.toLowerCase();
+      final userName = rfq.user?.name?.toLowerCase() ?? "";
+      return category.contains(searchText.value) ||
+          userName.contains(searchText.value);
+    }).toList();
+  }
+
+  int get totalPages => (filteredRfqs.length / itemsPerPage).ceil();
+
+  List<RfqModel> get pagedRFQs {
+    int start = (currentPage.value - 1) * itemsPerPage;
     int end = start + itemsPerPage;
-    return rfqs.sublist(
+    return filteredRfqs.sublist(
       start,
-      end > rfqs.length ? rfqs.length : end,
+      end > filteredRfqs.length ? filteredRfqs.length : end,
     );
   }
 
-  int get currentGroup => ((currentPage2.value - 1) / pagesPerGroup).floor();
+  int get currentGroup => ((currentPage.value - 1) / pagesPerGroup).floor();
 
   List<int> get visiblePageNumbers {
+    if (totalPages == 0) return [1]; // prevent invalid clamp
     int startPage = currentGroup * pagesPerGroup + 1;
     int endPage = (startPage + pagesPerGroup - 1).clamp(1, totalPages);
     return List.generate(endPage - startPage + 1, (index) => startPage + index);
   }
 
   void goToPage(int page) {
-    if (page >= 1 && page <= totalPages) currentPage2.value = page;
+    if (page >= 1 && page <= totalPages) currentPage.value = page;
   }
 
   void goToNextPage() {
-    if (currentPage2.value < totalPages) {
-      currentPage2.value++;
+    if (currentPage.value < totalPages) {
+      currentPage.value++;
     }
   }
 
   void goToPreviousPage() {
-    if (currentPage2.value > 1) {
-      currentPage2.value--;
+    if (currentPage.value > 1) {
+      currentPage.value--;
     }
   }
-
 }

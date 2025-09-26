@@ -1,5 +1,6 @@
 
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:matloob_admin/screens/store_management/view_store_details.dart';
 import 'package:matloob_admin/utils/screen_bindings.dart';
 import '../screens/auth/auth_screen.dart';
 import '../screens/auth/send_otp_screen.dart';
@@ -24,6 +25,7 @@ class RouteGenerator {
       GetPage(name: kRfqScreenRoute, page: () => RfqScreen(), binding: ScreenBindings(),),
       GetPage(name: kUserManagementScreenRoute, page: () => UserManagementScreen(), binding: ScreenBindings(),),
       GetPage(name: kClickTrackingScreenRoute, page: () => ClickTrackingScreen(), binding: ScreenBindings(),),
+      GetPage(name: kViewStoreDetailsScreenRoute, page: () => ViewStoreDetails(), binding: ScreenBindings(),),
     ];
   }
 }

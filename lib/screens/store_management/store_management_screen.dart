@@ -3,19 +3,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:matloob_admin/custom_widgets/add_store_dialog.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
+import 'package:matloob_admin/custom_widgets/view_store_detail_model.dart';
+import 'package:matloob_admin/models/store_model.dart';
+import 'package:matloob_admin/screens/sidemenu/sidemenu.dart';
 import 'package:matloob_admin/screens/store_management/controller/store_controller.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../../../utils/app_images.dart';
-import '../../custom_widgets/add_store_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
-import '../../custom_widgets/view_store_detail_model.dart';
-import '../sidemenu/sidemenu.dart';
 
 class StoreManagementScreen extends GetView<StoreController> {
   const StoreManagementScreen({super.key});
@@ -50,29 +52,44 @@ class StoreManagementScreen extends GetView<StoreController> {
                               fontSize: 18.sp,
                             ),
                           ),
-                          Spacer(),
-                          CustomButton(
-                            title: kExportAsExcel,
-                            onTap: () {},
-                            height: 40.h,
-                            width: 146.w,
-                            textSize: 16.sp,
-                            fontWeight: FontWeight.w500,
+                          const Spacer(),
+                          Obx(
+                            () =>
+                                controller.isExporting.value
+                                    ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                    : CustomButton(
+                                      title: kExportAsExcel,
+                                      onTap: () {
+                                        controller.exportStoresToExcel();
+                                      },
+                                      height: 40.h,
+                                      width: 146.w,
+                                      textSize: 16.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                           ),
                           SizedBox(width: 22.w),
-                          CustomButton(
-                            title: "+ $kAddStore",
-                            onTap: () {
-                              Get.dialog(
-                                AddStoreModel(
-                                  selectedCountry: controller.selectedStatus,
-                                ),
-                              );
-                            },
-                            height: 40.h,
-                            width: 128.w,
-                            textSize: 16.sp,
-                            fontWeight: FontWeight.w500,
+                          Obx(
+                            () =>
+                                controller.isAdding.value
+                                    ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                    : CustomButton(
+                                      title: "+ $kAddStore",
+                                      onTap: () {
+                                        Get.dialog(
+                                          barrierDismissible: false,
+                                          AddStoreDialog(),
+                                        );
+                                      },
+                                      height: 40.h,
+                                      width: 128.w,
+                                      textSize: 16.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                           ),
                         ],
                       ),
@@ -96,12 +113,12 @@ class StoreManagementScreen extends GetView<StoreController> {
                                 height: 45.h,
                                 width: 300.w,
                                 child: TextField(
+                                  controller: controller.searchController,
                                   style: GoogleFonts.roboto(
                                     fontSize: 15.sp,
                                     fontWeight: FontWeight.w400,
                                     color: kBlackColor,
                                   ),
-
                                   decoration: InputDecoration(
                                     hintStyle: GoogleFonts.roboto(
                                       color: kBlackColor.withOpacity(0.2),
@@ -134,8 +151,16 @@ class StoreManagementScreen extends GetView<StoreController> {
                                 ),
                               ),
                               SizedBox(height: 20.h),
-                              Obx(
-                                () => Stack(
+                              Obx(() {
+                                if (controller.storeRequests.isEmpty) {
+                                  return const Center(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text("No stores found."),
+                                    ),
+                                  );
+                                }
+                                return Stack(
                                   children: [
                                     Container(
                                       height: 44,
@@ -154,65 +179,95 @@ class StoreManagementScreen extends GetView<StoreController> {
                                         dividerThickness: 0.2,
                                         columns: [
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kStoreID,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kStoreID,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kCompanyName,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kCompanyName,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kRegisteredOn,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kRegisteredOn,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kViews,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kViews,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kCompanyNumber,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kCompanyNumber,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kLocation,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kLocation,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kSpecialty,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kSpecialty,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
-                                            label: ColumnRowWidget(
-                                              title: kStatus,
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: kStatus,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             headingRowAlignment:
                                                 MainAxisAlignment.center,
-                                            label: ColumnRowWidget(
-                                              title: "Action",
+                                            label: Flexible(
+                                              flex: 1,
+                                              child: ColumnRowWidget(
+                                                title: "Action",
+                                              ),
                                             ),
                                           ),
                                         ],
                                         rows:
-                                            controller.pagedUsers
+                                            controller.filteredStores
                                                 .map(
-                                                  (user) => _buildDataRow(
-                                                    user['id']!,
-                                                    user['compName']!,
-                                                    user['registeredOn']!,
-                                                    user['views']!,
-                                                    user['compNumber']!,
-                                                    user['location']!,
-                                                    user['specialty']!,
-                                                    user['status']!,
+                                                  (store) => _buildDataRow(
+                                                    store.id,
+                                                    store.companyName,
+                                                    store.createdAt
+                                                            ?.toIso8601String() ??
+                                                        "",
+                                                    (store.views).toString(),
+                                                    store.companyNumber,
+                                                    store.location,
+                                                    store.speciality,
+                                                    store.storeStatus.name,
+                                                    store,
                                                     context,
                                                   ),
                                                 )
@@ -220,8 +275,8 @@ class StoreManagementScreen extends GetView<StoreController> {
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -229,7 +284,7 @@ class StoreManagementScreen extends GetView<StoreController> {
                       SizedBox(height: 29.h),
                       Obx(
                         () => CustomPagination(
-                          currentPage: controller.currentPage2.value,
+                          currentPage: controller.currentPage.value,
                           visiblePages: controller.visiblePageNumbers,
                           onPrevious: controller.goToPreviousPage,
                           onNext: controller.goToNextPage,
@@ -256,140 +311,99 @@ class StoreManagementScreen extends GetView<StoreController> {
     String location,
     String specialty,
     String status,
+    Store store,
     context,
   ) {
+    DateTime? dateTime = DateTime.tryParse(registeredOn);
+
+    String formattedDate =
+        dateTime != null ? DateFormat('dd-MM-yyyy').format(dateTime) : 'N/A';
     return DataRow(
       cells: [
         DataCell(
           MouseRegion(
             cursor: SystemMouseCursors.click,
+
             child: GestureDetector(
-              onTap: () {
-                Get.dialog(
-                  ViewStoreDetailModel(
-                    showEditApprove: true,
-                    onEdit: () {},
-                    selectedStatus: controller.selectedStatus,
-                  ),
-                );
+              onTap: (){
+                controller.fetchStoreDetails(store.id);
+                Get.toNamed(kViewStoreDetailsScreenRoute);
               },
-              child: Text(
-                id,
-                textAlign: TextAlign.center,
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w200,
-                  color: kBlackShade7Color.withOpacity(0.7),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Text(
+                  id,
+                  style: _cellStyle(),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ),
           ),
         ),
         DataCell(
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                Get.dialog(
-                  ViewStoreDetailModel(
-                    showEditApprove: true,
-                    onEdit: () {},
-                    selectedStatus: controller.selectedStatus,
-                  ),
-                );
-              },
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w200,
-                  color: kBlackShade7Color.withOpacity(0.7),
-                ),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              name,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
         DataCell(
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                Get.dialog(
-                  ViewStoreDetailModel(
-                    showEditApprove: true,
-                    onEdit: () {},
-                    selectedStatus: controller.selectedStatus,
-                  ),
-                );
-              },
-              child: Text(
-                registeredOn,
-                textAlign: TextAlign.center,
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w200,
-                  color: kBlackShade7Color.withOpacity(0.7),
-                ),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              formattedDate,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
         DataCell(
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                Get.dialog(
-                  ViewStoreDetailModel(
-                    showEditApprove: true,
-                    onEdit: () {},
-                    selectedStatus: controller.selectedStatus,
-                  ),
-                );
-              },
-              child: Text(
-                views,
-                textAlign: TextAlign.center,
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w200,
-                  color: kBlackShade7Color.withOpacity(0.7),
-                ),
-              ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              views,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
         DataCell(
-          Text(
-            number,
-            textAlign: TextAlign.center,
-            style: AppStyles.blackTextStyle().copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w200,
-              color: kBlackShade7Color.withOpacity(0.7),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              number,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
         DataCell(
-          Text(
-            location,
-            textAlign: TextAlign.center,
-            style: AppStyles.blackTextStyle().copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w200,
-              color: kBlackShade7Color.withOpacity(0.7),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              location,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
         DataCell(
-          Text(
-            specialty,
-            textAlign: TextAlign.center,
-            style: AppStyles.blackTextStyle().copyWith(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w200,
-              color: kBlackShade7Color.withOpacity(0.7),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
+            child: Text(
+              specialty,
+              style: _cellStyle(),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
           ),
         ),
@@ -400,7 +414,7 @@ class StoreManagementScreen extends GetView<StoreController> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               color:
-                  status == kActive
+                  status == "Accepted"
                       ? kPrimaryColor.withOpacity(0.2)
                       : status == kPending
                       ? kBrownColor.withOpacity(0.2)
@@ -414,7 +428,7 @@ class StoreManagementScreen extends GetView<StoreController> {
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   color:
-                      status == kActive
+                      status == "Accepted"
                           ? kPrimaryColor
                           : status == kPending
                           ? kBrownColor
@@ -427,68 +441,75 @@ class StoreManagementScreen extends GetView<StoreController> {
         DataCell(
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 12,
             children: [
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.dialog(
-                      CustomDialog(
-                        image: kDeleteDialogImage,
-                        title: kConfirmDeleteDetail,
-                        btnText: kConfirmDelete,
-                        onTap: () {
-                          Get.back();
-                        },
-                        btnColor: kRedColor,
-                        hideDetail: true,
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        kDeleteIcon,
-                        height: 16.h,
-                        width: 16.w,
-                      ),
-                    ),
-                  ),
-                ),
+              Obx(
+                () =>
+                    controller.isDeleting.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : _actionButton(
+                          icon: kDeleteIcon,
+                          onTap: () {
+                            Get.dialog(
+                              barrierDismissible: false,
+                              CustomDialog(
+                                image: kDeleteDialogImage,
+                                title: kConfirmDeleteDetail,
+                                btnText: kConfirmDelete,
+                                isLoading: controller.isDeleting,
+                                onTap: () {
+                                  controller.deleteStoreInController(store.id);
+                                },
+                                btnColor: kRedColor,
+                                hideDetail: true,
+                              ),
+                            );
+                          },
+                        ),
               ),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.dialog(
-                      ViewStoreDetailModel(
-                        showEditApprove: true,
-                        onEdit: () {},
-                        selectedStatus: controller.selectedStatus,
-                        showStoreEdit: true,
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        kEditIcon,
-                        height: 16.h,
-                        width: 16.w,
-                      ),
+              SizedBox(width: 8.w),
+              _actionButton(
+                icon: kEditIcon,
+                onTap: () {
+                  controller.selectedStatus.value = status;
+                  Get.dialog(
+                    ViewStoreDetailModel(
+                      showEditApprove: false,
+                      onEdit: () {},
+                      selectedStatus: controller.selectedStatus,
+                      showStoreEdit: true,
+                      store: store,
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  TextStyle _cellStyle() {
+    return AppStyles.blackTextStyle().copyWith(
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w200,
+      color: kBlackShade7Color.withOpacity(0.7),
+    );
+  }
+
+  Widget _actionButton({required String icon, required VoidCallback onTap}) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: CircleAvatar(
+          radius: 14,
+          backgroundColor: kPrimaryColor,
+          child: Center(
+            child: SvgPicture.asset(icon, height: 16.h, width: 16.w),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_text.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
-import '../../../utils/app_styles.dart';
 import '../../custom_widgets/auth_component.dart';
 import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_textfield.dart';
@@ -34,6 +33,7 @@ class AuthScreen extends GetView<AuthController> {
               hintText: kEmailHint,
               prefixIcon: kMailIcon,
               fillColor: kWhiteColor,
+              controller: controller.emailCont,
               isFilled: true,
             ),
             SizedBox(height: 32.h),
@@ -42,6 +42,7 @@ class AuthScreen extends GetView<AuthController> {
             Obx(
                   () => CustomTextField(
                 hintText: kPasswordHint,
+                controller: controller.passwordCont,
                 isObscure: controller.isPasswordHidden.value,
                 prefixIcon: kLockIcon,
                 suffix: IconButton(
@@ -76,13 +77,19 @@ class AuthScreen extends GetView<AuthController> {
               ],
             ),
             SizedBox(height: 71.h),
-            CustomButton(
-              title: kLogin,
-              onTap: () {
-                Get.toNamed(kDashboardScreenRoute);
-              },
-              height: 62,
+            Obx(
+              () =>
+                  controller.isLoadingLogin.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                        title: kLogin,
+                        onTap: () async {
+                          await controller.loginUser();
+                        },
+                        height: 62,
+                      ),
             ),
+            
           ],
         ),
       ),

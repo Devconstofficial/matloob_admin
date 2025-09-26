@@ -4,14 +4,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
+import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/custom_widgets/view_details_dialog.dart';
+import 'package:matloob_admin/models/rfq_model.dart';
+import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import '../../../utils/app_images.dart';
-import '../../custom_widgets/add_store_dialog.dart';
+import '../../custom_widgets/add_product_dialog.dart';
 import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
-import '../../custom_widgets/custom_pagination.dart';
 import '../../custom_widgets/view_store_detail_model.dart';
 import '../sidemenu/sidemenu.dart';
 import 'controller/dashboard_controller.dart';
@@ -109,41 +112,53 @@ class DashboardScreen extends GetView<DashboardController> {
                         spacing: 15.w,
                         runSpacing: 15.w,
                         children: [
-                          insightContainer(
-                            kDoubleUserIcon,
-                            "1,000",
-                            kTotalUsers,
-                            kGreenColor,
+                          Obx(
+                            () => insightContainer(
+                              kDoubleUserIcon,
+                              controller.totalUsers.value.toString(),
+                              kTotalUsers,
+                              kGreenColor,
+                            ),
                           ),
-                          insightContainer(
-                            kDownloadIcon,
-                            "1,000",
-                            kTotalDownloads,
-                            kPrimaryColor,
+                          Obx(
+                            () => insightContainer(
+                              kAddStoreIcon,
+                              controller.totalStores.value.toString(),
+                              kTotalStores,
+                              kPrimaryColor,
+                            ),
                           ),
-                          insightContainer(
-                            kAddStoreIcon,
-                            "200",
-                            kPendingStores,
-                            kGreenColor,
+                          Obx(
+                            () => insightContainer(
+                              kAddStoreIcon,
+                              controller.totalPendingStores.value.toString(),
+                              kPendingStores,
+                              kGreenColor,
+                            ),
                           ),
-                          insightContainer(
-                            kAddStoreIcon,
-                            "400",
-                            kLiveStores,
-                            kPrimaryColor,
+                          Obx(
+                            () => insightContainer(
+                              kAddStoreIcon,
+                              controller.totalActiveStores.value.toString(),
+                              kLiveStores,
+                              kPrimaryColor,
+                            ),
                           ),
-                          insightContainer(
-                            kAddRfqIcon,
-                            "100",
-                            kTotalRFQs,
-                            kGreenColor,
+                          Obx(
+                            () => insightContainer(
+                              kAddRfqIcon,
+                              controller.totalRfqs.value.toString(),
+                              kTotalRFQs,
+                              kGreenColor,
+                            ),
                           ),
-                          insightContainer(
-                            kAddRfqIcon,
-                            "100",
-                            kPendingRFQs,
-                            kPrimaryColor,
+                          Obx(
+                            () => insightContainer(
+                              kAddRfqIcon,
+                              controller.totalPendingRfqs.value.toString(),
+                              kPendingRFQs,
+                              kPrimaryColor,
+                            ),
                           ),
                         ],
                       ),
@@ -158,16 +173,7 @@ class DashboardScreen extends GetView<DashboardController> {
                               fontSize: 18.sp,
                             ),
                           ),
-                          CustomButton(
-                            title: "+ $kAddStore",
-                            onTap: () {
-                              Get.dialog(AddStoreModel(selectedCountry: controller.selectedCountry,));
-                            },
-                            height: 40.h,
-                            width: 128.w,
-                            textSize: 16.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          
                         ],
                       ),
                       SizedBox(height: 12.h),
@@ -191,136 +197,88 @@ class DashboardScreen extends GetView<DashboardController> {
                               ),
                               SizedBox(
                                 width: Get.width,
-                                child: DataTable(
-                                  columnSpacing: 0,
-                                  headingRowHeight: 44,
-                                  dataRowMinHeight: 55,
-                                  dataRowMaxHeight: 55,
-                                  dividerThickness: 0.2,
-                                  columns: [
-                                    DataColumn(
-                                      label: Row(
-                                        spacing: 3,
-                                        children: [
-                                          Text(
-                                            "Company name",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: AppStyles.blackTextStyle()
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14.sp,
-                                                ),
-                                          ),
-                                          SvgPicture.asset(
-                                            kUpDownArrowsIcon,
-                                            height: 13,
-                                            width: 9,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Row(
-                                        spacing: 3,
-                                        children: [
-                                          Text(
-                                            "Company Number",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: AppStyles.blackTextStyle()
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14.sp,
-                                                ),
-                                          ),
-                                          SvgPicture.asset(
-                                            kUpDownArrowsIcon,
-                                            height: 13,
-                                            width: 9,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Row(
-                                        spacing: 3,
-                                        children: [
-                                          Text(
-                                            "Location",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: AppStyles.blackTextStyle()
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14.sp,
-                                                ),
-                                          ),
-                                          SvgPicture.asset(
-                                            kUpDownArrowsIcon,
-                                            height: 13,
-                                            width: 9,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Row(
-                                        spacing: 3,
-                                        children: [
-                                          Text(
-                                            "Specialty",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            style: AppStyles.blackTextStyle()
-                                                .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14.sp,
-                                                ),
-                                          ),
-                                          SvgPicture.asset(
-                                            kUpDownArrowsIcon,
-                                            height: 13,
-                                            width: 9,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      headingRowAlignment:
-                                          MainAxisAlignment.center,
-                                      label: Flexible(
+                                child: Obx(() {
+                                  if (controller.storeRequests.isEmpty) {
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 70,
+                                        ),
                                         child: Text(
-                                          "Action",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
+                                          "No new requests for stores",
                                           style: AppStyles.blackTextStyle()
                                               .copyWith(
-                                                fontWeight: FontWeight.w500,
                                                 fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: kGreyColor,
                                               ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                  rows:
-                                      controller.storeRequests
-                                          .map(
-                                            (user) => _buildDataRow(
-                                              user['name']!,
-                                              user['companyNumber']!,
-                                              user['location']!,
-                                              user['speciality']!,
-                                              context,
-                                            ),
-                                          )
-                                          .toList(),
-                                ),
+                                    );
+                                  }
+
+                                  return DataTable(
+                                    columnSpacing: 0,
+                                    headingRowHeight: 44,
+                                    dataRowMinHeight: 55,
+                                    dataRowMaxHeight: 55,
+                                    dividerThickness: 0.2,
+                                    columns: [
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Company Name",
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Company Number",
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Location",
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Speciality",
+                                        ),
+                                      ),
+
+                                      DataColumn(
+                                        headingRowAlignment:
+                                            MainAxisAlignment.center,
+                                        label: Flexible(
+                                          child: Text(
+                                            "Action",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: AppStyles.blackTextStyle()
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14.sp,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows:
+                                        controller.storeRequests
+                                            .map(
+                                              (store) => _buildStoreDataRow(
+                                                store,
+                                                context,
+                                              ),
+                                            )
+                                            .toList(),
+                                  );
+                                }),
                               ),
                             ],
                           ),
                         ),
                       ),
+
                       SizedBox(height: 20.h),
                       Row(
                         children: [
@@ -347,7 +305,6 @@ class DashboardScreen extends GetView<DashboardController> {
                             children: [
                               Container(
                                 height: 44,
-
                                 decoration: BoxDecoration(
                                   color: kLightBlueColor.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(10),
@@ -355,58 +312,71 @@ class DashboardScreen extends GetView<DashboardController> {
                               ),
                               SizedBox(
                                 width: Get.width,
-                                child: DataTable(
-                                  columnSpacing: 0,
-                                  headingRowHeight: 44,
-                                  dataRowMinHeight: 55,
-                                  dataRowMaxHeight: 55,
-                                  dividerThickness: 0.2,
-                                  columns: [
-                                    DataColumn(
-                                      label: ColumnRowWidget(title: "RFQ ID"),
-                                    ),
-                                    DataColumn(
-                                      label: ColumnRowWidget(
-                                        title: "Submitted By",
+                                child: Obx(() {
+                                  if (controller.rfqs.isEmpty) {
+                                    return Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 70,
+                                        ),
+                                        child: Text(
+                                          "No new RFQ requests",
+                                          style: AppStyles.blackTextStyle()
+                                              .copyWith(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                color: kGreyColor,
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    DataColumn(
-                                      label: ColumnRowWidget(title: "Category"),
-                                    ),
-                                    DataColumn(
-                                      label: ColumnRowWidget(title: "City"),
-                                    ),
-                                    DataColumn(
-                                      headingRowAlignment:
-                                          MainAxisAlignment.center,
-                                      label: ColumnRowWidget(title: "Action"),
-                                    ),
-                                  ],
-                                  rows:
-                                      controller.rfqs
-                                          .map(
-                                            (user) => _buildDataRow(
-                                              user['id']!,
-                                              user['submittedBy']!,
-                                              user['category']!,
-                                              user['city']!,
-                                              context,
-                                            ),
-                                          )
-                                          .toList(),
-                                ),
+                                    );
+                                  }
+
+                                  return DataTable(
+                                    columnSpacing: 0,
+                                    headingRowHeight: 44,
+                                    dataRowMinHeight: 55,
+                                    dataRowMaxHeight: 55,
+                                    dividerThickness: 0.2,
+                                    columns: [
+                                      DataColumn(
+                                        label: ColumnRowWidget(title: "RFQ ID"),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Submitted By",
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: "Category",
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(title: "City"),
+                                      ),
+                                      DataColumn(
+                                        headingRowAlignment:
+                                            MainAxisAlignment.center,
+                                        label: ColumnRowWidget(title: "Action"),
+                                      ),
+                                    ],
+                                    rows:
+                                        controller.rfqs
+                                            .map(
+                                              (rfq) => _buildRfqDataRow(
+                                                rfq,
+                                                context,
+                                              ),
+                                            )
+                                            .toList(),
+                                  );
+                                }),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      // Obx(() => CustomPagination(
-                      //   currentPage: controller.currentPage2.value,
-                      //   visiblePages: controller.visiblePageNumbers,
-                      //   onPrevious: controller.goToPreviousPage,
-                      //   onNext: controller.goToNextPage,
-                      //   onPageSelected: controller.goToPage,
-                      // )),
                     ],
                   ),
                 ),
@@ -418,39 +388,12 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  DataRow _buildDataRow(
-    String name,
-    String number,
-    String location,
-    String specialty,
-    context,
-  ) {
+  DataRow _buildStoreDataRow(Store store, context) {
     return DataRow(
       cells: [
         DataCell(
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                Get.dialog(ViewStoreDetailModel(showEditApprove: true,onEdit: (){
-
-                },selectedStatus: controller.selectedCountry,));
-              },
-              child: Text(
-                name,
-                textAlign: TextAlign.center,
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w200,
-                  color: kBlackShade7Color.withOpacity(0.7),
-                ),
-              ),
-            ),
-          ),
-        ),
-        DataCell(
           Text(
-            number,
+            store.companyName,
             textAlign: TextAlign.center,
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 12.sp,
@@ -461,7 +404,7 @@ class DashboardScreen extends GetView<DashboardController> {
         ),
         DataCell(
           Text(
-            location,
+            store.companyNumber,
             textAlign: TextAlign.center,
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 12.sp,
@@ -472,7 +415,18 @@ class DashboardScreen extends GetView<DashboardController> {
         ),
         DataCell(
           Text(
-            specialty,
+            store.location,
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            store.speciality,
             textAlign: TextAlign.center,
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 12.sp,
@@ -490,7 +444,188 @@ class DashboardScreen extends GetView<DashboardController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    Get.dialog(ViewStoreDetailModel(selectedStatus: controller.selectedCountry,));
+                    controller.selectedCountry.value = store.storeStatus.name;
+                    controller.specialityController.value = store.speciality;
+                    Get.dialog(
+                      barrierDismissible: false,
+                      ViewStoreDetailModel(
+                        showEditApprove: true,
+                        onEdit: () {},
+                        selectedStatus: controller.selectedCountry,
+                        store: store,
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 14,
+                    backgroundColor: kPrimaryColor,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        kEditIcon,
+                        height: 16.h,
+                        width: 16.w,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Obx(
+                () =>
+                    controller.isLoading3.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.dialog(
+                                barrierDismissible: false,
+                                CustomDialog(
+                                  image: kRejectReasonImage,
+                                  title: kRejectionReason,
+                                  btnText: kReject,
+                                  isLoading: controller.isLoading3,
+                                  onTap: () async {
+                                    await controller.rejectStore(
+                                      storeId: store.id,
+                                    );
+                                    showCustomSnackbar(
+                                      "Success",
+                                      "Store rejected successfully",
+                                      backgroundColor: kGreenColor,
+                                    );
+                                  },
+                                  hideDetail: true,
+                                  showRejection: true,
+                                  btnColor: kRedColor,
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: kPrimaryColor,
+                              child: Center(
+                                child: Icon(
+                                  Icons.close,
+                                  color: kWhiteColor,
+                                  size: 14,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+              ),
+              Obx(
+                () =>
+                    controller.isLoading1.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.dialog(
+                                barrierDismissible: false,
+                                CustomDialog(
+                                  image: kApproveDialogImage,
+                                  title: kApproveDetail,
+                                  isLoading: controller.isLoading1,
+                                  btnText: kApprove,
+                                  onTap: () async {
+                                    await controller.updateStoreStatusAction(
+                                      storeId: store.id,
+                                      newStatus: "Accepted",
+                                    );
+
+                                    showCustomSnackbar(
+                                      "Success",
+                                      "Store status updated to Accepted",
+                                      backgroundColor: kGreenColor,
+                                    );
+                                  },
+                                  hideDetail: true,
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: kPrimaryColor,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  kCheckIcon,
+                                  height: 16.h,
+                                  width: 16.w,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  DataRow _buildRfqDataRow(RfqModel rfq, context) {
+    return DataRow(
+      cells: [
+        DataCell(
+          Text(
+            rfq.rfqId,
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            rfq.user!.name!,
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            rfq.category,
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
+          ),
+        ),
+        DataCell(
+          Text(
+            rfq.city ?? "",
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
+          ),
+        ),
+        DataCell(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 12,
+            children: [
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.dialog(
+                      barrierDismissible: false,
+                      ViewDetailModel(rfq: rfq),
+                    );
                   },
                   child: CircleAvatar(
                     radius: 14,
@@ -507,58 +642,99 @@ class DashboardScreen extends GetView<DashboardController> {
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.dialog(
-                      CustomDialog(
-                        image: kRejectReasonImage,
-                        title: kRejectionReason,
-                        btnText: kReject,
-                        onTap: () {
-                          Get.back();
-                        },
-                        hideDetail: true,
-                        showRejection: true,
-                        btnColor: kRedColor,
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(
-                      child: Icon(Icons.close, color: kWhiteColor, size: 14),
-                    ),
-                  ),
+                child: Obx(
+                  () =>
+                      controller.isLoadingRFQStatus.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : GestureDetector(
+                            onTap: () {
+                              final reasonController = TextEditingController();
+
+                              Get.dialog(
+                                barrierDismissible: false,
+                                CustomDialog(
+                                  image: kRejectReasonImage,
+                                  title: kRejectionReason,
+                                  btnText: kReject,
+                                  isLoading: controller.isLoadingRFQStatus,
+                                  onTap: () async {
+                                    await controller.updateRFQStatusAction(
+                                      rfqId: rfq.rfqId,
+                                      status: "Rejected",
+                                    );
+                                    reasonController.clear();
+                                    showCustomSnackbar(
+                                      "Success",
+                                      "RFQ status updated to Rejected",
+                                      backgroundColor: kGreenColor,
+                                    );
+                                  },
+                                  hideDetail: true,
+                                  showRejection: true,
+                                  btnColor: kRedColor,
+
+                                  reasonController: reasonController,
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: kPrimaryColor,
+                              child: Center(
+                                child: Icon(
+                                  Icons.close,
+                                  color: kWhiteColor,
+                                  size: 14,
+                                ),
+                              ),
+                            ),
+                          ),
                 ),
               ),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.dialog(
-                      CustomDialog(
-                        image: kApproveDialogImage,
-                        title: kApproveDetail,
-                        btnText: kApprove,
-                        onTap: () {
-                          Get.back();
-                        },
-                        hideDetail: true,
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        kCheckIcon,
-                        height: 16.h,
-                        width: 16.w,
-                      ),
-                    ),
-                  ),
+                child: Obx(
+                  () =>
+                      controller.isLoadingRFQStatus.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : GestureDetector(
+                            onTap: () {
+                              Get.dialog(
+                                barrierDismissible: false,
+                                CustomDialog(
+                                  image: kApproveDialogImage,
+                                  title: kApproveDetail,
+                                  isLoading: controller.isLoadingRFQStatus,
+                                  btnText: kApprove,
+                                  onTap: () async {
+                                    await controller.updateRFQStatusAction(
+                                      rfqId: rfq.rfqId,
+                                      status: "Accepted",
+                                    );
+
+                                    showCustomSnackbar(
+                                      "Success",
+                                      "RFQ status updated to Accepted",
+                                      backgroundColor: kGreenColor,
+                                    );
+                                  },
+                                  hideDetail: true,
+                                ),
+                              );
+                            },
+
+                            child: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: kPrimaryColor,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  kCheckIcon,
+                                  height: 16.h,
+                                  width: 16.w,
+                                ),
+                              ),
+                            ),
+                          ),
                 ),
               ),
             ],

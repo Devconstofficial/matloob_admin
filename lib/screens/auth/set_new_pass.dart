@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
-import '../../../utils/app_styles.dart';
 import '../../custom_widgets/auth_component.dart';
 import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_text.dart';
@@ -19,25 +17,39 @@ class SetNewPassScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: AuthComponent(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(kLogoImage,height: 72.h,width: 150.w,),
+            SvgPicture.asset(kLogoImage, height: 72.h, width: 150.w),
             SizedBox(height: 43.h),
-            CustomText(text: kCreateNewPassword,fontWeight: FontWeight.w600,fontSize: 24.sp,),
+            CustomText(
+              text: kCreateNewPassword,
+              fontWeight: FontWeight.w600,
+              fontSize: 24.sp,
+            ),
             SizedBox(height: 14.h),
-            CustomText(text: kCreateNewPasswordDetail,fontWeight: FontWeight.w300,fontSize: 18.sp,color: kBlackColor.withOpacity(0.6),),
+            CustomText(
+              text: kCreateNewPasswordDetail,
+              fontWeight: FontWeight.w300,
+              fontSize: 18.sp,
+              color: kBlackColor.withOpacity(0.6),
+            ),
 
             SizedBox(height: 32.h),
-            CustomText(text: kNewPassword,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
+            CustomText(
+              text: kNewPassword,
+              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              color: kGreyShade7Color,
+            ),
             SizedBox(height: 11.h),
             Obx(
-                  () => CustomTextField(
+              () => CustomTextField(
                 hintText: kNewPasswordHint,
+                controller: controller.passwordforgotCont,
                 isObscure: controller.isPasswordHidden1.value,
                 prefixIcon: kLockIcon,
                 suffix: IconButton(
@@ -57,11 +69,17 @@ class SetNewPassScreen extends GetView<AuthController> {
               ),
             ),
             SizedBox(height: 14.h),
-            CustomText(text: kConfirmNewPassword,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
+            CustomText(
+              text: kConfirmNewPassword,
+              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              color: kGreyShade7Color,
+            ),
             SizedBox(height: 11.h),
             Obx(
-                  () => CustomTextField(
+              () => CustomTextField(
                 hintText: kConfirmNewPasswordHint,
+                controller: controller.passwordforgotConfirmCont,
                 isObscure: controller.isPasswordHidden2.value,
                 prefixIcon: kLockIcon,
                 suffix: IconButton(
@@ -81,18 +99,33 @@ class SetNewPassScreen extends GetView<AuthController> {
               ),
             ),
             SizedBox(height: 48.h),
-            CustomButton(
-              title: kUpdatePassword,
-              onTap: () {
-                Get.dialog(CustomDialog(image: kSuccessImage, title: kPasswordResetSuccessfully, detail: kPasswordResetSuccessfullyDetail,onTap: (){
-                  Get.toNamed(kAuthScreenRoute);
-                },btnText: kGoHome,));
-              },
+            Obx(
+              () =>
+                  controller.isLoadingCreatePassword.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                        title: kUpdatePassword,
+                        onTap: () async {
+                          await controller.setNewPassword(() {
+                            Get.dialog(
+                              barrierDismissible: false,
+                              CustomDialog(
+                                image: kSuccessImage,
+                                title: kPasswordResetSuccessfully,
+                                detail: kPasswordResetSuccessfullyDetail,
+                                onTap: () {
+                                  Get.offAllNamed(kAuthScreenRoute);
+                                },
+                                btnText: kGoHome,
+                              ),
+                            );
+                          });
+                        },
+                      ),
             ),
           ],
         ),
       ),
-
     );
   }
 }

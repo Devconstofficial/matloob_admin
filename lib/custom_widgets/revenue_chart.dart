@@ -14,7 +14,7 @@ class RevenueChart extends StatelessWidget {
   final Color tooltipBgColor;
 
   const RevenueChart({
-    Key? key,
+    super.key,
     required this.filingFee,
     required this.serviceFee,
     required this.labels,
@@ -24,7 +24,7 @@ class RevenueChart extends StatelessWidget {
     this.serviceColor = const Color(0xFF333333),
     this.tooltipBorderColor = Colors.blue,
     this.tooltipBgColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

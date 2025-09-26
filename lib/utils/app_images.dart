@@ -20,7 +20,7 @@ String kCrossIcon = "$basePathIcons/cross.svg";
 String kDeleteIcon = "$basePathIcons/delete.svg";
 String kSearchIcon1 = "$basePathIcons/search.png";
 String kUploadImage = "$basePathIcons/upload.png";
-
+String kFile = "$basePathIcons/file.png";
 
 
 /// IMAGES
@@ -32,3 +32,4 @@ String kDeleteDialogImage = "$basePath/deleteDialogImage.png";
 String kApproveDialogImage = "$basePath/approveDialogImage.png";
 String kRejectReasonImage = "$basePath/rejectReasonImage.png";
 String kProductImage = "$basePath/product_image.png";
+String kNoProductImage = "$basePath/noProduct.png";

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
-import 'package:matloob_admin/custom_widgets/custom_textfield.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_styles.dart';
 import '../utils/app_strings.dart';
@@ -20,6 +18,9 @@ class CustomDialog extends StatefulWidget {
   bool showRejection;
   Color btnColor;
   VoidCallback? onTap;
+  final TextEditingController? reasonController;
+  RxBool? isLoading;
+
   CustomDialog({super.key,
     this.intentPadding = 29,
     this.width = 450,
@@ -31,6 +32,8 @@ class CustomDialog extends StatefulWidget {
     this.showRejection = false,
     this.btnColor = kPrimaryColor,
     this.onTap,
+    this.reasonController,
+    this.isLoading 
   });
 
   @override
@@ -41,6 +44,7 @@ class CustomDialogState extends State<CustomDialog> {
 
   customTextField1(hintText,{int maxLines = 1,EdgeInsets contentPadding = const EdgeInsets.symmetric(vertical: 0,horizontal: 20),}){
     return TextField(
+      controller: widget.reasonController,
       style: GoogleFonts.roboto(
         fontSize: 15.sp,
         fontWeight: FontWeight.w400,
@@ -142,7 +146,7 @@ class CustomDialogState extends State<CustomDialog> {
                 widget.detail,
                 style: AppStyles.blackTextStyle().copyWith(fontSize: 16.sp,fontWeight: FontWeight.w200),textAlign: TextAlign.center,),
               SizedBox(height: widget.hideDetail == true ? 43.h : 25.h,),
-              CustomButton(title: widget.btnText, onTap: widget.onTap ?? (){},color: widget.btnColor,borderColor: widget.btnColor,)
+              Obx(()=> widget.isLoading!.value? const Center(child: CircularProgressIndicator(),): CustomButton(title: widget.btnText, onTap: widget.onTap ?? (){},color: widget.btnColor,borderColor: widget.btnColor,))
             ],
           ),
         ),

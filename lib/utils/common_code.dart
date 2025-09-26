@@ -1,5 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:matloob_admin/utils/app_strings.dart';
+import 'package:matloob_admin/utils/session_management/session_management.dart';
+import 'package:matloob_admin/utils/session_management/session_token_keys.dart';
 
 class CommonCode {
 
@@ -7,6 +11,10 @@ class CommonCode {
     bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
     // print('=====================is email valid $emailValid');
     return emailValid;
+  }
+  static String formatDate(DateTime date) {
+    final formatter = DateFormat('dd-MM-yyyy');
+    return formatter.format(date.toLocal()); 
   }
 
   bool isValidPhone(
@@ -34,6 +42,13 @@ class CommonCode {
 
   static unFocus(BuildContext context) {
     FocusManager.instance.primaryFocus!.unfocus();
+  }
+
+  static Future<void> logout() async {
+    Get.offNamedUntil(kAuthScreenRoute, (predicate)=>false);
+    SessionManagement sessionManagement= SessionManagement();
+    await sessionManagement.removeSession(token: SessionTokenKeys.kUserModelKey,);
+    await sessionManagement.removeSession(token: SessionTokenKeys.kUserTokenKey,);
   }
 
 }

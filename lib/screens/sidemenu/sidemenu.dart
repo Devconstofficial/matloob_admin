@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_images.dart';
 import '../../utils/app_strings.dart';
@@ -331,7 +332,7 @@ class _SideMenuState extends State<SideMenu> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      Get.toNamed(kAuthScreenRoute);
+                      CommonCode.logout();
                     },
                     child: Container(
                         height: 49,

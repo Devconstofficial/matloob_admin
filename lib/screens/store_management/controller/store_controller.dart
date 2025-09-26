@@ -1,256 +1,430 @@
+import 'dart:developer';
+import 'dart:io' as io;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/models/store_model.dart';
+import 'package:matloob_admin/screens/dashboard_screen/controller/dashboard_controller.dart';
+import 'package:matloob_admin/utils/app_colors.dart';
+import 'package:matloob_admin/utils/image_picker_services.dart';
+import 'package:matloob_admin/web_services/medical_products_services.dart';
+import 'package:matloob_admin/web_services/store_services.dart';
+import 'dart:io';
+import 'dart:html' as html;
+import 'package:excel/excel.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:intl/intl.dart';
+import 'package:matloob_admin/web_services/user_services.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 
 class StoreController extends GetxController {
-  final List<Map<String, dynamic>> allStores = [
-    {
-      "id": "STORE-001",
-      "compName": "MediCorp Distributors",
-      "registeredOn": "21 Jun 2021",
-      "views": "2.4k",
-      "compNumber": "056653567",
-      "location": "Mecca",
-      "specialty": "Both",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-002",
-      "compName": "PharmaZone Ltd.",
-      "registeredOn": "15 Jul 2022",
-      "views": "--",
-      "compNumber": "056653568",
-      "location": "Riyadh",
-      "specialty": "Services",
-      "status": "Pending",
-    },
-    {
-      "id": "STORE-003",
-      "compName": "HealthFirst Supplies",
-      "registeredOn": "05 Mar 2023",
-      "views": "109",
-      "compNumber": "056653569",
-      "location": "Dammam",
-      "specialty": "Products",
-      "status": "Restricted",
-    },
-    {
-      "id": "STORE-004",
-      "compName": "LifeMed Co.",
-      "registeredOn": "12 Jan 2022",
-      "views": "350",
-      "compNumber": "056653570",
-      "location": "Jeddah",
-      "specialty": "Both",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-005",
-      "compName": "Elite Care",
-      "registeredOn": "30 Nov 2021",
-      "views": "789",
-      "compNumber": "056653571",
-      "location": "Tabuk",
-      "specialty": "Services",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-006",
-      "compName": "Wellness Traders",
-      "registeredOn": "01 May 2023",
-      "views": "143",
-      "compNumber": "056653572",
-      "location": "Abha",
-      "specialty": "Products",
-      "status": "Pending",
-    },
-    {
-      "id": "STORE-007",
-      "compName": "HealWell Partners",
-      "registeredOn": "18 Feb 2022",
-      "views": "432",
-      "compNumber": "056653573",
-      "location": "Khobar",
-      "specialty": "Both",
-      "status": "Restricted",
-    },
-    {
-      "id": "STORE-008",
-      "compName": "CareLink Inc.",
-      "registeredOn": "20 Oct 2021",
-      "views": "1.2k",
-      "compNumber": "056653574",
-      "location": "Yanbu",
-      "specialty": "Products",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-009",
-      "compName": "PharmaConnect",
-      "registeredOn": "08 Apr 2022",
-      "views": "789",
-      "compNumber": "056653575",
-      "location": "Buraidah",
-      "specialty": "Services",
-      "status": "Pending",
-    },
-    {
-      "id": "STORE-010",
-      "compName": "MedSupply Express",
-      "registeredOn": "25 Aug 2023",
-      "views": "55",
-      "compNumber": "056653576",
-      "location": "Najran",
-      "specialty": "Both",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-011",
-      "compName": "Zahra Medical",
-      "registeredOn": "14 Dec 2022",
-      "views": "620",
-      "compNumber": "056653577",
-      "location": "Mecca",
-      "specialty": "Products",
-      "status": "Restricted",
-    },
-    {
-      "id": "STORE-012",
-      "compName": "Al Noor Supplies",
-      "registeredOn": "10 Jan 2024",
-      "views": "998",
-      "compNumber": "056653578",
-      "location": "Riyadh",
-      "specialty": "Services",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-013",
-      "compName": "MedCity Traders",
-      "registeredOn": "03 Feb 2022",
-      "views": "234",
-      "compNumber": "056653579",
-      "location": "Jeddah",
-      "specialty": "Products",
-      "status": "Pending",
-    },
-    {
-      "id": "STORE-014",
-      "compName": "Pulse Healthcare",
-      "registeredOn": "17 Mar 2023",
-      "views": "301",
-      "compNumber": "056653580",
-      "location": "Dammam",
-      "specialty": "Both",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-015",
-      "compName": "Global MedTech",
-      "registeredOn": "22 Jun 2021",
-      "views": "--",
-      "compNumber": "056653581",
-      "location": "Tabuk",
-      "specialty": "Services",
-      "status": "Restricted",
-    },
-    {
-      "id": "STORE-016",
-      "compName": "BioCare Supply",
-      "registeredOn": "29 Sep 2022",
-      "views": "1.9k",
-      "compNumber": "056653582",
-      "location": "Abha",
-      "specialty": "Products",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-017",
-      "compName": "Smart Health Solutions",
-      "registeredOn": "06 Jan 2023",
-      "views": "470",
-      "compNumber": "056653583",
-      "location": "Yanbu",
-      "specialty": "Both",
-      "status": "Pending",
-    },
-    {
-      "id": "STORE-018",
-      "compName": "MediServe Arabia",
-      "registeredOn": "19 May 2023",
-      "views": "1.1k",
-      "compNumber": "056653584",
-      "location": "Buraidah",
-      "specialty": "Services",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-019",
-      "compName": "CareHub Network",
-      "registeredOn": "11 Apr 2021",
-      "views": "882",
-      "compNumber": "056653585",
-      "location": "Khobar",
-      "specialty": "Products",
-      "status": "Restricted",
-    },
-    {
-      "id": "STORE-020",
-      "compName": "SahaTech Medical",
-      "registeredOn": "02 Oct 2023",
-      "views": "2.1k",
-      "compNumber": "056653586",
-      "location": "Najran",
-      "specialty": "Both",
-      "status": "Active",
-    },
-    {
-      "id": "STORE-021",
-      "compName": "SahaTech Medical",
-      "registeredOn": "02 Oct 2023",
-      "views": "2.1k",
-      "compNumber": "056653586",
-      "location": "Najran",
-      "specialty": "Both",
-      "status": "Active",
-    },
-  ];
-  var selectedStatus = ''.obs;
-
-  var currentPage2 = 1.obs;
-  final int itemsPerPage = 4;
+  final StoreServices storeServices = StoreServices();
+  final UserServices userServices = UserServices();
+  TextEditingController searchController = TextEditingController();
+  var searchText = "".obs;
+  final RxList<Store> storeRequests = <Store>[].obs;
+  var isDeleting = false.obs;
+  var isDeletingProduct = false.obs;
+  var isFetching = false.obs;
+  var isAdding = false.obs;
+  var isAddingProduct = false.obs;
+  DashboardController dashboardController = Get.put(DashboardController());
+  var totalPages = 1.obs;
+  var currentPage = 1.obs;
+  final int itemsPerPage = 10;
   final int pagesPerGroup = 5;
-
-  int get totalPages => (allStores.length / itemsPerPage).ceil();
-
-  List get pagedUsers {
-    int start = (currentPage2.value - 1) * itemsPerPage;
-    int end = start + itemsPerPage;
-    return allStores.sublist(
-      start,
-      end > allStores.length ? allStores.length : end,
-    );
+  var isExporting = false.obs;
+  var selectedStatus = ''.obs;
+  var usersBasicList = <Map<String, dynamic>>[].obs;
+  var isFetchingUsers = false.obs;
+  Future<void> fetchUsersBasic() async {
+    try {
+      isFetchingUsers.value = true;
+      final users = await userServices.getUsersBasic();
+      usersBasicList.assignAll(users);
+    } catch (e) {
+      log("Error fetching basic users: $e");
+      showCustomSnackbar("Error", "Failed to fetch users");
+    } finally {
+      isFetchingUsers.value = false;
+    }
   }
 
-  int get currentGroup => ((currentPage2.value - 1) / pagesPerGroup).floor();
+  Future<void> exportStoresToExcel() async {
+    try {
+      isExporting.value = true;
+
+      var excel = Excel.createExcel();
+      Sheet sheet = excel[excel.getDefaultSheet() ?? 'Stores'];
+      final headers = [
+        "Store ID",
+        "Company Name",
+        "Company Number",
+        "Location",
+        "Speciality",
+        "Status",
+        "Clicks",
+        "Views",
+        "Created At",
+        "Updated At",
+        "User Info",
+        "Products",
+      ];
+      sheet.appendRow(headers.map((h) => TextCellValue(h)).toList());
+
+      for (var store in storeRequests) {
+        String userInfo =
+            store.user != null
+                ? "Name: ${store.user!.name}, Email: ${store.user!.email}, Mobile: ${store.user!.mobile}"
+                : "";
+
+        String products =
+            store.medicalProducts.isNotEmpty
+                ? store.medicalProducts.map((p) => p.title).join(", ")
+                : "";
+
+        sheet.appendRow([
+          TextCellValue(store.id),
+          TextCellValue(store.companyName),
+          TextCellValue(store.companyNumber),
+          TextCellValue(store.location),
+          TextCellValue(store.speciality),
+          TextCellValue(store.storeStatus.toString().split('.').last),
+          IntCellValue(store.clicks),
+          IntCellValue(store.views),
+          TextCellValue(
+            store.createdAt != null
+                ? DateFormat('yyyy-MM-dd HH:mm').format(store.createdAt!)
+                : "",
+          ),
+          TextCellValue(
+            store.updatedAt != null
+                ? DateFormat('yyyy-MM-dd HH:mm').format(store.updatedAt!)
+                : "",
+          ),
+          TextCellValue(userInfo),
+          TextCellValue(products),
+        ]);
+      }
+
+      final fileBytes = excel.encode();
+      if (fileBytes == null) throw Exception("Failed to encode Excel file.");
+
+      if (kIsWeb) {
+        final blob = html.Blob([fileBytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        html.AnchorElement(href: url)
+          ..setAttribute(
+            "download",
+            "Stores_${DateTime.now().millisecondsSinceEpoch}.xlsx",
+          )
+          ..click();
+        html.Url.revokeObjectUrl(url);
+        showCustomSnackbar(
+          "Success",
+          "Stores exported! Check your downloads folder.",
+          backgroundColor: kGreenColor,
+        );
+      } else {
+        Directory dir = await getApplicationDocumentsDirectory();
+        String path =
+            "${dir.path}/Stores_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+        File(path)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes);
+        showCustomSnackbar(
+          "Success",
+          "Stores exported to Excel at: ${path.replaceAll(dir.path, 'App Documents')}",
+        );
+      }
+    } catch (e) {
+      log("Error exporting stores: $e");
+      showCustomSnackbar("Error", "Failed to export stores");
+    } finally {
+      isExporting.value = false;
+    }
+  }
+
+  List<Store> get filteredStores {
+    final query = searchText.value.trim().toLowerCase();
+    if (query.isEmpty) return storeRequests;
+
+    return storeRequests.where((store) {
+      final company = store.companyName.toLowerCase();
+      final speciality = store.speciality.toLowerCase();
+      return company.contains(query) || speciality.contains(query);
+    }).toList();
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await fetchStores();
+    await fetchUsersBasic();
+    searchController.addListener(() {
+      searchText.value = searchController.text;
+      currentPage.value = 1;
+    });
+  }
+
+  Future<void> fetchStores({int page = 1}) async {
+    try {
+      final response = await storeServices.getStores(
+        page: page,
+        limit: itemsPerPage,
+      );
+      storeRequests.clear();
+
+      final List<Store> allStores = response["stores"] ?? [];
+      final meta = response["meta"] ?? {};
+
+      storeRequests.assignAll(allStores);
+      if (meta.containsKey("totalPages")) {
+        totalPages.value = meta["totalPages"];
+      } else if (meta.containsKey("total") && itemsPerPage > 0) {
+        totalPages.value = (meta["total"] / itemsPerPage).ceil();
+      }
+
+      currentPage.value = page;
+    } catch (e) {
+      log("Error fetching stores: $e");
+    }
+  }
+
+  int get currentGroup => ((currentPage.value - 1) / pagesPerGroup).floor();
 
   List<int> get visiblePageNumbers {
     int startPage = currentGroup * pagesPerGroup + 1;
-    int endPage = (startPage + pagesPerGroup - 1).clamp(1, totalPages);
+    int endPage = (startPage + pagesPerGroup - 1).clamp(1, totalPages.value);
     return List.generate(endPage - startPage + 1, (index) => startPage + index);
   }
 
   void goToPage(int page) {
-    if (page >= 1 && page <= totalPages) currentPage2.value = page;
+    if (page >= 1 && page <= totalPages.value) {
+      fetchStores(page: page);
+    }
   }
 
   void goToNextPage() {
-    if (currentPage2.value < totalPages) {
-      currentPage2.value++;
+    if (currentPage.value < totalPages.value) {
+      fetchStores(page: currentPage.value + 1);
     }
   }
 
   void goToPreviousPage() {
-    if (currentPage2.value > 1) {
-      currentPage2.value--;
+    if (currentPage.value > 1) {
+      fetchStores(page: currentPage.value - 1);
     }
   }
+
+  Future<void> deleteStoreInController(String storeId) async {
+    try {
+      isDeleting.value = true;
+
+      final message = await storeServices.deleteStore(storeId);
+
+      await fetchStores();
+      await dashboardController.fetchStores();
+
+      Get.back();
+      showCustomSnackbar("Success", message);
+    } catch (e) {
+      log("Error deleting store: $e");
+      showCustomSnackbar(
+        "Error",
+        "Failed to delete store. Please check if your store has associated users or products.",
+      );
+    } finally {
+      isDeleting.value = false;
+    }
+  }
+
+  Future<void> createStore({
+  required String userId,
+  required String logo,
+  required String companyName,
+  required String companyNumber,
+  required String location,
+  required String speciality,
+  String storeStatus = 'Accepted',
+}) async {
+  try {
+    isAdding.value = true;
+    Store newStore = await storeServices.addStore(
+      userId: userId,
+      logo: logo,
+      companyName: companyName,
+      companyNumber: companyNumber,
+      location: location,
+      speciality: speciality,
+      storeStatus: storeStatus,
+    );
+    await fetchStores();
+    Get.back();
+
+    showCustomSnackbar("Success", "Store created successfully", backgroundColor: kGreenColor);
+  } catch (e) {
+    log("Error creating store: $e");
+    showCustomSnackbar("Error", "Failed to create store");
+  } finally {
+    isAdding.value = false;
+  }
+}
+
+  final RxInt selectedTab = 0.obs;
+  final RxString selectedChip = ''.obs;
+  
+  final RxBool isContactForPrice = false.obs;
+
+  final List<List<String>> medicalProd = const [
+    ['Medical Supplies', 'Diagnostics', 'Pharmaceuticals', 'Personal Care', 'Orthopedics'],
+    ['Blood Pressure', 'Diabetic Care', 'Injections', 'Dressings'],
+  ];
+
+  final List<List<String>> medServices = const [
+    ['Consultation', 'Telemedicine', 'Home Care', 'Physiotherapy'],
+    ['Lab Tests', 'Radiology', 'Surgery Assistance'],
+  ];
+
+  final List<List<String>> labEqu = const [
+    ['Analytical Instruments', 'Safety Equipment', 'Reagents & Kits'],
+    ['Microscopes', 'Centrifuges', 'Autoclaves', 'Pipettes'],
+  ];
+
+  void toggleChip(String label) {
+    if (selectedChip.value == label) {
+      selectedChip.value = '';
+    } else {
+      selectedChip.value = label;
+    }
+  }
+
+  void toggleContactForPrice(bool val) {
+    isContactForPrice.value = val;
+  }
+  
+  void setSelectedTab(int index) {
+    if (selectedTab.value != index) {
+      selectedTab.value = index;
+      selectedChip.value = '';
+    }
+  }
+
+  final MedicalProductsServices productServices = MedicalProductsServices();
+  final ImagePickerService imagePickerService = ImagePickerService();
+  Future<void> addProductToStore({
+    required String storeId,
+    required String title,
+    required String brand,
+    required String country,
+    required String description,
+    required List<XFile> selectedImages,
+    required double price,
+    required bool isContactForPrice,
+  }) async {
+    if (selectedChip.value.isEmpty) {
+      showCustomSnackbar("Missing Field", "Please select a product subcategory.");
+      return;
+    }
+    
+    try {
+      isAddingProduct.value = true;
+      final List<String> imageUrls = [];
+      for (var image in selectedImages) {
+        String? extension;
+        Uint8List fileBytes;
+
+        if (kIsWeb) {
+          final response = await image.readAsBytes();
+          fileBytes = response.buffer.asUint8List();
+          extension = image.name.split('.').last;
+        } else {
+          fileBytes = await io.File(image.path).readAsBytes();
+          extension = image.path.split('.').last;
+        }
+
+        String url = await imagePickerService.uploadProductImagesToFirebase(
+          fileBytes,
+          extension,
+        );
+        if (url.isNotEmpty) {
+          imageUrls.add(url);
+        }
+            }
+
+      if (imageUrls.isEmpty && selectedImages.isNotEmpty) {
+        throw Exception("Failed to upload product images.");
+      }
+
+      await productServices.createProduct(
+        storeId: storeId,
+        brand: brand,
+        category: selectedTab.value == 0
+            ? "Medical Products"
+            : selectedTab.value == 1
+                ? "Medical Services"
+                : "Lab Equipment",
+        subCategory: selectedChip.value,
+        title: title,
+        country: country,
+        isContactForPrice: isContactForPrice,
+        images: imageUrls,
+        description: description,
+        price: isContactForPrice ? 0 : price,
+      );
+
+      await fetchStores();
+      await fetchStoreDetails(storeId); 
+      Get.back();
+      showCustomSnackbar("Success", "Product added successfully!", backgroundColor: kGreenColor);
+
+    } catch (e) {
+      log("Error adding product: $e", name: "StoreController");
+      showCustomSnackbar("Error", "Failed to add product: ${e.toString().split(':').last.trim()}");
+    } finally {
+      isAddingProduct.value = false;
+    }
+  }
+
+  Future<void> deleteProductFromStore(String productId,String storeId) async {
+    try {
+      isDeletingProduct.value = true;
+      final message = await productServices.deleteProduct(productId);
+      await fetchStores(); 
+      await fetchStoreDetails(storeId); 
+      Get.back();
+      showCustomSnackbar("Success", message, backgroundColor: kGreenColor);
+      
+     
+
+    } catch (e) {
+      log("Error deleting product: $e", name: "StoreController");
+      showCustomSnackbar("Error", "Failed to delete product: ${e.toString().split(':').last.trim()}");
+    }
+    finally {
+      isDeletingProduct.value = false;
+    }
+  }
+
+  final Rx<Store?> currentStoreDetail = Rx<Store?>(null);
+
+  Future<void> fetchStoreDetails(String storeId) async {
+    try {
+      isFetching.value = true;
+      currentStoreDetail.value = null;
+      
+      final store = await storeServices.getStoreDetail(storeId);
+      currentStoreDetail.value = store;
+      
+    } catch (e) {
+      log("Error fetching store details for $storeId: $e");
+      showCustomSnackbar("Error", "Failed to load store details.");
+    } finally {
+      isFetching.value = false;
+    }
+  }
+
 }

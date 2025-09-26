@@ -1,4 +1,4 @@
-package com.example.matloob_admin
+package com.matloob.admin
 
 import io.flutter.embedding.android.FlutterActivity
 

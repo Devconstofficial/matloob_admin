@@ -53,6 +53,11 @@ dependencies:
   dropdown_button2: ^2.3.9
   flutter_switch: ^0.3.2
   dotted_border: ^2.0.0
+  shared_preferences: ^2.5.3
+  firebase_core: ^4.1.1
+  firebase_storage: ^13.0.2
+  excel: ^4.0.6
+  path_provider: ^2.1.5
 
 
 dev_dependencies:

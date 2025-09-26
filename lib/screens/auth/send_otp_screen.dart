@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
-import '../../../utils/app_styles.dart';
 import '../../custom_widgets/auth_component.dart';
 import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_text.dart';
@@ -36,17 +34,22 @@ class SendOtpScreen extends GetView<AuthController> {
             SizedBox(height: 11.h),
             CustomTextField(
               hintText: kEmailHint,
+              controller: controller.forgetEmailCont,
               prefixIcon: kMailIcon,
               fillColor: kWhiteColor,
               isFilled: true,
             ),
             SizedBox(height: 72.h),
-            CustomButton(
-              title: kSendCode,
-              onTap: () {
-                Get.toNamed(kVerifyOtpScreenRoute);
-              },
+            Obx(
+              ()=> controller.isLoadingForgot.value ? const Center(child: CircularProgressIndicator(),) :CustomButton(
+                title: kSendCode,
+                onTap: ()async {
+                  await controller.requestPasswordReset();
+                  
+                },
+              ),
             ),
+            
           ],
         ),
       ),

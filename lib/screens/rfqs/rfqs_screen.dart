@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
-import 'package:matloob_admin/custom_widgets/custom_textfield.dart';
+import 'package:matloob_admin/custom_widgets/view_details_dialog.dart';
+import 'package:matloob_admin/models/rfq_model.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
-import '../../custom_widgets/view_details_dialog.dart';
 import '../sidemenu/sidemenu.dart';
 import 'controller/rfq_controller.dart';
 
@@ -22,7 +23,6 @@ class RfqScreen extends GetView<RfqController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -34,7 +34,7 @@ class RfqScreen extends GetView<RfqController> {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32.w,vertical: 40.h),
+                  padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 40.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -42,20 +42,36 @@ class RfqScreen extends GetView<RfqController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(kSubmittedRFQs,style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500,fontSize: 18.sp),),
-                          CustomButton(title: kExportAsExcel, onTap: (){},height: 40.h,width: 146.w,textSize: 16.sp,fontWeight: FontWeight.w500,),
+                          Text(
+                            kSubmittedRFQs,
+                            style: AppStyles.blackTextStyle().copyWith(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                          Obx(
+                            ()=> controller.isExporting.value? const Center(child: CircularProgressIndicator(),): CustomButton(
+                              title: kExportAsExcel,
+                              onTap: () {
+                                controller.exportRFQsToExcel();
+                              },
+                              height: 40.h,
+                              width: 146.w,
+                              textSize: 16.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: 12.h,),
+                      SizedBox(height: 12.h),
                       Container(
                         width: Get.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: kGreyColor, width: 0.3),
+                          border: Border.all(color: kGreyColor, width: 0.3),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 24,top: 24,right: 24),
+                          padding: const EdgeInsets.only(left: 24, top: 24, right: 24),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -63,12 +79,12 @@ class RfqScreen extends GetView<RfqController> {
                                 height: 45.h,
                                 width: 300.w,
                                 child: TextField(
+                                  controller: controller.searchController,
                                   style: GoogleFonts.roboto(
                                     fontSize: 15.sp,
                                     fontWeight: FontWeight.w400,
                                     color: kBlackColor,
                                   ),
-
                                   decoration: InputDecoration(
                                     hintStyle: GoogleFonts.roboto(
                                       color: kBlackColor.withOpacity(0.2),
@@ -98,78 +114,72 @@ class RfqScreen extends GetView<RfqController> {
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20.h,),
-                              Obx(() => Stack(
-                                children: [
-                                  Container(
-                                    height: 44,
-                                    decoration: BoxDecoration(
-                                      color: kLightBlueColor.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(10),
+                              SizedBox(height: 20.h),
+                              Obx(() {
+                                final rfqs = controller.pagedRFQs;
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      height: 44,
+                                      decoration: BoxDecoration(
+                                        color: kLightBlueColor.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: Get.width,
-                                    child: DataTable(
-                                      columnSpacing: 0,
-                                      headingRowHeight: 44,
-                                      dataRowMinHeight: 55,
-                                      dataRowMaxHeight: 55,
-                                      dividerThickness: 0.2,
-                                      columns: [
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kRfqID),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kSubmittedBy),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kCategory),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kCity),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kSubmittedOn),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kResponses),
-                                        ),
-                                        DataColumn(
-                                          label: ColumnRowWidget(title: kStatus),
-                                        ),
-                                        DataColumn(
-                                          headingRowAlignment: MainAxisAlignment.center,
-                                          label: ColumnRowWidget(title: "Action"),
-                                        ),
-                                      ],
-                                      rows: controller.pagedUsers
-                                          .map((user) => _buildDataRow(
-                                          user['id']!,
-                                          user['subBy']!,
-                                          user['category']!,
-                                          user['city']!,
-                                          user['subOn']!,
-                                          user['response']!,
-                                          user['status']!,
-                                          context))
-                                          .toList(),
+                                    SizedBox(
+                                      width: Get.width,
+                                      child: DataTable(
+                                        columnSpacing: 0,
+                                        headingRowHeight: 44,
+                                        dataRowMinHeight: 55,
+                                        dataRowMaxHeight: 55,
+                                        dividerThickness: 0.2,
+                                        columns: [
+                                          DataColumn(label: ColumnRowWidget(title: kRfqID)),
+                                          DataColumn(label: ColumnRowWidget(title: kSubmittedBy)),
+                                          DataColumn(label: ColumnRowWidget(title: kCategory)),
+                                          DataColumn(label: ColumnRowWidget(title: kCity)),
+                                          DataColumn(label: ColumnRowWidget(title: kSubmittedOn)),
+                                          DataColumn(label: ColumnRowWidget(title: kResponses)),
+                                          DataColumn(label: ColumnRowWidget(title: kStatus)),
+                                          DataColumn(
+                                            headingRowAlignment: MainAxisAlignment.center,
+                                            label: ColumnRowWidget(title: "Action"),
+                                          ),
+                                        ],
+                                        rows: rfqs.map((rfq) {
+                                          return _buildDataRow(
+                                            rfq.rfqId,
+                                            rfq.user?.name ?? "-",
+                                            rfq.category,
+                                            rfq.city ?? "-",
+                                            rfq.createdAt != null
+                                                ? CommonCode.formatDate(rfq.createdAt!)
+                                                : "-",
+                                            rfq.clicks ,
+                                            rfq.status.name ,
+                                            rfq,
+                                            context,
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),)
+                                  ],
+                                );
+                              }),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 29.h,),
+                      SizedBox(height: 29.h),
+
                       Obx(() => CustomPagination(
-                        currentPage: controller.currentPage2.value,
-                        visiblePages: controller.visiblePageNumbers,
-                        onPrevious: controller.goToPreviousPage,
-                        onNext: controller.goToNextPage,
-                        onPageSelected: controller.goToPage,
-                      )),
+                            currentPage: controller.currentPage.value,
+                            visiblePages: controller.visiblePageNumbers,
+                            onPrevious: controller.goToPreviousPage,
+                            onNext: controller.goToNextPage,
+                            onPageSelected: controller.goToPage,
+                          )),
                     ],
                   ),
                 ),
@@ -181,103 +191,61 @@ class RfqScreen extends GetView<RfqController> {
     );
   }
 
-  DataRow _buildDataRow(String id, String submittedBy, String category, String city, String submitOn,String responses,String status, context) {
-
+  DataRow _buildDataRow(
+    String id,
+    String submittedBy,
+    String category,
+    String city,
+    String submitOn,
+    int responses,
+    String status,
+    RfqModel rfq,
+    BuildContext context,
+  ) {
     return DataRow(
       cells: [
-        DataCell(MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Get.dialog(ViewDetailModel());
-            },
-            child: Text(
-              id,
-              textAlign: TextAlign.center,
-              style: AppStyles.blackTextStyle()
-                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
-            ),
-          ),
-        )),
-        DataCell(MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Get.dialog(ViewDetailModel());
-            },
-            child: Text(
-              submittedBy,
-              textAlign: TextAlign.center,
-              style: AppStyles.blackTextStyle()
-                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
-            ),
-          ),
-        )),
-        DataCell(MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Get.dialog(ViewDetailModel());
-            },
-            child: Text(
-              category,
-              textAlign: TextAlign.center,
-              style: AppStyles.blackTextStyle()
-                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
-            ),
-          ),
-        )),
-        DataCell(MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Get.dialog(ViewDetailModel());
-            },
-            child: Text(
-              city,
-              textAlign: TextAlign.center,
-              style: AppStyles.blackTextStyle()
-                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
-            ),
-          ),
-        )),
-        DataCell(MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Get.dialog(ViewDetailModel());
-            },
-            child: Text(
-              submitOn,
-              textAlign: TextAlign.center,
-              style: AppStyles.blackTextStyle()
-                  .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
-            ),
-          ),
-        )),
+        DataCell(_buildClickableText(id)),
+        DataCell(_buildClickableText(submittedBy)),
+        DataCell(_buildClickableText(category)),
+        DataCell(_buildClickableText(city)),
+        DataCell(_buildClickableText(submitOn)),
         DataCell(Text(
-          responses,
+          responses.toString(),
           textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontSize: 12.sp, fontWeight: FontWeight.w200,color: kBlackShade7Color.withOpacity(0.7)),
+          style: AppStyles.blackTextStyle().copyWith(
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w200,
+            color: kBlackShade7Color.withOpacity(0.7),
+          ),
         )),
         DataCell(
-            Container(
-              width: 71,
-              height: 26,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: status == kPublished ? kPrimaryColor.withOpacity(0.2) : status == kPending ? kBrownColor.withOpacity(0.2) : kRedColor.withOpacity(0.2)
-              ),
-              child: Center(
-                child: Text(
-                  status,
-                  textAlign: TextAlign.center,
-                  style: AppStyles.blackTextStyle()
-                      .copyWith(fontSize: 12, fontWeight: FontWeight.w500,color: status == kPublished ? kPrimaryColor : status == kPending ? kBrownColor : kRedColor),
+          Container(
+            width: 71,
+            height: 26,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: status == "Accepted"
+                  ? kPrimaryColor.withOpacity(0.2)
+                  : status == "Rejected"
+                      ?kRedColor.withOpacity(0.2) 
+                      : kBrownColor.withOpacity(0.2),
+            ),
+            child: Center(
+              child: Text(
+                status,
+                textAlign: TextAlign.center,
+                style: AppStyles.blackTextStyle().copyWith(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  color: status == "Accepted"
+                      ? kPrimaryColor
+                      : status == "Rejected"
+                          ?kRedColor
+                          : kBrownColor
                 ),
               ),
-            )
+            ),
+          ),
         ),
         DataCell(
           Row(
@@ -286,20 +254,36 @@ class RfqScreen extends GetView<RfqController> {
             children: [
               MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.dialog(CustomDialog(image: kDeleteDialogImage, title: kConfirmDeleteDetail,btnText: kConfirmDelete, onTap: (){
-                      Get.back();
-                    },btnColor: kRedColor,hideDetail: true,));
-                  },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(
-                      child: SvgPicture.asset(
-                        kDeleteIcon,
-                        height: 16.h,
-                        width: 16.w,
+                child: Obx(
+                   () =>
+                      controller.isDeleting.value
+                          ? const Center(child: CircularProgressIndicator())
+                          : GestureDetector(
+                    onTap: () {
+                      Get.dialog(
+                        barrierDismissible: false,
+                        CustomDialog(
+                          image: kDeleteDialogImage,
+                          title: kConfirmDeleteDetail,
+                          btnText: kConfirmDelete,
+                          isLoading: controller.isDeleting,
+                          onTap: () {
+                            controller.deleteRFQAction(id,responses);
+                          },
+                          btnColor: kRedColor,
+                          hideDetail: true,
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 14,
+                      backgroundColor: kPrimaryColor,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          kDeleteIcon,
+                          height: 16.h,
+                          width: 16.w,
+                        ),
                       ),
                     ),
                   ),
@@ -309,7 +293,10 @@ class RfqScreen extends GetView<RfqController> {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    Get.dialog(ViewDetailModel());
+                    Get.dialog(
+                      barrierDismissible: false,
+                      ViewDetailModel(rfq: rfq,isEditable: false,),
+                    );
                   },
                   child: CircleAvatar(
                     radius: 14,
@@ -328,6 +315,21 @@ class RfqScreen extends GetView<RfqController> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildClickableText(String text) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: AppStyles.blackTextStyle().copyWith(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w200,
+          color: kBlackShade7Color.withOpacity(0.7),
+        ),
+      ),
     );
   }
 }
