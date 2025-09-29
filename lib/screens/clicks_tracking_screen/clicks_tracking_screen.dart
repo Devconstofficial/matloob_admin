@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
@@ -35,9 +37,12 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(kClicksTracking),
+                      customHeader(
+                        CommonCode().t(LocaleKeys.clicksTracking),
+                        context,
+                      ),
                       Text(
-                        kRFQIssuerTracking,
+                        CommonCode().t(LocaleKeys.rfqIssuer),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontWeight: FontWeight.w500,
                           fontSize: 18.sp,
@@ -114,10 +119,13 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                       if (controller.pagedRFQClicks.isEmpty) {
                                         return Text(
                                           "No RFQ clicks found",
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                            fontSize: 16.sp,
-                                            color: kBlackColor.withOpacity(0.5),
-                                          ),
+                                          style: AppStyles.blackTextStyle()
+                                              .copyWith(
+                                                fontSize: 16.sp,
+                                                color: kBlackColor.withOpacity(
+                                                  0.5,
+                                                ),
+                                              ),
                                         );
                                       }
 
@@ -126,8 +134,10 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                           Container(
                                             height: 44,
                                             decoration: BoxDecoration(
-                                              color: kLightBlueColor.withOpacity(0.1),
-                                              borderRadius: BorderRadius.circular(10),
+                                              color: kLightBlueColor
+                                                  .withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                           ),
                                           SizedBox(
@@ -167,11 +177,17 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                                       .map(
                                                         (user) => _buildDataRow(
                                                           user.id,
-                                                          user.usersWhoClicked.isEmpty
+                                                          user
+                                                                  .usersWhoClicked
+                                                                  .isEmpty
                                                               ? 'N/A'
-                                                              : (user.usersWhoClicked[0].name ?? 'N/A'),
+                                                              : (user
+                                                                      .usersWhoClicked[0]
+                                                                      .name ??
+                                                                  'N/A'),
                                                           user.title,
-                                                          user.clicks.toString(),
+                                                          user.clicks
+                                                              .toString(),
                                                           context,
                                                         ),
                                                       )
@@ -204,12 +220,11 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                         ),
                       ),
 
-                    
                       SizedBox(height: 20.h),
                       Row(
                         children: [
                           Text(
-                           "Store Clicks Tracking",
+                            CommonCode().t(LocaleKeys.storeClicksTracking),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
@@ -288,10 +303,13 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                       if (controller.pagedStoreClicks.isEmpty) {
                                         return Text(
                                           "No store clicks found",
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                            fontSize: 16.sp,
-                                            color: kBlackColor.withOpacity(0.5),
-                                          ),
+                                          style: AppStyles.blackTextStyle()
+                                              .copyWith(
+                                                fontSize: 16.sp,
+                                                color: kBlackColor.withOpacity(
+                                                  0.5,
+                                                ),
+                                              ),
                                         );
                                       }
 
@@ -300,8 +318,10 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                           Container(
                                             height: 44,
                                             decoration: BoxDecoration(
-                                              color: kLightBlueColor.withOpacity(0.1),
-                                              borderRadius: BorderRadius.circular(10),
+                                              color: kLightBlueColor
+                                                  .withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                           ),
                                           SizedBox(
@@ -344,14 +364,16 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
                                               rows:
                                                   controller.pagedStoreClicks
                                                       .map(
-                                                        (user) => _buildDataRow1(
-                                                          user.id,
-                                                          user.companyName,
-                                                          user.speciality,
-                                                          user.clicks.toString(),
-                                                          user.location,
-                                                          context,
-                                                        ),
+                                                        (user) =>
+                                                            _buildDataRow1(
+                                                              user.id,
+                                                              user.companyName,
+                                                              user.speciality,
+                                                              user.clicks
+                                                                  .toString(),
+                                                              user.location,
+                                                              context,
+                                                            ),
                                                       )
                                                       .toList(),
                                             ),
@@ -397,7 +419,7 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
     String name,
     String issuer,
     String clicks,
-    
+
     context,
   ) {
     return DataRow(
@@ -451,6 +473,7 @@ class ClickTrackingScreen extends GetView<ClickTrackingController> {
       ],
     );
   }
+
   DataRow _buildDataRow1(
     String id,
     String name,

@@ -23,7 +23,8 @@ class WebUrls extends _BaseUrl {
   static const String kGetRFQDetailsUrl = "${_BaseUrl._kBaseUrl}/rfq";
   static const String kDeleteRFQUrl = "${_BaseUrl._kBaseUrl}/rfq";
   static const String kGetAllUsersUrl = "${_BaseUrl._kBaseUrl}/users";
-  static const String kGetAllUsersAnalyticsUrl = "${_BaseUrl._kBaseUrl}/users/analytics";
+  static const String kGetAllUsersAnalyticsUrl =
+      "${_BaseUrl._kBaseUrl}/users/analytics";
   static const String kUpdateUserStatusUrl = "${_BaseUrl._kBaseUrl}/user";
   static const String kUpdateUserUrl = "${_BaseUrl._kBaseUrl}/user";
   static const String kAddUserUrl = "${_BaseUrl._kBaseUrl}/user";
@@ -36,5 +37,5 @@ class WebUrls extends _BaseUrl {
 }
 
 abstract class _BaseUrl {
-  static const String _kBaseUrl = 'http://13.62.80.96/api/admin';
+  static const String _kBaseUrl = 'https://backend.mtloobapp.com/api/admin';
 }

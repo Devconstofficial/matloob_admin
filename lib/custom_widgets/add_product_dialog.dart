@@ -13,10 +13,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/screens/store_management/controller/store_controller.dart';
 import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../utils/app_colors.dart';
 
 class AddProductDialog extends StatefulWidget {
@@ -81,7 +83,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Product Details",
+            CommonCode().t(LocaleKeys.productDetails),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -91,14 +93,14 @@ class _AddProductDialogState extends State<AddProductDialog> {
           SizedBox(
             height: 48.h,
             child: customTextField(
-              "Title of Product",
+              CommonCode().t(LocaleKeys.titleHint),
               controller: titleController,
             ),
           ),
 
           SizedBox(height: 16.h),
           Text(
-            kCatalogDetails,
+            CommonCode().t(LocaleKeys.catalogDetails),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -272,7 +274,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 child: SizedBox(
                   height: 48.h,
                   child: customTextField(
-                    kBrandName,
+                    CommonCode().t(LocaleKeys.brandName),
                     controller: brandController,
                   ),
                 ),
@@ -282,7 +284,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                 child: SizedBox(
                   height: 48.h,
                   child: customTextField(
-                    kManufacturingCountry,
+                    CommonCode().t(LocaleKeys.manufacturingCountry),
                     controller: countryController,
                   ),
                 ),
@@ -294,7 +296,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                kContactForPrice,
+                CommonCode().t(LocaleKeys.contactForPrice),
                 style: AppStyles.blackTextStyle().copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
@@ -315,17 +317,16 @@ class _AddProductDialogState extends State<AddProductDialog> {
           ),
           SizedBox(height: 16.h),
           SizedBox(
-              height: 48.h,
-              child: customTextField(
-                 kContactForPriceHint
-                   ,
-                controller: priceController,
-              ),
+            height: 48.h,
+            child: customTextField(
+              kContactForPriceHint,
+              controller: priceController,
             ),
+          ),
 
           SizedBox(height: 16.h),
           Text(
-            kProductImages,
+            CommonCode().t(LocaleKeys.productImage),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -384,7 +385,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          kMaxAllowed,
+                          CommonCode().t(LocaleKeys.max10MbFilesAllowed),
                           style: AppStyles.blackTextStyle().copyWith(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -461,7 +462,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
             ),
           SizedBox(height: 15.h),
           Text(
-            "Product Description",
+            CommonCode().t(LocaleKeys.productDescription),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -469,7 +470,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
           ),
           SizedBox(height: 8.h),
           customTextField(
-            "Product Description",
+            CommonCode().t(LocaleKeys.productDescription),
             controller: descriptionController,
             maxLines: 6,
             contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -478,7 +479,7 @@ class _AddProductDialogState extends State<AddProductDialog> {
           Row(
             children: [
               CustomButton(
-                title: kCancel,
+                title: CommonCode().t(LocaleKeys.cancel),
                 onTap: () {
                   Get.back();
                 },
@@ -495,51 +496,56 @@ class _AddProductDialogState extends State<AddProductDialog> {
 
               SizedBox(width: 20.w),
               Obx(
-                ()=> controller.isAddingProduct.value? const Center(child: CircularProgressIndicator(),): CustomButton(
-                  title: "Add Product",
-                  onTap: () async {
-                    if (titleController.text.isEmpty ||
-                        brandController.text.isEmpty ||
-                        countryController.text.isEmpty ||
-                        descriptionController.text.isEmpty ||
-                        (!controller.isContactForPrice.value &&
-                            priceController.text.isEmpty) ||
-                        selectedImages.isEmpty) {
-                      showCustomSnackbar(
-                        "Missing Field",
-                        "Please fill all required fields and select images.",
-                      );
-                      return;
-                    }
-                
-                    double price = 0;
-                    if (!controller.isContactForPrice.value) {
-                      price = double.tryParse(priceController.text) ?? 0;
-                    }
-                
-                    await controller.addProductToStore(
-                      storeId: widget.storeId,
-                      title: titleController.text.trim(),
-                      brand: brandController.text.trim(),
-                      country: countryController.text.trim(),
-                      description: descriptionController.text.trim(),
-                      selectedImages: selectedImages,
-                      price: price,
-                      isContactForPrice: controller.isContactForPrice.value,
-                    );
-                    titleController.clear();
-                    brandController.clear();
-                    countryController.clear(); 
-                    descriptionController.clear();
-                    priceController.clear();
-                    selectedImages.clear();
-                  },
-                  height: 40.h,
-                  width: 150.w,
-                  borderRadius: 12,
-                  textSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
+                () =>
+                    controller.isAddingProduct.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : CustomButton(
+                          title: CommonCode().t(LocaleKeys.addProduct),
+                          onTap: () async {
+                            if (titleController.text.isEmpty ||
+                                brandController.text.isEmpty ||
+                                countryController.text.isEmpty ||
+                                descriptionController.text.isEmpty ||
+                                (!controller.isContactForPrice.value &&
+                                    priceController.text.isEmpty) ||
+                                selectedImages.isEmpty) {
+                              showCustomSnackbar(
+                                "Missing Field",
+                                "Please fill all required fields and select images.",
+                              );
+                              return;
+                            }
+
+                            double price = 0;
+                            if (!controller.isContactForPrice.value) {
+                              price =
+                                  double.tryParse(priceController.text) ?? 0;
+                            }
+
+                            await controller.addProductToStore(
+                              storeId: widget.storeId,
+                              title: titleController.text.trim(),
+                              brand: brandController.text.trim(),
+                              country: countryController.text.trim(),
+                              description: descriptionController.text.trim(),
+                              selectedImages: selectedImages,
+                              price: price,
+                              isContactForPrice:
+                                  controller.isContactForPrice.value,
+                            );
+                            titleController.clear();
+                            brandController.clear();
+                            countryController.clear();
+                            descriptionController.clear();
+                            priceController.clear();
+                            selectedImages.clear();
+                          },
+                          height: 40.h,
+                          width: 150.w,
+                          borderRadius: 12,
+                          textSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
               ),
             ],
           ),
@@ -548,4 +554,3 @@ class _AddProductDialogState extends State<AddProductDialog> {
     );
   }
 }
-

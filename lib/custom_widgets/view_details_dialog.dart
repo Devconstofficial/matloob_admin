@@ -9,11 +9,13 @@ import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/rfq_model.dart';
 import 'package:matloob_admin/screens/dashboard_screen/controller/dashboard_controller.dart';
 import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import 'custom_dropdown.dart';
 import '../utils/app_colors.dart';
 
@@ -33,7 +35,7 @@ class FileItem {
 class ViewDetailModel extends StatefulWidget {
   final RfqModel rfq;
   final bool isEditable;
-  const ViewDetailModel({required this.rfq, this.isEditable=true, super.key});
+  const ViewDetailModel({required this.rfq, this.isEditable = true, super.key});
 
   @override
   State<ViewDetailModel> createState() => _ViewDetailModelState();
@@ -323,7 +325,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
           children: [
             Center(
               child: Text(
-                kRFQInformation,
+                CommonCode().t(LocaleKeys.rfqInformation),
                 style: AppStyles.blackTextStyle().copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
@@ -377,7 +379,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  userName,
+                  CommonCode().t(LocaleKeys.userName),
                   style: AppStyles.blackTextStyle().copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -387,7 +389,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             ),
             SizedBox(height: 18.h),
             Text(
-              "Category: ${widget.rfq.category} | ${widget.rfq.subcategory} | ${widget.rfq.subSubcategory}",
+              "${CommonCode().t(LocaleKeys.category)}: ${widget.rfq.category} | ${widget.rfq.subcategory} | ${widget.rfq.subSubcategory}",
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w400,
@@ -397,7 +399,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
 
             SizedBox(height: 16.h),
             Text(
-              "Delivery",
+              CommonCode().t(LocaleKeys.delivery),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -442,7 +444,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
 
             SizedBox(height: 16.h),
             Text(
-              "Status",
+              CommonCode().t(LocaleKeys.status),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -463,7 +465,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
 
             SizedBox(height: 16.h),
             Text(
-              kTargetedPrice,
+              CommonCode().t(LocaleKeys.targetPrice),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -474,7 +476,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
 
             SizedBox(height: 16.h),
             Text(
-              kTitle,
+              CommonCode().t(LocaleKeys.title),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -483,13 +485,13 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 8.h),
             _customTextField(
               controller: titleController,
-              hintText: "Enter RFQ Title",
+              hintText: CommonCode().t(LocaleKeys.enterRfqTitle),
               readOnly: false,
             ),
 
             SizedBox(height: 16.h),
             Text(
-              "Description",
+              CommonCode().t(LocaleKeys.description),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -498,14 +500,14 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 8.h),
             _customTextField(
               controller: descriptionController,
-              hintText: "Enter RFQ Description",
+              hintText: CommonCode().t(LocaleKeys.enterRfqDescription),
               maxLines: 6,
               readOnly: false,
             ),
 
             SizedBox(height: 32.h),
             Text(
-              "Product Images",
+              CommonCode().t(LocaleKeys.productImage),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -516,7 +518,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
 
             SizedBox(height: 16.h),
             Text(
-              "Files",
+              CommonCode().t(LocaleKeys.files),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -534,7 +536,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                         controller.isLoadingRFQStatus.value
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButton(
-                              title: kReject,
+                              title: CommonCode().t(LocaleKeys.reject),
                               onTap: () {
                                 final reasonController =
                                     TextEditingController();
@@ -543,8 +545,10 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                                   barrierDismissible: false,
                                   CustomDialog(
                                     image: kRejectReasonImage,
-                                    title: kRejectionReason,
-                                    btnText: kReject,
+                                    title: CommonCode().t(
+                                      LocaleKeys.rejectionReason,
+                                    ),
+                                    btnText: CommonCode().t(LocaleKeys.reject),
                                     isLoading: controller.isLoadingRFQStatus,
                                     onTap: () async {
                                       await controller.updateRFQStatusAction(
@@ -583,7 +587,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                       controller.isUpdatingRFQ.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                            title: kEdit,
+                            title: CommonCode().t(LocaleKeys.edit),
                             onTap: () async {
                               double parsedPrice =
                                   double.tryParse(priceController.text) ?? 0;
@@ -617,7 +621,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                         controller.isLoadingRFQStatus.value
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButton(
-                              title: kApprove,
+                              title: CommonCode().t(LocaleKeys.approve),
                               onTap: () {
                                 Get.dialog(
                                   barrierDismissible: false,

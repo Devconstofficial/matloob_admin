@@ -1,10 +1,11 @@
+import 'package:easy_localization/easy_localization.dart' as lt;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:intl/intl.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/session_management/session_management.dart';
 import 'package:matloob_admin/utils/session_management/session_token_keys.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class CommonCode {
   static bool isValidEmail(String email) {
@@ -55,5 +56,5 @@ class CommonCode {
     );
   }
 
-  String t(String key) => StringTranslateExtension(key).tr();
+  String t(String key) => lt.tr(key);
 }

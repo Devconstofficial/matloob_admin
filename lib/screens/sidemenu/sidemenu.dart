@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/utils/common_code.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/app_images.dart';
 import '../../utils/app_strings.dart';
 import '../../utils/app_styles.dart';
 import 'controller/sidemenu_controller.dart';
-
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -17,27 +17,20 @@ class SideMenu extends StatefulWidget {
   State<SideMenu> createState() => _SideMenuState();
 }
 
-
 class _SideMenuState extends State<SideMenu> {
   final menuController = Get.put(SideMenuController());
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       backgroundColor: kWhiteColor,
       width: 212.w,
       child: Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           border: Border(
-            right: BorderSide(
-              color: kBlackColor.withOpacity(0.1),
-              width: 0.5,
-            ),
+            right: BorderSide(color: kBlackColor.withOpacity(0.1), width: 0.5),
           ),
         ),
         child: Padding(
@@ -52,19 +45,20 @@ class _SideMenuState extends State<SideMenu> {
                     border: Border(
                       bottom: BorderSide(
                         color: kBlackColor.withOpacity(0.1),
-                        width: 0.5
-                      )
-                    )
+                        width: 0.5,
+                      ),
+                    ),
                   ),
                   child: Center(
                     child: SizedBox(
-                        height: 50.h,
-                        width: 100.w,
-                        child: Center(
-                          child: SvgPicture.asset(
-                            kLogoImage,
-                            fit: BoxFit.fitWidth,
-                          ),)
+                      height: 50.h,
+                      width: 100.w,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          kLogoImage,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -76,7 +70,7 @@ class _SideMenuState extends State<SideMenu> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 30.h,),
+                      SizedBox(height: 30.h),
                       Obx(() {
                         return MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -86,46 +80,66 @@ class _SideMenuState extends State<SideMenu> {
                               Get.toNamed(kDashboardScreenRoute);
                             },
                             child: Container(
-                                height: 40,
-                                width: 190,
-                                decoration: BoxDecoration(
-                                  color: menuController.selectedIndex.value == 0 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
-                                  border: Border.all(
-                                    color: menuController.selectedIndex.value == 0 ? kPrimaryColor : kWhiteColor
-                                  ),
-                                  borderRadius: BorderRadius.circular(12)
+                              height: 40,
+                              width: 190,
+                              decoration: BoxDecoration(
+                                color:
+                                    menuController.selectedIndex.value == 0
+                                        ? kPrimaryColor.withOpacity(0.05)
+                                        : kWhiteColor,
+                                border: Border.all(
+                                  color:
+                                      menuController.selectedIndex.value == 0
+                                          ? kPrimaryColor
+                                          : kWhiteColor,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        kDashboardIcon,
-                                        height: 20,
-                                        width: 20,
-                                          color: menuController.selectedIndex.value == 0 ? kPrimaryColor : kGreyColor5,
-                                        ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                                      Flexible(
-                                        child: Text(
-                                          kDashboard,
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                              color: menuController.selectedIndex.value == 0
-                                                  ? kPrimaryColor : kGreyColor5,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      kDashboardIcon,
+                                      height: 20,
+                                      width: 20,
+                                      color:
+                                          menuController.selectedIndex.value ==
+                                                  0
+                                              ? kPrimaryColor
+                                              : kGreyColor5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.01,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        CommonCode().t(LocaleKeys.dashboard),
+                                        style: AppStyles.blackTextStyle()
+                                            .copyWith(
+                                              color:
+                                                  menuController
+                                                              .selectedIndex
+                                                              .value ==
+                                                          0
+                                                      ? kPrimaryColor
+                                                      : kGreyColor5,
                                               fontSize: 14,
-                                            fontWeight: FontWeight.w400
-                                          ),
-                                        ),
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
                       }),
-                      const SizedBox(height: 12,),
+                      const SizedBox(height: 12),
                       Obx(() {
                         return MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -135,47 +149,69 @@ class _SideMenuState extends State<SideMenu> {
                               Get.toNamed(kStoreManagementScreenRoute);
                             },
                             child: Container(
-                                height: 40,
-                                width: 190,
+                              height: 40,
+                              width: 190,
 
-                                decoration: BoxDecoration(
-                                    color: menuController.selectedIndex.value == 1 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
-                                    border: Border.all(
-                                        color: menuController.selectedIndex.value == 1 ? kPrimaryColor : kWhiteColor
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)
+                              decoration: BoxDecoration(
+                                color:
+                                    menuController.selectedIndex.value == 1
+                                        ? kPrimaryColor.withOpacity(0.05)
+                                        : kWhiteColor,
+                                border: Border.all(
+                                  color:
+                                      menuController.selectedIndex.value == 1
+                                          ? kPrimaryColor
+                                          : kWhiteColor,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        kStoreIcon,
-                                        height: 20,
-                                        width: 20,
-                                        color: menuController.selectedIndex.value == 1 ? kPrimaryColor : kGreyColor5,
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                                      Flexible(
-                                        child: Text(
-                                          kStoreManagement,
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                              color: menuController.selectedIndex.value == 1
-                                                  ? kPrimaryColor : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400
-                                          ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      kStoreIcon,
+                                      height: 20,
+                                      width: 20,
+                                      color:
+                                          menuController.selectedIndex.value ==
+                                                  1
+                                              ? kPrimaryColor
+                                              : kGreyColor5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.01,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        CommonCode().t(
+                                          LocaleKeys.storeManagement,
                                         ),
+                                        style: AppStyles.blackTextStyle()
+                                            .copyWith(
+                                              color:
+                                                  menuController
+                                                              .selectedIndex
+                                                              .value ==
+                                                          1
+                                                      ? kPrimaryColor
+                                                      : kGreyColor5,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
                       }),
-                      const SizedBox(height: 12,),
+                      const SizedBox(height: 12),
                       Obx(() {
                         return MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -185,46 +221,68 @@ class _SideMenuState extends State<SideMenu> {
                               Get.toNamed(kUserManagementScreenRoute);
                             },
                             child: Container(
-                                height: 40,
-                                width: 190,
-                                decoration: BoxDecoration(
-                                    color: menuController.selectedIndex.value == 2 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
-                                    border: Border.all(
-                                        color: menuController.selectedIndex.value == 2 ? kPrimaryColor : kWhiteColor
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)
+                              height: 40,
+                              width: 190,
+                              decoration: BoxDecoration(
+                                color:
+                                    menuController.selectedIndex.value == 2
+                                        ? kPrimaryColor.withOpacity(0.05)
+                                        : kWhiteColor,
+                                border: Border.all(
+                                  color:
+                                      menuController.selectedIndex.value == 2
+                                          ? kPrimaryColor
+                                          : kWhiteColor,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        kDoubleUserIcon,
-                                        height: 20,
-                                        width: 20,
-                                        color: menuController.selectedIndex.value == 2 ? kPrimaryColor : kGreyColor5,
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                                      Flexible(
-                                        child: Text(
-                                          kUserManagement,
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                              color: menuController.selectedIndex.value == 2
-                                                  ? kPrimaryColor : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400
-                                          ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      kDoubleUserIcon,
+                                      height: 20,
+                                      width: 20,
+                                      color:
+                                          menuController.selectedIndex.value ==
+                                                  2
+                                              ? kPrimaryColor
+                                              : kGreyColor5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.01,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        CommonCode().t(
+                                          LocaleKeys.userManagement,
                                         ),
+                                        style: AppStyles.blackTextStyle()
+                                            .copyWith(
+                                              color:
+                                                  menuController
+                                                              .selectedIndex
+                                                              .value ==
+                                                          2
+                                                      ? kPrimaryColor
+                                                      : kGreyColor5,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
                       }),
-                      const SizedBox(height: 12,),
+                      const SizedBox(height: 12),
                       Obx(() {
                         return MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -234,46 +292,66 @@ class _SideMenuState extends State<SideMenu> {
                               Get.toNamed(kRfqScreenRoute);
                             },
                             child: Container(
-                                height: 40,
-                                width: 190,
-                                decoration: BoxDecoration(
-                                    color: menuController.selectedIndex.value == 3 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
-                                    border: Border.all(
-                                        color: menuController.selectedIndex.value == 3 ? kPrimaryColor : kWhiteColor
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)
+                              height: 40,
+                              width: 190,
+                              decoration: BoxDecoration(
+                                color:
+                                    menuController.selectedIndex.value == 3
+                                        ? kPrimaryColor.withOpacity(0.05)
+                                        : kWhiteColor,
+                                border: Border.all(
+                                  color:
+                                      menuController.selectedIndex.value == 3
+                                          ? kPrimaryColor
+                                          : kWhiteColor,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        kRfqIcon,
-                                        height: 20,
-                                        width: 20,
-                                        color: menuController.selectedIndex.value == 3 ? kPrimaryColor : kGreyColor5,
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                                      Flexible(
-                                        child: Text(
-                                          kRFQ,
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                              color: menuController.selectedIndex.value == 3
-                                                  ? kPrimaryColor : kGreyColor5,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      kRfqIcon,
+                                      height: 20,
+                                      width: 20,
+                                      color:
+                                          menuController.selectedIndex.value ==
+                                                  3
+                                              ? kPrimaryColor
+                                              : kGreyColor5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.01,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        CommonCode().t(LocaleKeys.rfqs),
+                                        style: AppStyles.blackTextStyle()
+                                            .copyWith(
+                                              color:
+                                                  menuController
+                                                              .selectedIndex
+                                                              .value ==
+                                                          3
+                                                      ? kPrimaryColor
+                                                      : kGreyColor5,
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w400
-                                          ),
-                                        ),
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
                       }),
-                      const SizedBox(height: 12,),
+                      const SizedBox(height: 12),
                       Obx(() {
                         return MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -283,41 +361,63 @@ class _SideMenuState extends State<SideMenu> {
                               Get.toNamed(kClickTrackingScreenRoute);
                             },
                             child: Container(
-                                height: 40,
-                                width: 190,
-                                decoration: BoxDecoration(
-                                    color: menuController.selectedIndex.value == 4 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
-                                    border: Border.all(
-                                        color: menuController.selectedIndex.value == 4 ? kPrimaryColor : kWhiteColor
-                                    ),
-                                    borderRadius: BorderRadius.circular(12)
+                              height: 40,
+                              width: 190,
+                              decoration: BoxDecoration(
+                                color:
+                                    menuController.selectedIndex.value == 4
+                                        ? kPrimaryColor.withOpacity(0.05)
+                                        : kWhiteColor,
+                                border: Border.all(
+                                  color:
+                                      menuController.selectedIndex.value == 4
+                                          ? kPrimaryColor
+                                          : kWhiteColor,
                                 ),
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 12.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        kClicksIcon,
-                                        height: 20,
-                                        width: 20,
-                                        color: menuController.selectedIndex.value == 4 ? kPrimaryColor : kGreyColor5,
-                                      ),
-                                      SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                                      Flexible(
-                                        child: Text(
-                                          kClicksTracking,
-                                          style: AppStyles.blackTextStyle().copyWith(
-                                              color: menuController.selectedIndex.value == 4
-                                                  ? kPrimaryColor : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400
-                                          ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 12.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      kClicksIcon,
+                                      height: 20,
+                                      width: 20,
+                                      color:
+                                          menuController.selectedIndex.value ==
+                                                  4
+                                              ? kPrimaryColor
+                                              : kGreyColor5,
+                                    ),
+                                    SizedBox(
+                                      width:
+                                          MediaQuery.of(context).size.width *
+                                          0.01,
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        CommonCode().t(
+                                          LocaleKeys.clicksTracking,
                                         ),
+                                        style: AppStyles.blackTextStyle()
+                                            .copyWith(
+                                              color:
+                                                  menuController
+                                                              .selectedIndex
+                                                              .value ==
+                                                          4
+                                                      ? kPrimaryColor
+                                                      : kGreyColor5,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
@@ -327,7 +427,7 @@ class _SideMenuState extends State<SideMenu> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 40,right: 15),
+                padding: const EdgeInsets.only(bottom: 40, right: 15),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
@@ -335,35 +435,40 @@ class _SideMenuState extends State<SideMenu> {
                       CommonCode.logout();
                     },
                     child: Container(
-                        height: 49,
-                        width: 180,
-                        decoration: BoxDecoration(
-                            color: kWhiteColor,
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only( left: 12),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(kLogoutIcon,height: 20,width: 20,),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                              Text(
-                                kLOGOUT,
-                                style: AppStyles.blackTextStyle().copyWith(
-                                    color: kRedColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400
-                                ),
+                      height: 49,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        color: kWhiteColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              kLogoutIcon,
+                              height: 20,
+                              width: 20,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.01,
+                            ),
+                            Text(
+                              CommonCode().t(LocaleKeys.logout),
+                              style: AppStyles.blackTextStyle().copyWith(
+                                color: kRedColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
                               ),
-                            ],
-                          ),
-                        )
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                )
+                ),
               ),
-
             ],
           ),
         ),

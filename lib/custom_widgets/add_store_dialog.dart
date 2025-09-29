@@ -10,9 +10,11 @@ import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dropdown.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/screens/store_management/controller/store_controller.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import 'package:matloob_admin/utils/image_picker_services.dart';
 import '../utils/app_colors.dart';
 import 'dart:html' as html;
@@ -79,7 +81,7 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            kUserDetails,
+            CommonCode().t(LocaleKeys.userDetails),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -87,56 +89,75 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
           ),
           SizedBox(height: 13.h),
           Obx(() {
-  final value = userId.value.isEmpty ? null : userId.value;
-  return DropdownButtonFormField2<String>(
-    value: value,
-    isExpanded: true,
-    dropdownStyleData: DropdownStyleData(
-      maxHeight: 230,
-      decoration: BoxDecoration(
-        color: kWhiteColor,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-    ),
-    hint: Text(
-      "Select User",
-      style: AppStyles.blackTextStyle()
-          .copyWith(fontWeight: FontWeight.w400, fontSize: 14.sp, color: kBlackColor.withOpacity(0.5)),
-    ),
-    style: AppStyles.blackTextStyle()
-        .copyWith(fontSize: 14.sp, fontWeight: FontWeight.w400, color: kBlackColor.withOpacity(0.5)),
-    decoration: InputDecoration(
-      filled: true,
-      fillColor: kBlackShade1Color.withOpacity(0.01),
-      contentPadding: EdgeInsets.only(right: 6.w, top: 15.h, bottom: 15.h),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
-        borderSide: BorderSide(color: kBlackShade1Color.withOpacity(0.10)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
-        borderSide: BorderSide(color: kBlackShade1Color.withOpacity(0.10)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(16.r),
-        borderSide: BorderSide(color: kBlackShade1Color.withOpacity(0.10)),
-      ),
-    ),
-    items: storeController.usersBasicList.map((user) {
-      return DropdownMenuItem<String>(
-        value: user['id'],
-        child: Text(
-          "Id: ${user['id']}, Name: ${user['name']}",
-          style: AppStyles.blackTextStyle()
-              .copyWith(fontWeight: FontWeight.w400, fontSize: 14),
-        ),
-      );
-    }).toList(),
-    onChanged: (val) {
-      if (val != null) userId.value = val; 
-    },
-  );
-}),
+            final value = userId.value.isEmpty ? null : userId.value;
+            return DropdownButtonFormField2<String>(
+              value: value,
+              isExpanded: true,
+              dropdownStyleData: DropdownStyleData(
+                maxHeight: 230,
+                decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
+              ),
+              hint: Text(
+                CommonCode().t(LocaleKeys.selectUser),
+                style: AppStyles.blackTextStyle().copyWith(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.sp,
+                  color: kBlackColor.withOpacity(0.5),
+                ),
+              ),
+              style: AppStyles.blackTextStyle().copyWith(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: kBlackColor.withOpacity(0.5),
+              ),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: kBlackShade1Color.withOpacity(0.01),
+                contentPadding: EdgeInsets.only(
+                  right: 6.w,
+                  top: 15.h,
+                  bottom: 15.h,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                  borderSide: BorderSide(
+                    color: kBlackShade1Color.withOpacity(0.10),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                  borderSide: BorderSide(
+                    color: kBlackShade1Color.withOpacity(0.10),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                  borderSide: BorderSide(
+                    color: kBlackShade1Color.withOpacity(0.10),
+                  ),
+                ),
+              ),
+              items:
+                  storeController.usersBasicList.map((user) {
+                    return DropdownMenuItem<String>(
+                      value: user['id'],
+                      child: Text(
+                        "Id: ${user['id']}, Name: ${user['name']}",
+                        style: AppStyles.blackTextStyle().copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+              onChanged: (val) {
+                if (val != null) userId.value = val;
+              },
+            );
+          }),
           SizedBox(height: 30.h),
           Text(
             kStoreDetails,
@@ -147,103 +168,118 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
           ),
           SizedBox(height: 13.h),
 
-          Obx(() => Stack(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                final input = html.FileUploadInputElement()..accept = 'image/*';
-                input.click();
-                input.onChange.listen((e) async {
-                  final file = input.files?.first;
-                  if (file != null) {
-                    final reader = html.FileReader();
-                    reader.readAsArrayBuffer(file);
-                    reader.onLoadEnd.listen((e) {
-                      selectedLogoBytes.value = reader.result as Uint8List?;
+          Obx(
+            () => Stack(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    final input =
+                        html.FileUploadInputElement()..accept = 'image/*';
+                    input.click();
+                    input.onChange.listen((e) async {
+                      final file = input.files?.first;
+                      if (file != null) {
+                        final reader = html.FileReader();
+                        reader.readAsArrayBuffer(file);
+                        reader.onLoadEnd.listen((e) {
+                          selectedLogoBytes.value = reader.result as Uint8List?;
+                        });
+                      }
                     });
-                  }
-                });
-              },
-              child: Container(
-                width: 150.w,
-                height: 150.h,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: selectedLogoBytes.value == null
-                      ? Border.all(
-                          color: kGreyColor1,
-                          width: 2,
-                          style: BorderStyle.solid, 
-                        )
-                      : null,
-                  color: kBlackColor.withOpacity(0.05),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: selectedLogoBytes.value == null
-                      ? Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.add_a_photo_outlined,
-                                size: 40.sp,
-                                color: kGreyColor1,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                "Add Logo",
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: kBlackColor.withOpacity(0.5),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Image.memory(
-                          selectedLogoBytes.value!,
-                          fit: BoxFit.cover,
-                          width: 150.w,
-                          height: 150.h,
-                        ),
-                ),
-              ),
-            ),
-            if (selectedLogoBytes.value != null)
-              Positioned(
-                top: 6.h,
-                right: 6.w,
-                child: GestureDetector(
-                  onTap: () {
-                    selectedLogoBytes.value = null;
                   },
                   child: Container(
+                    width: 150.w,
+                    height: 150.h,
                     decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(12),
+                      border:
+                          selectedLogoBytes.value == null
+                              ? Border.all(
+                                color: kGreyColor1,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              )
+                              : null,
+                      color: kBlackColor.withOpacity(0.05),
                     ),
-                    padding: EdgeInsets.all(4),
-                    child: Icon(Icons.close, color: Colors.white, size: 16.sp),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child:
+                          selectedLogoBytes.value == null
+                              ? Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.add_a_photo_outlined,
+                                      size: 40.sp,
+                                      color: kGreyColor1,
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      CommonCode().t(LocaleKeys.addLogo),
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: kBlackColor.withOpacity(0.5),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : Image.memory(
+                                selectedLogoBytes.value!,
+                                fit: BoxFit.cover,
+                                width: 150.w,
+                                height: 150.h,
+                              ),
+                    ),
                   ),
                 ),
-              ),
-          ],
-        )),
+                if (selectedLogoBytes.value != null)
+                  Positioned(
+                    top: 6.h,
+                    right: 6.w,
+                    child: GestureDetector(
+                      onTap: () {
+                        selectedLogoBytes.value = null;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 16.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
           SizedBox(height: 13.h),
           Row(
             children: [
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField(companyNameController, kCompanyName),
+                  child: customTextField(
+                    companyNameController,
+                    CommonCode().t(LocaleKeys.companyName),
+                  ),
                 ),
               ),
               SizedBox(width: 11.w),
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField(companyContactController, kCompanyNumber),
+                  child: customTextField(
+                    companyContactController,
+                    CommonCode().t(LocaleKeys.companyNumber),
+                  ),
                 ),
               ),
             ],
@@ -254,7 +290,10 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
               Expanded(
                 child: SizedBox(
                   height: 48.h,
-                  child: customTextField(locationController, kLocation),
+                  child: customTextField(
+                    locationController,
+                    CommonCode().t(LocaleKeys.location),
+                  ),
                 ),
               ),
               SizedBox(width: 11.w),
@@ -276,7 +315,7 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomButton(
-                title: kCancel,
+                title: CommonCode().t(LocaleKeys.cancel),
                 onTap: () {
                   Get.back();
                 },
@@ -295,7 +334,7 @@ class _AddStoreDialogState extends State<AddStoreDialog> {
                     storeController.isAdding.value
                         ? const Center(child: CircularProgressIndicator())
                         : CustomButton(
-                          title: "Add Store",
+                          title: CommonCode().t(LocaleKeys.addStore),
                           onTap: () async {
                             if (userId.value.isEmpty ||
                                 selectedLogoBytes.value == null ||

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_text.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
@@ -11,40 +12,51 @@ import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_textfield.dart';
 import '../../utils/app_strings.dart';
 import 'controller/auth_controller.dart';
-import 'package:easy_localization/easy_localization.dart';
-
 
 class AuthScreen extends GetView<AuthController> {
   const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: AuthComponent(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(kLogoImage,height: 72.h,width: 150.w,),
+            SvgPicture.asset(kLogoImage, height: 72.h, width: 150.w),
             SizedBox(height: 43.h),
-            CustomText(text: CommonCode().t('signIn'),fontWeight: FontWeight.w600,fontSize: 24.sp,),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.signIn),
+              fontWeight: FontWeight.w600,
+              fontSize: 24.sp,
+            ),
             SizedBox(height: 37.h),
-            CustomText(text: kEmail,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.email),
+              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              color: kGreyShade7Color,
+            ),
             SizedBox(height: 11.h),
             CustomTextField(
-              hintText: kEmailHint,
+              hintText: CommonCode().t(LocaleKeys.emailHint),
               prefixIcon: kMailIcon,
               fillColor: kWhiteColor,
               controller: controller.emailCont,
               isFilled: true,
             ),
             SizedBox(height: 32.h),
-            CustomText(text: kPassword,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.password),
+              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              color: kGreyShade7Color,
+            ),
             SizedBox(height: 11.h),
             Obx(
-                  () => CustomTextField(
-                hintText: kPasswordHint,
+              () => CustomTextField(
+                hintText: CommonCode().t(LocaleKeys.passwordHint),
                 controller: controller.passwordCont,
                 isObscure: controller.isPasswordHidden.value,
                 prefixIcon: kLockIcon,
@@ -71,10 +83,15 @@ class AuthScreen extends GetView<AuthController> {
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Get.toNamed(kSendOtpScreenRoute);
                     },
-                    child: CustomText(text: kForgotPassword,fontWeight: FontWeight.w300,fontSize: 12.sp,color: kBlackShade10Color,),
+                    child: CustomText(
+                      text: CommonCode().t(LocaleKeys.forgotPassword),
+                      fontWeight: FontWeight.w300,
+                      fontSize: 12.sp,
+                      color: kBlackShade10Color,
+                    ),
                   ),
                 ),
               ],
@@ -85,14 +102,13 @@ class AuthScreen extends GetView<AuthController> {
                   controller.isLoadingLogin.value
                       ? const Center(child: CircularProgressIndicator())
                       : CustomButton(
-                        title: kLogin,
+                        title: CommonCode().t(LocaleKeys.login),
                         onTap: () async {
                           await controller.loginUser();
                         },
                         height: 62,
                       ),
             ),
-            
           ],
         ),
       ),

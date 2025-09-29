@@ -119,5 +119,16 @@
   "dragYourFilesOrBrowse": "اسحب ملفاتك أو تصفح",
   "max10MbFilesAllowed": "الحد الأقصى المسموح به للملفات هو 10 ميجابايت",
   "addProductButton": "إضافة منتج",
-  "productDetails": "تفاصيل المنتج"
+  "productDetails": "تفاصيل المنتج",
+  "catalogDetails": "تفاصيل الكتالوج",
+  "selectUser": "اختر المستخدم",
+  "addLogo": "أضف الشعار",
+  "rfqs": "طلبات عروض الأسعار",
+  "enterRfqTitle": "أدخل عنوان طلب العرض",
+  "description": "الوصف",
+  "enterRfqDescription": "أدخل وصف طلب العرض",
+  "files": "الملفات",
+  "edit": "تعديل",
+  "updateStoreStatus": "تحديث حالة المتجر",
+  "title": "العنوان"
 }

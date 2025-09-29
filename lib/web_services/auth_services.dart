@@ -77,8 +77,10 @@ class AuthService {
     return responseModel.data["message"] ?? responseModel.statusDescription;
   }
 
-  
-  Future<dynamic> verifyResetOtp({required String email, required String otp}) async {
+  Future<dynamic> verifyResetOtp({
+    required String email,
+    required String otp,
+  }) async {
     ResponseModel responseModel = await _client.customRequest(
       'POST',
       url: WebUrls.kVerifyOtpUrl,
@@ -95,7 +97,6 @@ class AuthService {
     return responseModel.data["message"] ?? responseModel.statusDescription;
   }
 
-  
   Future<dynamic> resendResetOtp({required String email}) async {
     ResponseModel responseModel = await _client.customRequest(
       'POST',
@@ -113,7 +114,10 @@ class AuthService {
     return responseModel.data["message"] ?? responseModel.statusDescription;
   }
 
-  Future<dynamic> setNewPassword({required String email, required String password}) async {
+  Future<dynamic> setNewPassword({
+    required String email,
+    required String password,
+  }) async {
     ResponseModel responseModel = await _client.customRequest(
       'POST',
       url: WebUrls.kCreatePasswordUrl,

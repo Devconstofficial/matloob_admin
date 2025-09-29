@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
 import 'package:matloob_admin/custom_widgets/view_details_dialog.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/rfq_model.dart';
 import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
@@ -105,7 +107,10 @@ class DashboardScreen extends GetView<DashboardController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(kDashboard),
+                      customHeader(
+                        CommonCode().t(LocaleKeys.dashboard),
+                        context,
+                      ),
                       Wrap(
                         spacing: 15.w,
                         runSpacing: 15.w,
@@ -114,7 +119,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kDoubleUserIcon,
                               controller.totalUsers.value.toString(),
-                              kTotalUsers,
+                              CommonCode().t(LocaleKeys.totalUsers),
                               kGreenColor,
                             ),
                           ),
@@ -122,7 +127,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kAddStoreIcon,
                               controller.totalStores.value.toString(),
-                              kTotalStores,
+                              CommonCode().t(LocaleKeys.totalStores),
                               kPrimaryColor,
                             ),
                           ),
@@ -130,7 +135,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kAddStoreIcon,
                               controller.totalPendingStores.value.toString(),
-                              kPendingStores,
+                              CommonCode().t(LocaleKeys.pendingStores),
                               kGreenColor,
                             ),
                           ),
@@ -138,7 +143,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kAddStoreIcon,
                               controller.totalActiveStores.value.toString(),
-                              kLiveStores,
+                              CommonCode().t(LocaleKeys.liveStores),
                               kPrimaryColor,
                             ),
                           ),
@@ -146,7 +151,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kAddRfqIcon,
                               controller.totalRfqs.value.toString(),
-                              kTotalRFQs,
+                              CommonCode().t(LocaleKeys.totalRFQs),
                               kGreenColor,
                             ),
                           ),
@@ -154,7 +159,7 @@ class DashboardScreen extends GetView<DashboardController> {
                             () => insightContainer(
                               kAddRfqIcon,
                               controller.totalPendingRfqs.value.toString(),
-                              kPendingRFQs,
+                              CommonCode().t(LocaleKeys.pendingRFQs),
                               kPrimaryColor,
                             ),
                           ),
@@ -165,13 +170,12 @@ class DashboardScreen extends GetView<DashboardController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            kPendingStoreRequests,
+                            CommonCode().t(LocaleKeys.pendingStoreRequests),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
                             ),
                           ),
-                          
                         ],
                       ),
                       SizedBox(height: 12.h),
@@ -281,7 +285,7 @@ class DashboardScreen extends GetView<DashboardController> {
                       Row(
                         children: [
                           Text(
-                            kPendingRFQs,
+                            CommonCode().t(LocaleKeys.pendingRFQs),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
@@ -338,25 +342,41 @@ class DashboardScreen extends GetView<DashboardController> {
                                     dividerThickness: 0.2,
                                     columns: [
                                       DataColumn(
-                                        label: ColumnRowWidget(title: "RFQ ID"),
-                                      ),
-                                      DataColumn(
                                         label: ColumnRowWidget(
-                                          title: "Submitted By",
+                                          title: CommonCode().t(
+                                            LocaleKeys.rfqId,
+                                          ),
                                         ),
                                       ),
                                       DataColumn(
                                         label: ColumnRowWidget(
-                                          title: "Category",
+                                          title: CommonCode().t(
+                                            LocaleKeys.submittedBy,
+                                          ),
                                         ),
                                       ),
                                       DataColumn(
-                                        label: ColumnRowWidget(title: "City"),
+                                        label: ColumnRowWidget(
+                                          title: CommonCode().t(
+                                            LocaleKeys.category,
+                                          ),
+                                        ),
+                                      ),
+                                      DataColumn(
+                                        label: ColumnRowWidget(
+                                          title: CommonCode().t(
+                                            LocaleKeys.city,
+                                          ),
+                                        ),
                                       ),
                                       DataColumn(
                                         headingRowAlignment:
                                             MainAxisAlignment.center,
-                                        label: ColumnRowWidget(title: "Action"),
+                                        label: ColumnRowWidget(
+                                          title: CommonCode().t(
+                                            LocaleKeys.action,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                     rows:

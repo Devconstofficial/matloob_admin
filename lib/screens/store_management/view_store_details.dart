@@ -6,6 +6,7 @@ import 'package:matloob_admin/custom_widgets/add_product_dialog.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
 import 'package:matloob_admin/custom_widgets/custom_header.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/medical_product_model.dart';
 import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/screens/sidemenu/sidemenu.dart';
@@ -15,6 +16,7 @@ import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 
 class ViewStoreDetails extends GetView<StoreController> {
   const ViewStoreDetails({super.key});
@@ -112,35 +114,46 @@ class ViewStoreDetails extends GetView<StoreController> {
               top: 8.h,
               right: 8.w,
               child: Obx(
-                ()=> controller.isDeletingProduct.value? const Center(child: CircularProgressIndicator(),) :GestureDetector(
-                  onTap: () {
-                    Get.dialog(
-                      barrierDismissible: false,
-                      CustomDialog(
-                        image: kDeleteDialogImage,
-                        title: kConfirmDeleteDetail,
-                        btnText: kConfirmDelete,
-                        isLoading: controller.isDeletingProduct,
-                        onTap: () {
-                          controller.deleteProductFromStore(
-                            product.id,
-                            controller.currentStoreDetail.value!.id,
-                          );
-                        },
-                        btnColor: kRedColor,
-                        hideDetail: true,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(4.w),
-                    decoration: const BoxDecoration(
-                      color: kRedColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(Icons.delete, color: kWhiteColor, size: 16.sp),
-                  ),
-                ),
+                () =>
+                    controller.isDeletingProduct.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : GestureDetector(
+                          onTap: () {
+                            Get.dialog(
+                              barrierDismissible: false,
+                              CustomDialog(
+                                image: kDeleteDialogImage,
+                                title: CommonCode().t(
+                                  LocaleKeys.areYouSureWantToDelete,
+                                ),
+                                btnText: CommonCode().t(
+                                  LocaleKeys.confirmDelete,
+                                ),
+                                isLoading: controller.isDeletingProduct,
+                                onTap: () {
+                                  controller.deleteProductFromStore(
+                                    product.id,
+                                    controller.currentStoreDetail.value!.id,
+                                  );
+                                },
+                                btnColor: kRedColor,
+                                hideDetail: true,
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(4.w),
+                            decoration: const BoxDecoration(
+                              color: kRedColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.delete,
+                              color: kWhiteColor,
+                              size: 16.sp,
+                            ),
+                          ),
+                        ),
               ),
             ),
           ],
@@ -186,7 +199,7 @@ class ViewStoreDetails extends GetView<StoreController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(store.companyName),
+                      customHeader(store.companyName, context),
                       SizedBox(height: 20.h),
                       Row(
                         children: [
@@ -213,7 +226,7 @@ class ViewStoreDetails extends GetView<StoreController> {
                           ),
                           SizedBox(width: 12.w),
                           Text(
-                            "Store Management",
+                            CommonCode().t(LocaleKeys.storeManagement),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w300,
@@ -250,14 +263,16 @@ class ViewStoreDetails extends GetView<StoreController> {
                                     Expanded(
                                       child: _customDetailField(
                                         store.companyName,
-                                        "Company Name",
+                                        CommonCode().t(LocaleKeys.companyName),
                                       ),
                                     ),
                                     SizedBox(width: 11.w),
                                     Expanded(
                                       child: _customDetailField(
                                         store.companyNumber,
-                                        "Contact Number",
+                                        CommonCode().t(
+                                          LocaleKeys.companyNumber,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -268,14 +283,14 @@ class ViewStoreDetails extends GetView<StoreController> {
                                     Expanded(
                                       child: _customDetailField(
                                         store.location,
-                                        "Location",
+                                        CommonCode().t(LocaleKeys.location),
                                       ),
                                     ),
                                     SizedBox(width: 11.w),
                                     Expanded(
                                       child: _customDetailField(
                                         store.speciality,
-                                        "Speciality",
+                                        CommonCode().t(LocaleKeys.speciality),
                                       ),
                                     ),
                                   ],
@@ -290,14 +305,14 @@ class ViewStoreDetails extends GetView<StoreController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Products",
+                            CommonCode().t(LocaleKeys.products),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontSize: 17.sp,
                               fontWeight: FontWeight.w300,
                             ),
                           ),
                           CustomButton(
-                            title: "Add Product",
+                            title: CommonCode().t(LocaleKeys.addProduct),
                             onTap: () {
                               log(
                                 "Navigate to Add Product for store: ${store.id}",

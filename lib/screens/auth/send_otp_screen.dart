@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/auth_component.dart';
 import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_text.dart';
 import '../../custom_widgets/custom_textfield.dart';
-import '../../utils/app_strings.dart';
 import 'controller/auth_controller.dart';
 
 class SendOtpScreen extends GetView<AuthController> {
@@ -16,24 +17,37 @@ class SendOtpScreen extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: AuthComponent(
         content: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(kLogoImage,height: 72.h,width: 150.w,),
+            SvgPicture.asset(kLogoImage, height: 72.h, width: 150.w),
             SizedBox(height: 43.h),
-            CustomText(text: kForgotPassword,fontWeight: FontWeight.w600,fontSize: 24.sp,),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.forgotPassword),
+              fontWeight: FontWeight.w600,
+              fontSize: 24.sp,
+            ),
             SizedBox(height: 14.h),
-            CustomText(text: kForgotPasswordDetail,fontWeight: FontWeight.w300,fontSize: 18.sp,color: kBlackColor.withOpacity(0.6),),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.forgotPasswordTitle),
+              fontWeight: FontWeight.w300,
+              fontSize: 18.sp,
+              color: kBlackColor.withOpacity(0.6),
+            ),
             SizedBox(height: 32.h),
 
-            CustomText(text: kEmail,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
+            CustomText(
+              text: CommonCode().t(LocaleKeys.email),
+              fontWeight: FontWeight.w500,
+              fontSize: 13.sp,
+              color: kGreyShade7Color,
+            ),
             SizedBox(height: 11.h),
             CustomTextField(
-              hintText: kEmailHint,
+              hintText: CommonCode().t(LocaleKeys.emailHint),
               controller: controller.forgetEmailCont,
               prefixIcon: kMailIcon,
               fillColor: kWhiteColor,
@@ -41,19 +55,19 @@ class SendOtpScreen extends GetView<AuthController> {
             ),
             SizedBox(height: 72.h),
             Obx(
-              ()=> controller.isLoadingForgot.value ? const Center(child: CircularProgressIndicator(),) :CustomButton(
-                title: kSendCode,
-                onTap: ()async {
-                  await controller.requestPasswordReset();
-                  
-                },
-              ),
+              () =>
+                  controller.isLoadingForgot.value
+                      ? const Center(child: CircularProgressIndicator())
+                      : CustomButton(
+                        title: CommonCode().t(LocaleKeys.sendCode),
+                        onTap: () async {
+                          await controller.requestPasswordReset();
+                        },
+                      ),
             ),
-            
           ],
         ),
       ),
-
     );
   }
 }

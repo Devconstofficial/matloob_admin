@@ -15,9 +15,9 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('en'), Locale('ar')],
-      path: 'assets/translations',
-      fallbackLocale: const Locale('en'),
+      supportedLocales: const [Locale('en', 'US'), Locale('ar', 'SA')],
+      path: 'assets/translation',
+      fallbackLocale: const Locale('en', 'US'),
       child: const MyApp(),
     ),
   );
@@ -44,7 +44,6 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-
           builder: (context, child) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 
 import '../utils/app_colors.dart';
 import '../utils/app_styles.dart';
@@ -32,14 +34,21 @@ class CustomPagination extends StatelessWidget {
             width: 77,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: kGreyLightColor,width: 1.5),
+              border: Border.all(color: kGreyLightColor, width: 1.5),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.arrow_back_ios, size: 12,color: kBlackShade11Color,),
-                SizedBox(width: 4,),
-                Text(kBack, style: AppStyles.blackTextStyle().copyWith(fontSize: 12)),
+                const Icon(
+                  Icons.arrow_back_ios,
+                  size: 12,
+                  color: kBlackShade11Color,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  CommonCode().t(LocaleKeys.back),
+                  style: AppStyles.blackTextStyle().copyWith(fontSize: 12),
+                ),
               ],
             ),
           ),
@@ -87,20 +96,25 @@ class CustomPagination extends StatelessWidget {
             width: 77,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: kGreyLightColor,width: 1.5),
+              border: Border.all(color: kGreyLightColor, width: 1.5),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(kNext, style: AppStyles.blackTextStyle().copyWith(fontSize: 12)),
-                SizedBox(width: 4,),
-                Icon(Icons.arrow_forward_ios_outlined, size: 12,color: kBlackShade11Color,),
+                Text(
+                  CommonCode().t(LocaleKeys.next),
+                  style: AppStyles.blackTextStyle().copyWith(fontSize: 12),
+                ),
+                SizedBox(width: 4),
+                Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  size: 12,
+                  color: kBlackShade11Color,
+                ),
               ],
             ),
           ),
         ),
-
-
       ],
     );
   }

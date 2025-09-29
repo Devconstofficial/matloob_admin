@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/auth_component.dart';
@@ -26,13 +28,13 @@ class SetNewPassScreen extends GetView<AuthController> {
             SvgPicture.asset(kLogoImage, height: 72.h, width: 150.w),
             SizedBox(height: 43.h),
             CustomText(
-              text: kCreateNewPassword,
+              text: CommonCode().t(LocaleKeys.createNewPassword),
               fontWeight: FontWeight.w600,
               fontSize: 24.sp,
             ),
             SizedBox(height: 14.h),
             CustomText(
-              text: kCreateNewPasswordDetail,
+              text: CommonCode().t(LocaleKeys.createNewPasswordSubtitle),
               fontWeight: FontWeight.w300,
               fontSize: 18.sp,
               color: kBlackColor.withOpacity(0.6),
@@ -40,7 +42,7 @@ class SetNewPassScreen extends GetView<AuthController> {
 
             SizedBox(height: 32.h),
             CustomText(
-              text: kNewPassword,
+              text: CommonCode().t(LocaleKeys.newPassword),
               fontWeight: FontWeight.w500,
               fontSize: 13.sp,
               color: kGreyShade7Color,
@@ -48,7 +50,7 @@ class SetNewPassScreen extends GetView<AuthController> {
             SizedBox(height: 11.h),
             Obx(
               () => CustomTextField(
-                hintText: kNewPasswordHint,
+                hintText: CommonCode().t(LocaleKeys.newPasswordHint),
                 controller: controller.passwordforgotCont,
                 isObscure: controller.isPasswordHidden1.value,
                 prefixIcon: kLockIcon,
@@ -70,7 +72,7 @@ class SetNewPassScreen extends GetView<AuthController> {
             ),
             SizedBox(height: 14.h),
             CustomText(
-              text: kConfirmNewPassword,
+              text: CommonCode().t(LocaleKeys.confirmPassword),
               fontWeight: FontWeight.w500,
               fontSize: 13.sp,
               color: kGreyShade7Color,
@@ -78,7 +80,7 @@ class SetNewPassScreen extends GetView<AuthController> {
             SizedBox(height: 11.h),
             Obx(
               () => CustomTextField(
-                hintText: kConfirmNewPasswordHint,
+                hintText: CommonCode().t(LocaleKeys.confirmPasswordHint),
                 controller: controller.passwordforgotConfirmCont,
                 isObscure: controller.isPasswordHidden2.value,
                 prefixIcon: kLockIcon,
@@ -104,15 +106,19 @@ class SetNewPassScreen extends GetView<AuthController> {
                   controller.isLoadingCreatePassword.value
                       ? const Center(child: CircularProgressIndicator())
                       : CustomButton(
-                        title: kUpdatePassword,
+                        title: CommonCode().t(LocaleKeys.updatePassword),
                         onTap: () async {
                           await controller.setNewPassword(() {
                             Get.dialog(
                               barrierDismissible: false,
                               CustomDialog(
                                 image: kSuccessImage,
-                                title: kPasswordResetSuccessfully,
-                                detail: kPasswordResetSuccessfullyDetail,
+                                title: CommonCode().t(
+                                  LocaleKeys.passwordResetSuccessful,
+                                ),
+                                detail: CommonCode().t(
+                                  LocaleKeys.passwordResetSuccessfulSubtitle,
+                                ),
                                 onTap: () {
                                   Get.offAllNamed(kAuthScreenRoute);
                                 },

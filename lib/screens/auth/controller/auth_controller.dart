@@ -46,19 +46,21 @@ class AuthController extends GetxController {
 
       if (result is UserModel) {
         Get.toNamed(kDashboardScreenRoute);
-        showCustomSnackbar("Success", "You're logged in successfully!", backgroundColor: kGreenColor);
+        showCustomSnackbar(
+          "Success",
+          "You're logged in successfully!",
+          backgroundColor: kGreenColor,
+        );
       } else {
         showCustomSnackbar("Error", result.toString());
       }
-    } catch (e) {
-      log("Login error: $e");
+    } catch (e, st) {
+      log("Login error: $e $st");
       showCustomSnackbar("Error", "Something went wrong, please try again");
     } finally {
       isLoadingLogin.value = false;
     }
   }
-
-  
 
   Future<void> requestPasswordReset() async {
     final email = forgetEmailCont.text.trim();
@@ -137,7 +139,11 @@ class AuthController extends GetxController {
       if (result is String) {
         showCustomSnackbar("Error", result.toString());
       } else {
-        showCustomSnackbar("Success", "OTP resent to $email", backgroundColor: kGreenColor);
+        showCustomSnackbar(
+          "Success",
+          "OTP resent to $email",
+          backgroundColor: kGreenColor,
+        );
       }
     } catch (e) {
       log("resendOtp error: $e");
@@ -167,7 +173,7 @@ class AuthController extends GetxController {
         email: email,
         password: password,
       );
-      if(result is String){
+      if (result is String) {
         showCustomSnackbar("Error", result.toString());
       } else {
         onSuccess();
@@ -179,7 +185,6 @@ class AuthController extends GetxController {
       isLoadingCreatePassword.value = false;
     }
   }
-
 
   var isPasswordHidden = true.obs;
   var isPasswordHidden1 = true.obs;
@@ -198,18 +203,54 @@ class AuthController extends GetxController {
   }
 
   List<List<String>> medicalProd = [
-    ["Medical consumables", "Dental clinics", "Dental laboratories", "Dermatology and cosmetics", "Laboratories and Analysis"],
-    ["Dental chairs and accessories", "Equipment, devices and photography", "Anesthesia","Dental Burs", "Sterilization & Disinfection"]
+    [
+      "Medical consumables",
+      "Dental clinics",
+      "Dental laboratories",
+      "Dermatology and cosmetics",
+      "Laboratories and Analysis",
+    ],
+    [
+      "Dental chairs and accessories",
+      "Equipment, devices and photography",
+      "Anesthesia",
+      "Dental Burs",
+      "Sterilization & Disinfection",
+    ],
   ];
 
   List<List<String>> medServices = [
-    ["Medical consumables", "Dental clinics", "Dental laboratories", "Dermatology and cosmetics", "Laboratories and Analysis"],
-    ["Dental chairs and accessories", "Equipment, devices and photography", "Anesthesia","Dental Burs", "Sterilization & Disinfection"]
+    [
+      "Medical consumables",
+      "Dental clinics",
+      "Dental laboratories",
+      "Dermatology and cosmetics",
+      "Laboratories and Analysis",
+    ],
+    [
+      "Dental chairs and accessories",
+      "Equipment, devices and photography",
+      "Anesthesia",
+      "Dental Burs",
+      "Sterilization & Disinfection",
+    ],
   ];
 
   List<List<String>> labEqu = [
-    ["Medical consumables", "Dental clinics", "Dental laboratories", "Dermatology and cosmetics", "Laboratories and Analysis"],
-    ["Dental chairs and accessories", "Equipment, devices and photography", "Anesthesia","Dental Burs", "Sterilization & Disinfection"]
+    [
+      "Medical consumables",
+      "Dental clinics",
+      "Dental laboratories",
+      "Dermatology and cosmetics",
+      "Laboratories and Analysis",
+    ],
+    [
+      "Dental chairs and accessories",
+      "Equipment, devices and photography",
+      "Anesthesia",
+      "Dental Burs",
+      "Sterilization & Disinfection",
+    ],
   ];
 
   void togglePasswordVisibility() {
@@ -223,5 +264,4 @@ class AuthController extends GetxController {
   void togglePasswordVisibility2() {
     isPasswordHidden2.value = !isPasswordHidden2.value;
   }
-
 }

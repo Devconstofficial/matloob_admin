@@ -119,5 +119,16 @@
   "dragYourFilesOrBrowse": "Drag your file(s) or browse",
   "max10MbFilesAllowed": "Max 10MB files are allowed",
   "addProductButton": "Add Product",
-  "productDetails": "Product Details"
+  "productDetails": "Product Details",
+  "catalogDetails": "Catalog Details",
+  "selectUser": "Select User",
+  "addLogo": "Add Logo",
+  "rfqs": "RFQ's",
+  "enterRfqTitle": "Enter RFQ Title",
+  "description": "Description",
+  "enterRfqDescription": "Enter RFQ Description",
+  "files": "Files",
+  "edit": "Edit",
+  "updateStoreStatus": "Update Store Status",
+  "title": "Title"
 }

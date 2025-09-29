@@ -6,10 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/add_user_dialog.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/user_analytics_model.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/custom_dialog.dart';
 import '../../custom_widgets/custom_header.dart';
@@ -106,12 +108,15 @@ class UserManagementScreen extends GetView<UserController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(kUserManagement),
+                      customHeader(
+                        CommonCode().t(LocaleKeys.userManagement),
+                        context,
+                      ),
                       Obx(
                         () => insightContainer(
                           kDoubleUserIcon,
                           controller.totalUsers.value.toString(),
-                          kOnlineUsers,
+                          CommonCode().t(LocaleKeys.onlineUser),
                           kGreenColor,
                         ),
                       ),
@@ -121,7 +126,7 @@ class UserManagementScreen extends GetView<UserController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            kRegisteredUsers,
+                            CommonCode().t(LocaleKeys.registeredUser),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
@@ -136,7 +141,9 @@ class UserManagementScreen extends GetView<UserController> {
                                           child: CircularProgressIndicator(),
                                         )
                                         : CustomButton(
-                                          title: kExportAsExcel,
+                                          title: CommonCode().t(
+                                            LocaleKeys.exportAsExcel,
+                                          ),
                                           onTap: () {
                                             controller.exportUsersToExcel();
                                           },
@@ -148,22 +155,25 @@ class UserManagementScreen extends GetView<UserController> {
                               ),
                               SizedBox(width: 12.w),
                               Obx(
-                                ()=> controller.isAdding.value?const Center(
+                                () =>
+                                    controller.isAdding.value
+                                        ? const Center(
                                           child: CircularProgressIndicator(),
                                         )
                                         : CustomButton(
-                                  title: "+ Add User",
-                                  onTap: () {
-                                    Get.dialog(
-                                      barrierDismissible: false,
-                                      AddUserDialog(),
-                                    );
-                                  },
-                                  height: 40.h,
-                                  width: 128.w,
-                                  textSize: 16.sp,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                          title:
+                                              "+ ${CommonCode().t(LocaleKeys.addUser)}",
+                                          onTap: () {
+                                            Get.dialog(
+                                              barrierDismissible: false,
+                                              AddUserDialog(),
+                                            );
+                                          },
+                                          height: 40.h,
+                                          width: 128.w,
+                                          textSize: 16.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                               ),
                             ],
                           ),
@@ -202,7 +212,9 @@ class UserManagementScreen extends GetView<UserController> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.sp,
                                     ),
-                                    hintText: kFilterQuickSearch,
+                                    hintText: CommonCode().t(
+                                      LocaleKeys.filterQuickSearch,
+                                    ),
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.w,
                                     ),
@@ -274,39 +286,53 @@ class UserManagementScreen extends GetView<UserController> {
                                         columns: [
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kUserID,
+                                              title: CommonCode().t(
+                                                LocaleKeys.userId,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kUserName,
+                                              title: CommonCode().t(
+                                                LocaleKeys.userName,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kPhoneNo,
+                                              title: CommonCode().t(
+                                                LocaleKeys.phoneNo,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kCompanyName,
+                                              title: CommonCode().t(
+                                                LocaleKeys.companyName,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kEmail,
+                                              title: CommonCode().t(
+                                                LocaleKeys.email,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             label: ColumnRowWidget(
-                                              title: kStatus,
+                                              title: CommonCode().t(
+                                                LocaleKeys.status,
+                                              ),
                                             ),
                                           ),
                                           DataColumn(
                                             headingRowAlignment:
                                                 MainAxisAlignment.center,
                                             label: ColumnRowWidget(
-                                              title: kAction,
+                                              title: CommonCode().t(
+                                                LocaleKeys.action,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -470,8 +496,12 @@ class UserManagementScreen extends GetView<UserController> {
                                 barrierDismissible: false,
                                 CustomDialog(
                                   image: kDeleteDialogImage,
-                                  title: kConfirmDeleteDetail,
-                                  btnText: kConfirmDelete,
+                                  title: CommonCode().t(
+                                    LocaleKeys.areYouSureWantToDelete,
+                                  ),
+                                  btnText: CommonCode().t(
+                                    LocaleKeys.confirmDelete,
+                                  ),
                                   isLoading: controller.isDeleting,
                                   onTap: () {
                                     controller.deleteUserInController(user.id);

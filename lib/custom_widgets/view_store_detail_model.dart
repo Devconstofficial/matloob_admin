@@ -6,11 +6,13 @@ import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/screens/dashboard_screen/controller/dashboard_controller.dart';
 import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 
 import '../utils/app_colors.dart';
 import 'custom_dropdown.dart';
@@ -103,7 +105,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              kStoreDetails,
+              CommonCode().t(LocaleKeys.storeDetails),
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
@@ -142,7 +144,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                   child: SizedBox(
                     height: 48.h,
                     child: customTextField(
-                      hintText: kLocation,
+                      hintText: CommonCode().t(LocaleKeys.location),
                       controller: locationController,
                       readOnly: false,
                     ),
@@ -155,7 +157,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                     child: CustomDropdown(
                       selected: controller.specialityController,
                       items: ["Services", "Product", "Both"],
-                      hint: kUpdateStoreStatus,
+                      hint: CommonCode().t(LocaleKeys.updateStoreStatus),
                     ),
                   ),
                 ),
@@ -164,7 +166,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
             SizedBox(height: 16.h),
 
             Text(
-              kUpdateStoreStatus,
+              CommonCode().t(LocaleKeys.updateStoreStatus),
 
               style: AppStyles.blackTextStyle().copyWith(
                 fontSize: 16,
@@ -182,7 +184,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                 "Completed",
                 "Cancelled",
               ],
-              hint: kUpdateStoreStatus,
+              hint: CommonCode().t(LocaleKeys.updateStoreStatus),
             ),
 
             SizedBox(height: 32.h),
@@ -194,7 +196,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                         controller.isLoading3.value
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButton(
-                              title: kReject,
+                              title: CommonCode().t(LocaleKeys.reject),
                               onTap: () {
                                 final reasonController =
                                     TextEditingController();
@@ -203,8 +205,10 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                                   barrierDismissible: false,
                                   CustomDialog(
                                     image: kRejectReasonImage,
-                                    title: kRejectionReason,
-                                    btnText: kReject,
+                                    title: CommonCode().t(
+                                      LocaleKeys.rejectionReason,
+                                    ),
+                                    btnText: CommonCode().t(LocaleKeys.reject),
                                     isLoading: controller.isLoading3,
                                     onTap: () async {
                                       await controller.rejectStore(
@@ -244,7 +248,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                       controller.isLoading2.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                            title: kEdit,
+                            title: CommonCode().t(LocaleKeys.edit),
                             onTap: () async {
                               final Map<String, dynamic> updateData = {
                                 "companyName": companyNameController.text,
@@ -289,7 +293,7 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                         controller.isLoading1.value
                             ? const Center(child: CircularProgressIndicator())
                             : CustomButton(
-                              title: kApprove,
+                              title: CommonCode().t(LocaleKeys.approve),
                               onTap: () {
                                 Get.dialog(
                                   barrierDismissible: false,

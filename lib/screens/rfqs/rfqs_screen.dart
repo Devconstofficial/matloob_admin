@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/view_details_dialog.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/rfq_model.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
@@ -34,32 +35,42 @@ class RfqScreen extends GetView<RfqController> {
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 40.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 32.w,
+                    vertical: 40.h,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(kRFQ),
+                      customHeader(CommonCode().t(LocaleKeys.rfqs), context),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            kSubmittedRFQs,
+                            CommonCode().t(LocaleKeys.submittedRfqs),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
                             ),
                           ),
                           Obx(
-                            ()=> controller.isExporting.value? const Center(child: CircularProgressIndicator(),): CustomButton(
-                              title: kExportAsExcel,
-                              onTap: () {
-                                controller.exportRFQsToExcel();
-                              },
-                              height: 40.h,
-                              width: 146.w,
-                              textSize: 16.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            () =>
+                                controller.isExporting.value
+                                    ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                    : CustomButton(
+                                      title: CommonCode().t(
+                                        LocaleKeys.exportAsExcel,
+                                      ),
+                                      onTap: () {
+                                        controller.exportRFQsToExcel();
+                                      },
+                                      height: 40.h,
+                                      width: 146.w,
+                                      textSize: 16.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                           ),
                         ],
                       ),
@@ -71,7 +82,11 @@ class RfqScreen extends GetView<RfqController> {
                           border: Border.all(color: kGreyColor, width: 0.3),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 24, top: 24, right: 24),
+                          padding: const EdgeInsets.only(
+                            left: 24,
+                            top: 24,
+                            right: 24,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -91,8 +106,12 @@ class RfqScreen extends GetView<RfqController> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.sp,
                                     ),
-                                    hintText: kFilterQuickSearch,
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
+                                    hintText: CommonCode().t(
+                                      LocaleKeys.filterQuickSearch,
+                                    ),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20.w,
+                                    ),
                                     prefixIcon: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Image.asset(
@@ -135,33 +154,83 @@ class RfqScreen extends GetView<RfqController> {
                                         dataRowMaxHeight: 55,
                                         dividerThickness: 0.2,
                                         columns: [
-                                          DataColumn(label: ColumnRowWidget(title: kRfqID)),
-                                          DataColumn(label: ColumnRowWidget(title: kSubmittedBy)),
-                                          DataColumn(label: ColumnRowWidget(title: kCategory)),
-                                          DataColumn(label: ColumnRowWidget(title: kCity)),
-                                          DataColumn(label: ColumnRowWidget(title: kSubmittedOn)),
-                                          DataColumn(label: ColumnRowWidget(title: kResponses)),
-                                          DataColumn(label: ColumnRowWidget(title: kStatus)),
                                           DataColumn(
-                                            headingRowAlignment: MainAxisAlignment.center,
-                                            label: ColumnRowWidget(title: "Action"),
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.rfqId,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.submittedBy,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.category,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.city,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.submittedOn,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.responses,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.status,
+                                              ),
+                                            ),
+                                          ),
+                                          DataColumn(
+                                            headingRowAlignment:
+                                                MainAxisAlignment.center,
+                                            label: ColumnRowWidget(
+                                              title: CommonCode().t(
+                                                LocaleKeys.action,
+                                              ),
+                                            ),
                                           ),
                                         ],
-                                        rows: rfqs.map((rfq) {
-                                          return _buildDataRow(
-                                            rfq.rfqId,
-                                            rfq.user?.name ?? "-",
-                                            rfq.category,
-                                            rfq.city ?? "-",
-                                            rfq.createdAt != null
-                                                ? CommonCode.formatDate(rfq.createdAt!)
-                                                : "-",
-                                            rfq.clicks ,
-                                            rfq.status.name ,
-                                            rfq,
-                                            context,
-                                          );
-                                        }).toList(),
+                                        rows:
+                                            rfqs.map((rfq) {
+                                              return _buildDataRow(
+                                                rfq.rfqId,
+                                                rfq.user?.name ?? "-",
+                                                rfq.category,
+                                                rfq.city ?? "-",
+                                                rfq.createdAt != null
+                                                    ? CommonCode.formatDate(
+                                                      rfq.createdAt!,
+                                                    )
+                                                    : "-",
+                                                rfq.clicks,
+                                                rfq.status.name,
+                                                rfq,
+                                                context,
+                                              );
+                                            }).toList(),
                                       ),
                                     ),
                                   ],
@@ -173,13 +242,15 @@ class RfqScreen extends GetView<RfqController> {
                       ),
                       SizedBox(height: 29.h),
 
-                      Obx(() => CustomPagination(
-                            currentPage: controller.currentPage.value,
-                            visiblePages: controller.visiblePageNumbers,
-                            onPrevious: controller.goToPreviousPage,
-                            onNext: controller.goToNextPage,
-                            onPageSelected: controller.goToPage,
-                          )),
+                      Obx(
+                        () => CustomPagination(
+                          currentPage: controller.currentPage.value,
+                          visiblePages: controller.visiblePageNumbers,
+                          onPrevious: controller.goToPreviousPage,
+                          onNext: controller.goToNextPage,
+                          onPageSelected: controller.goToPage,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -209,25 +280,28 @@ class RfqScreen extends GetView<RfqController> {
         DataCell(_buildClickableText(category)),
         DataCell(_buildClickableText(city)),
         DataCell(_buildClickableText(submitOn)),
-        DataCell(Text(
-          responses.toString(),
-          textAlign: TextAlign.center,
-          style: AppStyles.blackTextStyle().copyWith(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w200,
-            color: kBlackShade7Color.withOpacity(0.7),
+        DataCell(
+          Text(
+            responses.toString(),
+            textAlign: TextAlign.center,
+            style: AppStyles.blackTextStyle().copyWith(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w200,
+              color: kBlackShade7Color.withOpacity(0.7),
+            ),
           ),
-        )),
+        ),
         DataCell(
           Container(
             width: 71,
             height: 26,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: status == "Accepted"
-                  ? kPrimaryColor.withOpacity(0.2)
-                  : status == "Rejected"
-                      ?kRedColor.withOpacity(0.2) 
+              color:
+                  status == "Accepted"
+                      ? kPrimaryColor.withOpacity(0.2)
+                      : status == "Rejected"
+                      ? kRedColor.withOpacity(0.2)
                       : kBrownColor.withOpacity(0.2),
             ),
             child: Center(
@@ -237,11 +311,12 @@ class RfqScreen extends GetView<RfqController> {
                 style: AppStyles.blackTextStyle().copyWith(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: status == "Accepted"
-                      ? kPrimaryColor
-                      : status == "Rejected"
-                          ?kRedColor
-                          : kBrownColor
+                  color:
+                      status == "Accepted"
+                          ? kPrimaryColor
+                          : status == "Rejected"
+                          ? kRedColor
+                          : kBrownColor,
                 ),
               ),
             ),
@@ -255,38 +330,42 @@ class RfqScreen extends GetView<RfqController> {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: Obx(
-                   () =>
+                  () =>
                       controller.isDeleting.value
                           ? const Center(child: CircularProgressIndicator())
                           : GestureDetector(
-                    onTap: () {
-                      Get.dialog(
-                        barrierDismissible: false,
-                        CustomDialog(
-                          image: kDeleteDialogImage,
-                          title: kConfirmDeleteDetail,
-                          btnText: kConfirmDelete,
-                          isLoading: controller.isDeleting,
-                          onTap: () {
-                            controller.deleteRFQAction(id,responses);
-                          },
-                          btnColor: kRedColor,
-                          hideDetail: true,
-                        ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 14,
-                      backgroundColor: kPrimaryColor,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          kDeleteIcon,
-                          height: 16.h,
-                          width: 16.w,
-                        ),
-                      ),
-                    ),
-                  ),
+                            onTap: () {
+                              Get.dialog(
+                                barrierDismissible: false,
+                                CustomDialog(
+                                  image: kDeleteDialogImage,
+                                  title: CommonCode().t(
+                                    LocaleKeys.areYouSureWantToDelete,
+                                  ),
+                                  btnText: CommonCode().t(
+                                    LocaleKeys.confirmDelete,
+                                  ),
+                                  isLoading: controller.isDeleting,
+                                  onTap: () {
+                                    controller.deleteRFQAction(id, responses);
+                                  },
+                                  btnColor: kRedColor,
+                                  hideDetail: true,
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 14,
+                              backgroundColor: kPrimaryColor,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  kDeleteIcon,
+                                  height: 16.h,
+                                  width: 16.w,
+                                ),
+                              ),
+                            ),
+                          ),
                 ),
               ),
               MouseRegion(
@@ -295,7 +374,7 @@ class RfqScreen extends GetView<RfqController> {
                   onTap: () {
                     Get.dialog(
                       barrierDismissible: false,
-                      ViewDetailModel(rfq: rfq,isEditable: false,),
+                      ViewDetailModel(rfq: rfq, isEditable: false),
                     );
                   },
                   child: CircleAvatar(

@@ -4,11 +4,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/user_analytics_model.dart';
 import 'package:matloob_admin/screens/auth/controller/auth_controller.dart';
 import 'package:matloob_admin/screens/user_management/controller/user_controller.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../utils/app_colors.dart';
 import 'custom_dropdown.dart';
 
@@ -126,7 +128,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            kUserDetails,
+            CommonCode().t(LocaleKeys.userDetails),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -170,7 +172,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
           ),
           SizedBox(height: 16.h),
           Text(
-            kRequestQuotation,
+            CommonCode().t(LocaleKeys.requestForQuotation),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -192,7 +194,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                     spacing: 3,
                     children: [
                       Text(
-                        kTotalRFQs,
+                        CommonCode().t(LocaleKeys.totalRfqs),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -222,7 +224,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                     spacing: 3,
                     children: [
                       Text(
-                        kRfqSupplierResponse,
+                        CommonCode().t(LocaleKeys.rfqWithSupplierResponse),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -252,7 +254,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                     spacing: 3,
                     children: [
                       Text(
-                        kRfqNoResponse,
+                        CommonCode().t(LocaleKeys.rfqWithoutSupplierResponse),
                         style: AppStyles.blackTextStyle().copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w200,
@@ -273,7 +275,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
           ),
           SizedBox(height: 16.h),
           Text(
-            kUserStatus,
+            CommonCode().t(LocaleKeys.userStatus),
             style: AppStyles.blackTextStyle().copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w300,
@@ -290,7 +292,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CustomButton(
-                title: kCancel,
+                title: CommonCode().t(LocaleKeys.cancel),
                 onTap: () {
                   Get.back();
                 },
@@ -309,7 +311,7 @@ class _UserDetailModelState extends State<UserDetailModel> {
                     userController.isUpdating.value
                         ? const Center(child: CircularProgressIndicator())
                         : CustomButton(
-                          title: kUpdateChanges,
+                          title: CommonCode().t(LocaleKeys.updateChanges),
                           onTap: () {
                             userController.updateUserInController(
                               userId: widget.user.id,

@@ -9,12 +9,14 @@ import 'package:matloob_admin/custom_widgets/column_row.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
 import 'package:matloob_admin/custom_widgets/view_store_detail_model.dart';
+import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/screens/sidemenu/sidemenu.dart';
 import 'package:matloob_admin/screens/store_management/controller/store_controller.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/custom_header.dart';
 import '../../custom_widgets/custom_pagination.dart';
@@ -42,11 +44,14 @@ class StoreManagementScreen extends GetView<StoreController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      customHeader(kStoreManagement),
+                      customHeader(
+                        CommonCode().t(LocaleKeys.storeManagement),
+                        context,
+                      ),
                       Row(
                         children: [
                           Text(
-                            kRegisteredStores,
+                            CommonCode().t(LocaleKeys.registeredStores),
                             style: AppStyles.blackTextStyle().copyWith(
                               fontWeight: FontWeight.w500,
                               fontSize: 18.sp,
@@ -60,7 +65,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                       child: CircularProgressIndicator(),
                                     )
                                     : CustomButton(
-                                      title: kExportAsExcel,
+                                      title: CommonCode().t(
+                                        LocaleKeys.exportAsExcel,
+                                      ),
                                       onTap: () {
                                         controller.exportStoresToExcel();
                                       },
@@ -78,7 +85,8 @@ class StoreManagementScreen extends GetView<StoreController> {
                                       child: CircularProgressIndicator(),
                                     )
                                     : CustomButton(
-                                      title: "+ $kAddStore",
+                                      title:
+                                          "+ ${CommonCode().t(LocaleKeys.addStore)}",
                                       onTap: () {
                                         Get.dialog(
                                           barrierDismissible: false,
@@ -125,7 +133,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.sp,
                                     ),
-                                    hintText: kFilterQuickSearch,
+                                    hintText: CommonCode().t(
+                                      LocaleKeys.filterQuickSearch,
+                                    ),
                                     contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20.w,
                                     ),
@@ -182,7 +192,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kStoreID,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.storeId,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -190,7 +202,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kCompanyName,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.companyName,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -198,7 +212,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kRegisteredOn,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.registeredOn,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -206,7 +222,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kViews,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.views,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -214,7 +232,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kCompanyNumber,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.companyNumber,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -222,7 +242,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kLocation,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.location,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -230,7 +252,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kSpecialty,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.speciality,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -238,7 +262,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: kStatus,
+                                                title: CommonCode().t(
+                                                  LocaleKeys.status,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -248,7 +274,9 @@ class StoreManagementScreen extends GetView<StoreController> {
                                             label: Flexible(
                                               flex: 1,
                                               child: ColumnRowWidget(
-                                                title: "Action",
+                                                title: CommonCode().t(
+                                                  LocaleKeys.action,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -325,7 +353,7 @@ class StoreManagementScreen extends GetView<StoreController> {
             cursor: SystemMouseCursors.click,
 
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 controller.fetchStoreDetails(store.id);
                 Get.toNamed(kViewStoreDetailsScreenRoute);
               },
@@ -453,8 +481,12 @@ class StoreManagementScreen extends GetView<StoreController> {
                               barrierDismissible: false,
                               CustomDialog(
                                 image: kDeleteDialogImage,
-                                title: kConfirmDeleteDetail,
-                                btnText: kConfirmDelete,
+                                title: CommonCode().t(
+                                  LocaleKeys.areYouSureWantToDelete,
+                                ),
+                                btnText: CommonCode().t(
+                                  LocaleKeys.confirmDelete,
+                                ),
                                 isLoading: controller.isDeleting,
                                 onTap: () {
                                   controller.deleteStoreInController(store.id);
