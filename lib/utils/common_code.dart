@@ -4,23 +4,23 @@ import 'package:intl/intl.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/session_management/session_management.dart';
 import 'package:matloob_admin/utils/session_management/session_token_keys.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CommonCode {
-
   static bool isValidEmail(String email) {
-    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+    bool emailValid = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+    ).hasMatch(email);
     // print('=====================is email valid $emailValid');
     return emailValid;
   }
+
   static String formatDate(DateTime date) {
     final formatter = DateFormat('dd-MM-yyyy');
-    return formatter.format(date.toLocal()); 
+    return formatter.format(date.toLocal());
   }
 
-  bool isValidPhone(
-    String? inputString, {
-    bool isRequired = false,
-  }) {
+  bool isValidPhone(String? inputString, {bool isRequired = false}) {
     bool isInputStringValid = false;
 
     if (!isRequired && (inputString == null ? true : inputString.isEmpty)) {
@@ -45,10 +45,15 @@ class CommonCode {
   }
 
   static Future<void> logout() async {
-    Get.offNamedUntil(kAuthScreenRoute, (predicate)=>false);
-    SessionManagement sessionManagement= SessionManagement();
-    await sessionManagement.removeSession(token: SessionTokenKeys.kUserModelKey,);
-    await sessionManagement.removeSession(token: SessionTokenKeys.kUserTokenKey,);
+    Get.offNamedUntil(kAuthScreenRoute, (predicate) => false);
+    SessionManagement sessionManagement = SessionManagement();
+    await sessionManagement.removeSession(
+      token: SessionTokenKeys.kUserModelKey,
+    );
+    await sessionManagement.removeSession(
+      token: SessionTokenKeys.kUserTokenKey,
+    );
   }
 
+  String t(String key) => StringTranslateExtension(key).tr();
 }

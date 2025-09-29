@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_text.dart';
+import 'package:matloob_admin/utils/common_code.dart';
 import '../../../utils/app_colors.dart';
 import '../../../utils/app_images.dart';
 import '../../custom_widgets/auth_component.dart';
@@ -10,6 +11,8 @@ import '../../custom_widgets/custom_button.dart';
 import '../../custom_widgets/custom_textfield.dart';
 import '../../utils/app_strings.dart';
 import 'controller/auth_controller.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 class AuthScreen extends GetView<AuthController> {
   const AuthScreen({super.key});
@@ -25,7 +28,7 @@ class AuthScreen extends GetView<AuthController> {
           children: [
             SvgPicture.asset(kLogoImage,height: 72.h,width: 150.w,),
             SizedBox(height: 43.h),
-            CustomText(text: kSignIn,fontWeight: FontWeight.w600,fontSize: 24.sp,),
+            CustomText(text: CommonCode().t('signIn'),fontWeight: FontWeight.w600,fontSize: 24.sp,),
             SizedBox(height: 37.h),
             CustomText(text: kEmail,fontWeight: FontWeight.w500,fontSize: 13.sp,color: kGreyShade7Color,),
             SizedBox(height: 11.h),

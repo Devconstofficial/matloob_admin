@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,11 +9,18 @@ import 'package:matloob_admin/utils/app_theme.dart';
 import 'package:matloob_admin/utils/route_generator.dart';
 import 'package:matloob_admin/utils/screen_bindings.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -33,8 +41,12 @@ class MyApp extends StatelessWidget {
           initialBinding: ScreenBindings(),
           initialRoute: kAuthScreenRoute,
           getPages: RouteGenerator.getPages(),
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+
           builder: (context, child) {
-            return  MediaQuery(
+            return MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 textScaler: TextScaler.linear(
                   MediaQuery.of(context).textScaleFactor.clamp(1.0, 1.0),
