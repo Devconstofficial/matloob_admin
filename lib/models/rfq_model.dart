@@ -1,19 +1,15 @@
+import 'package:matloob_admin/models/rfq_categories_model.dart';
+import 'package:matloob_admin/models/rfq_sub_categories_model.dart';
+import 'package:matloob_admin/models/rfq_sub_sub_categories_model.dart';
 import 'package:matloob_admin/models/user_model.dart';
 
-enum RfqStatus {
-  Pending,
-  Accepted,
-  RevisonRequested,
-  Rejected,
-  Completed,
-  Cancelled,
-}
+enum RfqStatus { Pending, Accepted, RevisonRequested, Rejected, Completed, Cancelled }
 
 class RfqModel {
   String rfqId = "";
-  String category = "";
-  String subcategory = "";
-  String subSubcategory = "";
+  dynamic category = "";
+  dynamic subcategory = "";
+  dynamic subSubcategory = "";
   String userId = "";
   bool isWantDelivery = false;
   double? latitude;
@@ -54,7 +50,7 @@ class RfqModel {
     required this.title,
     required this.description,
     this.price = 0.0,
-    this.clicks=0,
+    this.clicks = 0,
     this.views = 0,
     this.images = const [],
     this.files = const [],
@@ -86,7 +82,7 @@ class RfqModel {
     List<String>? files,
     DateTime? createdAt,
     DateTime? updatedAt,
-    UserModel? user
+    UserModel? user,
   }) {
     return RfqModel(
       category: category ?? this.category,
@@ -126,7 +122,7 @@ class RfqModel {
       "location": location,
       "district": district,
       "city": city,
-      "clicks":clicks,
+      "clicks": clicks,
       "views": views,
       "condition": condition,
       "title": title,
@@ -140,9 +136,24 @@ class RfqModel {
 
   RfqModel.fromJson(Map<String, dynamic> json) {
     rfqId = json["_id"] ?? json["id"] ?? rfqId;
-    category = json["category"] ?? category;
-    subcategory = json["subcategory"] ?? subcategory;
-    subSubcategory = json["subSubcategory"] ?? subSubcategory;
+    category =
+        json["category"] == null
+            ? ""
+            : json["category"] != null && json["category"] is String
+            ? json["category"]
+            : RfqCategoriesModel.fromJson(json["category"]);
+    subcategory =
+        json["subcategory"] == null
+            ? ""
+            : json["subcategory"] != null && json["subcategory"] is String
+            ? json["subcategory"]
+            : RfqSubCategoriesModel.fromJson(json["subcategory"]);
+    subSubcategory =
+        json["subSubcategory"] == null
+            ? ""
+            : json["subSubcategory"] != null && json["subSubcategory"] is String
+            ? json["subSubcategory"]
+            : RfqSubSubCategoriesModel.fromJson(json["subSubcategory"]);
     userId = json["userId"] ?? userId;
     isWantDelivery = json["isWantDelivery"] ?? isWantDelivery;
     latitude = json["latitude"]?.toDouble();
@@ -218,7 +229,8 @@ class RfqModel {
       "images": images,
       "files": files,
       'user: $user, '
-      "createdAt": createdAt?.toIso8601String(),
+              "createdAt":
+          createdAt?.toIso8601String(),
       "updatedAt": updatedAt?.toIso8601String(),
     };
   }

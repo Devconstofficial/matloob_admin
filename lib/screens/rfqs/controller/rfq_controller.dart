@@ -1,17 +1,18 @@
 import 'dart:developer';
+import 'dart:html' as html;
+import 'dart:io';
+
+import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
 import 'package:matloob_admin/models/rfq_model.dart';
-import 'package:excel/excel.dart';
 import 'package:matloob_admin/screens/dashboard_screen/controller/dashboard_controller.dart';
 import 'package:matloob_admin/utils/app_colors.dart';
 import 'package:matloob_admin/web_services/rfq_services.dart';
-import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:intl/intl.dart';
-import 'dart:html' as html;
 
 class RfqController extends GetxController {
   final RxList<RfqModel> rfqList = <RfqModel>[].obs;
@@ -37,35 +38,60 @@ class RfqController extends GetxController {
       isExporting.value = true;
       var excel = Excel.createExcel();
       Sheet sheetObject = excel[excel.getDefaultSheet() ?? 'RFQs'];
-      final List<CellValue> headerValues = [
-        "RFQ ID",
-        "Submitted By",
-        "Category",
-        "Subcategory",
-        "SubSubcategory",
-        "City",
-        "Location",
-        "Condition",
-        "Status",
-        "Title",
-        "Description",
-        "Price",
-        "Clicks",
-        "Views",
-        "Phone Clicks",
-        "Created At",
-        "Updated At",
-        "Images",
-        "Files",
-      ].map((title) => TextCellValue(title)).toList();
+      final List<CellValue> headerValues =
+          [
+            "RFQ ID",
+            "Submitted By",
+            "Category",
+            "Subcategory",
+            "SubSubcategory",
+            "City",
+            "Location",
+            "Condition",
+            "Status",
+            "Title",
+            "Description",
+            "Price",
+            "Clicks",
+            "Views",
+            "Phone Clicks",
+            "Created At",
+            "Updated At",
+            "Images",
+            "Files",
+          ].map((title) => TextCellValue(title)).toList();
       sheetObject.appendRow(headerValues);
       for (var rfq in rfqList) {
         sheetObject.appendRow([
           TextCellValue(rfq.rfqId),
           TextCellValue(rfq.user?.name ?? ""),
-          TextCellValue(rfq.category),
-          TextCellValue(rfq.subcategory),
-          TextCellValue(rfq.subSubcategory),
+          TextCellValue(
+            rfq.category == null
+                ? ''
+                : rfq.category is String
+                ? rfq.category
+                : Get.locale?.languageCode == 'ar'
+                ? rfq.category.arName
+                : rfq.category.enName,
+          ),
+          TextCellValue(
+            rfq.subcategory == null
+                ? ''
+                : rfq.subcategory is String
+                ? rfq.subcategory
+                : Get.locale?.languageCode == 'ar'
+                ? rfq.subcategory.arName
+                : rfq.subcategory.enName,
+          ),
+          TextCellValue(
+            rfq.subSubcategory == null
+                ? ''
+                : rfq.subSubcategory is String
+                ? rfq.subSubcategory
+                : Get.locale?.languageCode == 'ar'
+                ? rfq.subSubcategory.arName
+                : rfq.subSubcategory.enName,
+          ),
           TextCellValue(rfq.city ?? ""),
           TextCellValue(rfq.location ?? ""),
           TextCellValue(rfq.condition),
@@ -76,12 +102,8 @@ class RfqController extends GetxController {
           IntCellValue(rfq.clicks),
           IntCellValue(rfq.views),
           IntCellValue(rfq.phoneClicks),
-          TextCellValue(rfq.createdAt != null
-              ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.createdAt!)
-              : ""),
-          TextCellValue(rfq.updatedAt != null
-              ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.updatedAt!)
-              : ""),
+          TextCellValue(rfq.createdAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.createdAt!) : ""),
+          TextCellValue(rfq.updatedAt != null ? DateFormat('yyyy-MM-dd HH:mm').format(rfq.updatedAt!) : ""),
           TextCellValue(rfq.images.join(", ")),
           TextCellValue(rfq.files.join(", ")),
         ]);
@@ -92,23 +114,17 @@ class RfqController extends GetxController {
       if (kIsWeb) {
         final blob = html.Blob([fileBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute(
-              "download", "RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx")
-          ..click();
+        final anchor =
+            html.AnchorElement(href: url)
+              ..setAttribute("download", "RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx")
+              ..click();
         html.Url.revokeObjectUrl(url);
 
-        showCustomSnackbar(
-          "Success",
-          "RFQs exported! Check your downloads folder.",
-          backgroundColor: const Color(0xFF00C851), 
-        );
+        showCustomSnackbar("Success", "RFQs exported! Check your downloads folder.", backgroundColor: const Color(0xFF00C851));
         log("Excel file downloaded in browser");
-      } 
-      else {
+      } else {
         Directory directory = await getApplicationDocumentsDirectory();
-        String filePath =
-            "${directory.path}/RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx";
+        String filePath = "${directory.path}/RFQs_${DateTime.now().millisecondsSinceEpoch}.xlsx";
         File(filePath)
           ..createSync(recursive: true)
           ..writeAsBytesSync(fileBytes);
@@ -159,20 +175,14 @@ class RfqController extends GetxController {
       await dashboardController.fetchRFQs();
 
       Get.back();
-      showCustomSnackbar(
-        "Success",
-        "RFQ deleted successfully",
-        backgroundColor: kGreenColor,
-      );
+      showCustomSnackbar("Success", "RFQ deleted successfully", backgroundColor: kGreenColor);
 
       log("SUCCESS: $successMessage");
     } catch (e) {
       log("Error deleting RFQ: $e");
 
       String errorMessage =
-          e is Exception && e.toString().contains("Exception:")
-              ? e.toString().substring("Exception: ".length)
-              : "Failed to delete RFQ";
+          e is Exception && e.toString().contains("Exception:") ? e.toString().substring("Exception: ".length) : "Failed to delete RFQ";
       showCustomSnackbar("Error", errorMessage);
       log("ERROR: $errorMessage");
     } finally {
@@ -188,10 +198,16 @@ class RfqController extends GetxController {
     if (searchText.value.isEmpty) return rfqList;
 
     return rfqList.where((rfq) {
-      final category = rfq.category.toLowerCase();
+      final category =
+          rfq.category == null
+              ? ''
+              : rfq.category is String
+              ? rfq.category.toLowerCase()
+              : Get.locale?.languageCode == 'ar'
+              ? rfq.category.arName
+              : rfq.category.enName.toLowerCase();
       final userName = rfq.user?.name?.toLowerCase() ?? "";
-      return category.contains(searchText.value) ||
-          userName.contains(searchText.value);
+      return category.contains(searchText.value) || userName.contains(searchText.value);
     }).toList();
   }
 
@@ -200,10 +216,7 @@ class RfqController extends GetxController {
   List<RfqModel> get pagedRFQs {
     int start = (currentPage.value - 1) * itemsPerPage;
     int end = start + itemsPerPage;
-    return filteredRfqs.sublist(
-      start,
-      end > filteredRfqs.length ? filteredRfqs.length : end,
-    );
+    return filteredRfqs.sublist(start, end > filteredRfqs.length ? filteredRfqs.length : end);
   }
 
   int get currentGroup => ((currentPage.value - 1) / pagesPerGroup).floor();

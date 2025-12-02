@@ -1,10 +1,10 @@
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:file_picker/file_picker.dart';
-import 'dart:typed_data';
-
 import 'package:matloob_admin/custom_widgets/customDialog1.dart';
 import 'package:matloob_admin/custom_widgets/custom_button.dart';
 import 'package:matloob_admin/custom_widgets/custom_dialog.dart';
@@ -16,20 +16,16 @@ import 'package:matloob_admin/utils/app_images.dart';
 import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import 'package:matloob_admin/utils/common_code.dart';
-import 'custom_dropdown.dart';
+
 import '../utils/app_colors.dart';
+import 'custom_dropdown.dart';
 
 class FileItem {
   final String path;
   final String displayName;
   final bool isNetwork;
   final Uint8List? fileBytes;
-  FileItem({
-    required this.path,
-    required this.displayName,
-    this.isNetwork = true,
-    this.fileBytes,
-  });
+  FileItem({required this.path, required this.displayName, this.isNetwork = true, this.fileBytes});
 }
 
 class ViewDetailModel extends StatefulWidget {
@@ -58,36 +54,16 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
   @override
   void initState() {
     super.initState();
-    locationController = TextEditingController(
-      text: "${widget.rfq.city ?? ''}, ${widget.rfq.district ?? ''}",
-    );
+    locationController = TextEditingController(text: "${widget.rfq.city ?? ''}, ${widget.rfq.district ?? ''}");
     titleController = TextEditingController(text: widget.rfq.title);
     descriptionController = TextEditingController(text: widget.rfq.description);
-    priceController = TextEditingController(
-      text: widget.rfq.price > 0 ? widget.rfq.price.toStringAsFixed(0) : "",
-    );
+    priceController = TextEditingController(text: widget.rfq.price > 0 ? widget.rfq.price.toStringAsFixed(0) : "");
     selectedDelivery = (widget.rfq.isWantDelivery ? "Yes" : "No").obs;
     selectedCondition = widget.rfq.condition.obs;
     selectedStatus = widget.rfq.status.name.obs;
 
-    imageList = RxList.from(
-      widget.rfq.images.map(
-        (path) => FileItem(
-          path: path,
-          displayName: path.split('/').last,
-          isNetwork: true,
-        ),
-      ),
-    );
-    fileList = RxList.from(
-      widget.rfq.files.map(
-        (path) => FileItem(
-          path: path,
-          displayName: path.split('/').last,
-          isNetwork: true,
-        ),
-      ),
-    );
+    imageList = RxList.from(widget.rfq.images.map((path) => FileItem(path: path, displayName: path.split('/').last, isNetwork: true)));
+    fileList = RxList.from(widget.rfq.files.map((path) => FileItem(path: path, displayName: path.split('/').last, isNetwork: true)));
   }
 
   @override
@@ -104,39 +80,19 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
     String hintText = "",
     int maxLines = 1,
     bool readOnly = false,
-    EdgeInsets contentPadding = const EdgeInsets.symmetric(
-      vertical: 0,
-      horizontal: 20,
-    ),
+    EdgeInsets contentPadding = const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
   }) {
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
-      style: GoogleFonts.roboto(
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w400,
-        color: kBlackColor,
-      ),
+      style: GoogleFonts.roboto(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kBlackColor),
       maxLines: maxLines,
       decoration: InputDecoration(
-        hintStyle: GoogleFonts.roboto(
-          color: kBlackColor.withOpacity(0.5),
-          fontWeight: FontWeight.w400,
-          fontSize: 14.sp,
-        ),
+        hintStyle: GoogleFonts.roboto(color: kBlackColor.withOpacity(0.5), fontWeight: FontWeight.w400, fontSize: 14.sp),
         hintText: hintText,
-        contentPadding: contentPadding.copyWith(
-          top: maxLines > 1 ? 20.h : 0,
-          bottom: maxLines > 1 ? 20.h : 0,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: kBlackColor.withOpacity(0.1)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: kBlackColor.withOpacity(0.1)),
-        ),
+        contentPadding: contentPadding.copyWith(top: maxLines > 1 ? 20.h : 0, bottom: maxLines > 1 ? 20.h : 0),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: kBlackColor.withOpacity(0.1))),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: kBlackColor.withOpacity(0.1))),
       ),
     );
   }
@@ -144,10 +100,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
   Widget _priceTextField() {
     return Container(
       height: 48.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: kBlackColor.withOpacity(0.1)),
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: kBlackColor.withOpacity(0.1))),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
       child: Row(
         children: [
@@ -156,26 +109,11 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
               controller: priceController,
               keyboardType: TextInputType.number,
               readOnly: false,
-              style: GoogleFonts.roboto(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w400,
-                color: kBlackColor,
-              ),
-              decoration: InputDecoration(
-                hintText: "0",
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.only(bottom: 15.h),
-              ),
+              style: GoogleFonts.roboto(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kBlackColor),
+              decoration: InputDecoration(hintText: "0", border: InputBorder.none, contentPadding: EdgeInsets.only(bottom: 15.h)),
             ),
           ),
-          Text(
-            "SAR",
-            style: GoogleFonts.roboto(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400,
-              color: kBlackColor.withOpacity(0.5),
-            ),
-          ),
+          Text("SAR", style: GoogleFonts.roboto(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kBlackColor.withOpacity(0.5))),
         ],
       ),
     );
@@ -188,11 +126,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
       FilePickerResult? result;
 
       if (isImage) {
-        result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-          allowMultiple: true,
-          withData: true,
-        );
+        result = await FilePicker.platform.pickFiles(type: FileType.image, allowMultiple: true, withData: true);
       } else {
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
@@ -205,14 +139,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
       if (result != null && result.files.isNotEmpty) {
         for (PlatformFile file in result.files) {
           if (file.bytes != null) {
-            items.add(
-              FileItem(
-                path: file.name,
-                displayName: file.name,
-                isNetwork: false,
-                fileBytes: file.bytes,
-              ),
-            );
+            items.add(FileItem(path: file.name, displayName: file.name, isNetwork: false, fileBytes: file.bytes));
           }
         }
       }
@@ -241,25 +168,17 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                         isImage
                             ? item.isNetwork
                                 ? Image.network(item.path, fit: BoxFit.cover)
-                                : Image.memory(
-                                  item.fileBytes!,
-                                  fit: BoxFit.cover,
-                                )
+                                : Image.memory(item.fileBytes!, fit: BoxFit.cover)
                             : Padding(
                               padding: EdgeInsets.symmetric(horizontal: 5.w),
                               child: Row(
                                 children: [
-                                  Image.asset(
-                                    fileIconAsset,
-                                    height: 20.h,
-                                    width: 20.w,
-                                  ),
+                                  Image.asset(fileIconAsset, height: 20.h, width: 20.w),
                                   SizedBox(width: 5.w),
                                   Expanded(
                                     child: Text(
                                       item.displayName,
-                                      style: AppStyles.blackTextStyle()
-                                          .copyWith(fontSize: 10.sp),
+                                      style: AppStyles.blackTextStyle().copyWith(fontSize: 10.sp),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),
@@ -275,11 +194,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                   child: GestureDetector(
                     onTap: () => items.remove(item),
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: kRedColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: kWhiteColor, width: 2),
-                      ),
+                      decoration: BoxDecoration(color: kRedColor, shape: BoxShape.circle, border: Border.all(color: kWhiteColor, width: 2)),
                       child: Icon(Icons.close, color: kWhiteColor, size: 14),
                     ),
                   ),
@@ -297,12 +212,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                 border: Border.all(color: kBlackColor.withOpacity(0.1)),
                 color: kWhiteColor,
               ),
-              child: Center(
-                child: Icon(
-                  isImage ? Icons.add_a_photo : Icons.add,
-                  color: kBlackColor.withOpacity(0.5),
-                ),
-              ),
+              child: Center(child: Icon(isImage ? Icons.add_a_photo : Icons.add, color: kBlackColor.withOpacity(0.5))),
             ),
           ),
         ],
@@ -314,8 +224,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
   Widget build(BuildContext context) {
     final userName = widget.rfq.user?.name ?? "User Not Found";
     final String? profileImageUrl = widget.rfq.user?.profileImage;
-    final bool hasProfileImage =
-        profileImageUrl != null && profileImageUrl.isNotEmpty;
+    final bool hasProfileImage = profileImageUrl != null && profileImageUrl.isNotEmpty;
 
     return CustomDialog1(
       width: 750.w,
@@ -326,10 +235,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             Center(
               child: Text(
                 CommonCode().t(LocaleKeys.rfqInformation),
-                style: AppStyles.blackTextStyle().copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
-                ),
+                style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300),
               ),
             ),
             SizedBox(height: 11.h),
@@ -338,9 +244,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                 Container(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child:
@@ -348,155 +252,88 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                             ? Image.network(
                               profileImageUrl,
                               fit: BoxFit.cover,
-                              loadingBuilder: (
-                                context,
-                                child,
-                                loadingProgress,
-                              ) {
+                              loadingBuilder: (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return Center(
                                   child: CircularProgressIndicator(
                                     value:
-                                        loadingProgress.expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes!
+                                        loadingProgress.expectedTotalBytes != null
+                                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                             : null,
                                   ),
                                 );
                               },
                               errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  kPersonImage,
-                                  fit: BoxFit.cover,
-                                );
+                                return Image.asset(kPersonImage, fit: BoxFit.cover);
                               },
                             )
                             : Image.asset(kPersonImage, fit: BoxFit.cover),
                   ),
                 ),
                 SizedBox(width: 8.w),
-                Text(
-                  CommonCode().t(LocaleKeys.userName),
-                  style: AppStyles.blackTextStyle().copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Text(CommonCode().t(LocaleKeys.userName), style: AppStyles.blackTextStyle().copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
               ],
             ),
             SizedBox(height: 18.h),
             Text(
-              "${CommonCode().t(LocaleKeys.category)}: ${widget.rfq.category} | ${widget.rfq.subcategory} | ${widget.rfq.subSubcategory}",
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w400,
-                color: kBlackColor.withOpacity(0.6),
-              ),
+              "${CommonCode().t(LocaleKeys.category)}: ${widget.rfq.category == null
+                  ? ''
+                  : widget.rfq.category is String
+                  ? widget.rfq.category
+                  : Get.locale?.languageCode == 'ar'
+                  ? widget.rfq.category.arName
+                  : widget.rfq.category.enName} | ${widget.rfq.subcategory == null
+                  ? ''
+                  : widget.rfq.subcategory is String
+                  ? widget.rfq.subcategory
+                  : Get.locale?.languageCode == 'ar'
+                  ? widget.rfq.subcategory.arName
+                  : widget.rfq.subcategory.enName} | ${widget.rfq.subSubcategory == null
+                  ? ''
+                  : widget.rfq.subSubcategory is String
+                  ? widget.rfq.subSubcategory
+                  : Get.locale?.languageCode == 'ar'
+                  ? widget.rfq.subSubcategory.arName
+                  : widget.rfq.subSubcategory.enName}",
+              style: AppStyles.blackTextStyle().copyWith(fontSize: 14.sp, fontWeight: FontWeight.w400, color: kBlackColor.withOpacity(0.6)),
             ),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.delivery),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.delivery), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(
-              selected: selectedDelivery,
-              items: const ["Yes", "No"],
-              hint: "Delivery Required",
-            ),
+            CustomDropdown(selected: selectedDelivery, items: const ["Yes", "No"], hint: "Delivery Required"),
 
             SizedBox(height: 16.h),
-            Text(
-              kLocation,
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(kLocation, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            _customTextField(
-              controller: locationController,
-              hintText: "City, District",
-              readOnly: true,
-            ),
+            _customTextField(controller: locationController, hintText: "City, District", readOnly: true),
 
             SizedBox(height: 16.h),
-            Text(
-              kCondition,
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(kCondition, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(
-              selected: selectedCondition,
-              items: const ["New", "Used", "Refurbished"],
-              hint: "Select Condition",
-            ),
+            CustomDropdown(selected: selectedCondition, items: const ["New", "Used", "Refurbished"], hint: "Select Condition"),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.status),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.status), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             CustomDropdown(
               selected: selectedStatus,
-              items: const [
-                "Pending",
-                "Accepted",
-                "Rejected",
-                "Completed",
-                "Cancelled",
-              ],
+              items: const ["Pending", "Accepted", "Rejected", "Completed", "Cancelled"],
               hint: "Select Status",
             ),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.targetPrice),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.targetPrice), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             _priceTextField(),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.title),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.title), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            _customTextField(
-              controller: titleController,
-              hintText: CommonCode().t(LocaleKeys.enterRfqTitle),
-              readOnly: false,
-            ),
+            _customTextField(controller: titleController, hintText: CommonCode().t(LocaleKeys.enterRfqTitle), readOnly: false),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.description),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.description), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             _customTextField(
               controller: descriptionController,
@@ -506,24 +343,12 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             ),
 
             SizedBox(height: 32.h),
-            Text(
-              CommonCode().t(LocaleKeys.productImage),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.productImage), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             _imageFileDisplay(imageList, isImage: true),
 
             SizedBox(height: 16.h),
-            Text(
-              CommonCode().t(LocaleKeys.files),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.files), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             _imageFileDisplay(fileList, isImage: false),
 
@@ -538,30 +363,20 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                             : CustomButton(
                               title: CommonCode().t(LocaleKeys.reject),
                               onTap: () {
-                                final reasonController =
-                                    TextEditingController();
+                                final reasonController = TextEditingController();
 
                                 Get.dialog(
                                   barrierDismissible: false,
                                   CustomDialog(
                                     image: kRejectReasonImage,
-                                    title: CommonCode().t(
-                                      LocaleKeys.rejectionReason,
-                                    ),
+                                    title: CommonCode().t(LocaleKeys.rejectionReason),
                                     btnText: CommonCode().t(LocaleKeys.reject),
                                     isLoading: controller.isLoadingRFQStatus,
                                     onTap: () async {
-                                      await controller.updateRFQStatusAction(
-                                        rfqId: widget.rfq.rfqId,
-                                        status: "Rejected",
-                                      );
+                                      await controller.updateRFQStatusAction(rfqId: widget.rfq.rfqId, status: "Rejected");
                                       reasonController.clear();
                                       Get.back();
-                                      showCustomSnackbar(
-                                        "Success",
-                                        "RFQ status updated to Rejected",
-                                        backgroundColor: kGreenColor,
-                                      );
+                                      showCustomSnackbar("Success", "RFQ status updated to Rejected", backgroundColor: kGreenColor);
                                     },
                                     hideDetail: true,
                                     showRejection: true,
@@ -589,8 +404,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                           : CustomButton(
                             title: CommonCode().t(LocaleKeys.edit),
                             onTap: () async {
-                              double parsedPrice =
-                                  double.tryParse(priceController.text) ?? 0;
+                              double parsedPrice = double.tryParse(priceController.text) ?? 0;
 
                               await controller.updateRFQFromUI(
                                 rfq: widget.rfq,
@@ -631,17 +445,10 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                                     isLoading: controller.isLoadingRFQStatus,
                                     btnText: kApprove,
                                     onTap: () async {
-                                      await controller.updateRFQStatusAction(
-                                        rfqId: widget.rfq.rfqId,
-                                        status: "Accepted",
-                                      );
+                                      await controller.updateRFQStatusAction(rfqId: widget.rfq.rfqId, status: "Accepted");
 
                                       Get.back();
-                                      showCustomSnackbar(
-                                        "Success",
-                                        "RFQ status updated to Accepted",
-                                        backgroundColor: kGreenColor,
-                                      );
+                                      showCustomSnackbar("Success", "RFQ status updated to Accepted", backgroundColor: kGreenColor);
                                     },
                                     hideDetail: true,
                                   ),
