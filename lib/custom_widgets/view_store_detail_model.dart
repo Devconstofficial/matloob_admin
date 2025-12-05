@@ -47,14 +47,11 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
   @override
   void initState() {
     super.initState();
-    companyNameController = TextEditingController(
-      text: widget.store.companyName,
-    );
-    contactNumberController = TextEditingController(
-      text: widget.store.companyNumber,
-    );
+    companyNameController = TextEditingController(text: widget.store.companyName);
+    contactNumberController = TextEditingController(text: widget.store.companyNumber);
     locationController = TextEditingController(text: widget.store.location);
-    controller.specialityController.value = widget.store.speciality;
+    controller.specialityController.value =
+        CommonCode().isEnglish(widget.store.speciality) ? widget.store.speciality.toTitleCase() : widget.store.speciality;
   }
 
   Widget customTextField({
@@ -62,36 +59,19 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
     String hintText = "",
     int maxLines = 1,
     bool readOnly = false,
-    EdgeInsets contentPadding = const EdgeInsets.symmetric(
-      vertical: 0,
-      horizontal: 20,
-    ),
+    EdgeInsets contentPadding = const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
   }) {
     return TextFormField(
       controller: controller,
       readOnly: readOnly,
-      style: GoogleFonts.roboto(
-        fontSize: 15.sp,
-        fontWeight: FontWeight.w400,
-        color: kBlackColor,
-      ),
+      style: GoogleFonts.roboto(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kBlackColor),
       maxLines: maxLines,
       decoration: InputDecoration(
-        hintStyle: GoogleFonts.roboto(
-          color: kBlackColor.withOpacity(0.5),
-          fontWeight: FontWeight.w400,
-          fontSize: 14.sp,
-        ),
+        hintStyle: GoogleFonts.roboto(color: kBlackColor.withOpacity(0.5), fontWeight: FontWeight.w400, fontSize: 14.sp),
         hintText: hintText,
         contentPadding: contentPadding,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: kBlackColor.withOpacity(0.1)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: kBlackColor.withOpacity(0.1)),
-        ),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: kBlackColor.withOpacity(0.1))),
+        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: kBlackColor.withOpacity(0.1))),
       ),
     );
   }
@@ -104,35 +84,18 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              CommonCode().t(LocaleKeys.storeDetails),
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.storeDetails), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 11.h),
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 48.h,
-                    child: customTextField(
-                      hintText: kCompanyName,
-                      controller: companyNameController,
-                      readOnly: true,
-                    ),
-                  ),
+                  child: SizedBox(height: 48.h, child: customTextField(hintText: kCompanyName, controller: companyNameController, readOnly: true)),
                 ),
                 SizedBox(width: 11.w),
                 Expanded(
                   child: SizedBox(
                     height: 48.h,
-                    child: customTextField(
-                      hintText: kContactNumber,
-                      controller: contactNumberController,
-                      readOnly: true,
-                    ),
+                    child: customTextField(hintText: kContactNumber, controller: contactNumberController, readOnly: true),
                   ),
                 ),
               ],
@@ -143,20 +106,19 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                 Expanded(
                   child: SizedBox(
                     height: 48.h,
-                    child: customTextField(
-                      hintText: CommonCode().t(LocaleKeys.location),
-                      controller: locationController,
-                      readOnly: false,
-                    ),
+                    child: customTextField(hintText: CommonCode().t(LocaleKeys.location), controller: locationController, readOnly: false),
                   ),
                 ),
                 SizedBox(width: 11.w),
                 Expanded(
                   child: SizedBox(
-                    height: 48.h,
+                    height: 56.h,
                     child: CustomDropdown(
                       selected: controller.specialityController,
-                      items: ["Services", "Product", "Both"],
+                      items:
+                          CommonCode().isEnglish(controller.specialityController.value)
+                              ? ["Services", "Product", "Both"]
+                              : ["الخدمات", "المنتج", "كلاهما"],
                       hint: CommonCode().t(LocaleKeys.updateStoreStatus),
                     ),
                   ),
@@ -165,25 +127,11 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
             ),
             SizedBox(height: 16.h),
 
-            Text(
-              CommonCode().t(LocaleKeys.updateStoreStatus),
-
-              style: AppStyles.blackTextStyle().copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+            Text(CommonCode().t(LocaleKeys.updateStoreStatus), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
             CustomDropdown(
               selected: widget.selectedStatus,
-              items: [
-                "Pending",
-                "Accepted",
-                "RevisonRequested",
-                "Rejected",
-                "Completed",
-                "Cancelled",
-              ],
+              items: ["Pending", "Accepted", "RevisonRequested", "Rejected", "Completed", "Cancelled"],
               hint: CommonCode().t(LocaleKeys.updateStoreStatus),
             ),
 
@@ -198,30 +146,20 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                             : CustomButton(
                               title: CommonCode().t(LocaleKeys.reject),
                               onTap: () {
-                                final reasonController =
-                                    TextEditingController();
+                                final reasonController = TextEditingController();
 
                                 Get.dialog(
                                   barrierDismissible: false,
                                   CustomDialog(
                                     image: kRejectReasonImage,
-                                    title: CommonCode().t(
-                                      LocaleKeys.rejectionReason,
-                                    ),
+                                    title: CommonCode().t(LocaleKeys.rejectionReason),
                                     btnText: CommonCode().t(LocaleKeys.reject),
                                     isLoading: controller.isLoading3,
                                     onTap: () async {
-                                      await controller.rejectStore(
-                                        storeId: widget.store.id,
-                                        reason: reasonController.text,
-                                      );
+                                      await controller.rejectStore(storeId: widget.store.id, reason: reasonController.text);
                                       reasonController.clear();
                                       Get.back();
-                                      showCustomSnackbar(
-                                        "Success",
-                                        "Store rejected successfully",
-                                        backgroundColor: kGreenColor,
-                                      );
+                                      showCustomSnackbar("Success", "Store rejected successfully", backgroundColor: kGreenColor);
                                     },
                                     hideDetail: true,
                                     showRejection: true,
@@ -248,42 +186,29 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                       controller.isLoading2.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                            title: CommonCode().t(LocaleKeys.edit),
+                            title: CommonCode().t(LocaleKeys.update),
                             onTap: () async {
                               final Map<String, dynamic> updateData = {
                                 "companyName": companyNameController.text,
                                 "companyNumber": contactNumberController.text,
                                 "location": locationController.text,
-                                "speciality":
-                                    controller.specialityController.value,
+                                "speciality": controller.specialityController.value,
                                 "storeStatus": widget.selectedStatus.value,
                               };
 
-                              await controller.updateStoreDetails(
-                                storeId: widget.store.id,
-                                updateData: updateData,
-                              );
+                              await controller.updateStoreDetails(storeId: widget.store.id, updateData: updateData);
                               companyNameController.clear();
                               contactNumberController.clear();
                               locationController.clear();
                             },
                             height: 40.h,
                             width: 133.w,
-                            color:
-                                widget.showEditApprove
-                                    ? kWhiteColor
-                                    : kPrimaryColor,
+                            color: widget.showEditApprove ? kWhiteColor : kPrimaryColor,
                             borderRadius: 12,
-                            borderColor:
-                                widget.showEditApprove
-                                    ? kBlackColor
-                                    : kPrimaryColor,
+                            borderColor: widget.showEditApprove ? kBlackColor : kPrimaryColor,
                             textSize: 14,
                             fontWeight: FontWeight.w400,
-                            textColor:
-                                widget.showEditApprove
-                                    ? kBlackColor
-                                    : kWhiteColor,
+                            textColor: widget.showEditApprove ? kBlackColor : kWhiteColor,
                           ),
                 ),
                 SizedBox(width: 16.w),
@@ -303,17 +228,10 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                                     isLoading: controller.isLoading1,
                                     btnText: kApprove,
                                     onTap: () async {
-                                      await controller.updateStoreStatusAction(
-                                        storeId: widget.store.id,
-                                        newStatus: "Accepted",
-                                      );
+                                      await controller.updateStoreStatusAction(storeId: widget.store.id, newStatus: "Accepted");
 
                                       Get.back();
-                                      showCustomSnackbar(
-                                        "Success",
-                                        "Store status updated to Accepted",
-                                        backgroundColor: kGreenColor,
-                                      );
+                                      showCustomSnackbar("Success", "Store status updated to Accepted", backgroundColor: kGreenColor);
                                     },
                                     hideDetail: true,
                                   ),

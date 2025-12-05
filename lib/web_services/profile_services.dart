@@ -21,41 +21,27 @@ class ProfileServices {
   final SessionManagement _sessionManagement = SessionManagement();
 
   Future<dynamic> getMyProfile() async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     ResponseModel responseModel = await _client.customRequest(
       'GET',
       url: WebUrls.kGetProfileUrl,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("getMyProfile==================> $responseModel");
 
     if (responseModel.statusCode >= 200 && responseModel.statusCode <= 230) {
       final userData = responseModel.data["data"]["user"];
-      await _sessionManagement.saveSession(
-        tokenKey: SessionTokenKeys.kUserModelKey,
-        tokenValue: jsonEncode(userData),
-      );
+      await _sessionManagement.saveSession(tokenKey: SessionTokenKeys.kUserModelKey, tokenValue: jsonEncode(userData));
       return UserModel.fromJson(userData);
     }
 
     return responseModel.data["message"] ?? responseModel.statusDescription;
   }
 
-  Future<dynamic> updateProfile({
-    String? email,
-    String? name,
-    String? profileImage,
-  }) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+  Future<dynamic> updateProfile({String? email, String? name, String? profileImage}) async {
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     Map<String, dynamic> updateData = {};
     if (email != null) updateData["email"] = email;
@@ -66,20 +52,14 @@ class ProfileServices {
       'PATCH',
       url: WebUrls.kUpdateProfileUrl,
       requestBody: updateData,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("updateProfile==================> $responseModel");
 
     if (responseModel.statusCode >= 200 && responseModel.statusCode <= 230) {
       final userData = responseModel.data["data"]["user"];
-      await _sessionManagement.saveSession(
-        tokenKey: SessionTokenKeys.kUserModelKey,
-        tokenValue: jsonEncode(userData),
-      );
+      await _sessionManagement.saveSession(tokenKey: SessionTokenKeys.kUserModelKey, tokenValue: jsonEncode(userData));
       return UserModel.fromJson(userData);
     }
 

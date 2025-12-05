@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/generated/locale_keys.g.dart';
 import 'package:matloob_admin/utils/common_code.dart';
+
 import '../../utils/app_colors.dart';
 import '../../utils/app_images.dart';
 import '../../utils/app_strings.dart';
@@ -28,11 +29,7 @@ class _SideMenuState extends State<SideMenu> {
       width: 212.w,
       child: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(color: kBlackColor.withOpacity(0.1), width: 0.5),
-          ),
-        ),
+        decoration: BoxDecoration(border: Border(right: BorderSide(color: kBlackColor.withOpacity(0.1), width: 0.5))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -41,25 +38,9 @@ class _SideMenuState extends State<SideMenu> {
               SizedBox(
                 height: 150,
                 child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: kBlackColor.withOpacity(0.1),
-                        width: 0.5,
-                      ),
-                    ),
-                  ),
+                  decoration: BoxDecoration(border: Border(bottom: BorderSide(color: kBlackColor.withOpacity(0.1), width: 0.5))),
                   child: Center(
-                    child: SizedBox(
-                      height: 50.h,
-                      width: 100.w,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          kLogoImage,
-                          fit: BoxFit.fitWidth,
-                        ),
-                      ),
-                    ),
+                    child: SizedBox(height: 150.h, width: 100.w, child: Center(child: SvgPicture.asset(kLogoImage, fit: BoxFit.fitWidth))),
                   ),
                 ),
               ),
@@ -83,16 +64,8 @@ class _SideMenuState extends State<SideMenu> {
                               height: 40,
                               width: 190,
                               decoration: BoxDecoration(
-                                color:
-                                    menuController.selectedIndex.value == 0
-                                        ? kPrimaryColor.withOpacity(0.05)
-                                        : kWhiteColor,
-                                border: Border.all(
-                                  color:
-                                      menuController.selectedIndex.value == 0
-                                          ? kPrimaryColor
-                                          : kWhiteColor,
-                                ),
+                                color: menuController.selectedIndex.value == 0 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
+                                border: Border.all(color: menuController.selectedIndex.value == 0 ? kPrimaryColor : kWhiteColor),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
@@ -104,32 +77,17 @@ class _SideMenuState extends State<SideMenu> {
                                       kDashboardIcon,
                                       height: 20,
                                       width: 20,
-                                      color:
-                                          menuController.selectedIndex.value ==
-                                                  0
-                                              ? kPrimaryColor
-                                              : kGreyColor5,
+                                      color: menuController.selectedIndex.value == 0 ? kPrimaryColor : kGreyColor5,
                                     ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                     Flexible(
                                       child: Text(
                                         CommonCode().t(LocaleKeys.dashboard),
-                                        style: AppStyles.blackTextStyle()
-                                            .copyWith(
-                                              color:
-                                                  menuController
-                                                              .selectedIndex
-                                                              .value ==
-                                                          0
-                                                      ? kPrimaryColor
-                                                      : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                        style: AppStyles.blackTextStyle().copyWith(
+                                          color: menuController.selectedIndex.value == 0 ? kPrimaryColor : kGreyColor5,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -153,16 +111,8 @@ class _SideMenuState extends State<SideMenu> {
                               width: 190,
 
                               decoration: BoxDecoration(
-                                color:
-                                    menuController.selectedIndex.value == 1
-                                        ? kPrimaryColor.withOpacity(0.05)
-                                        : kWhiteColor,
-                                border: Border.all(
-                                  color:
-                                      menuController.selectedIndex.value == 1
-                                          ? kPrimaryColor
-                                          : kWhiteColor,
-                                ),
+                                color: menuController.selectedIndex.value == 1 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
+                                border: Border.all(color: menuController.selectedIndex.value == 1 ? kPrimaryColor : kWhiteColor),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
@@ -174,34 +124,17 @@ class _SideMenuState extends State<SideMenu> {
                                       kStoreIcon,
                                       height: 20,
                                       width: 20,
-                                      color:
-                                          menuController.selectedIndex.value ==
-                                                  1
-                                              ? kPrimaryColor
-                                              : kGreyColor5,
+                                      color: menuController.selectedIndex.value == 1 ? kPrimaryColor : kGreyColor5,
                                     ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                     Flexible(
                                       child: Text(
-                                        CommonCode().t(
-                                          LocaleKeys.storeManagement,
+                                        CommonCode().t(LocaleKeys.storeManagement),
+                                        style: AppStyles.blackTextStyle().copyWith(
+                                          color: menuController.selectedIndex.value == 1 ? kPrimaryColor : kGreyColor5,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        style: AppStyles.blackTextStyle()
-                                            .copyWith(
-                                              color:
-                                                  menuController
-                                                              .selectedIndex
-                                                              .value ==
-                                                          1
-                                                      ? kPrimaryColor
-                                                      : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
                                       ),
                                     ),
                                   ],
@@ -224,16 +157,8 @@ class _SideMenuState extends State<SideMenu> {
                               height: 40,
                               width: 190,
                               decoration: BoxDecoration(
-                                color:
-                                    menuController.selectedIndex.value == 2
-                                        ? kPrimaryColor.withOpacity(0.05)
-                                        : kWhiteColor,
-                                border: Border.all(
-                                  color:
-                                      menuController.selectedIndex.value == 2
-                                          ? kPrimaryColor
-                                          : kWhiteColor,
-                                ),
+                                color: menuController.selectedIndex.value == 2 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
+                                border: Border.all(color: menuController.selectedIndex.value == 2 ? kPrimaryColor : kWhiteColor),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
@@ -245,34 +170,17 @@ class _SideMenuState extends State<SideMenu> {
                                       kDoubleUserIcon,
                                       height: 20,
                                       width: 20,
-                                      color:
-                                          menuController.selectedIndex.value ==
-                                                  2
-                                              ? kPrimaryColor
-                                              : kGreyColor5,
+                                      color: menuController.selectedIndex.value == 2 ? kPrimaryColor : kGreyColor5,
                                     ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                     Flexible(
                                       child: Text(
-                                        CommonCode().t(
-                                          LocaleKeys.userManagement,
+                                        CommonCode().t(LocaleKeys.userManagement),
+                                        style: AppStyles.blackTextStyle().copyWith(
+                                          color: menuController.selectedIndex.value == 2 ? kPrimaryColor : kGreyColor5,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        style: AppStyles.blackTextStyle()
-                                            .copyWith(
-                                              color:
-                                                  menuController
-                                                              .selectedIndex
-                                                              .value ==
-                                                          2
-                                                      ? kPrimaryColor
-                                                      : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
                                       ),
                                     ),
                                   ],
@@ -295,16 +203,8 @@ class _SideMenuState extends State<SideMenu> {
                               height: 40,
                               width: 190,
                               decoration: BoxDecoration(
-                                color:
-                                    menuController.selectedIndex.value == 3
-                                        ? kPrimaryColor.withOpacity(0.05)
-                                        : kWhiteColor,
-                                border: Border.all(
-                                  color:
-                                      menuController.selectedIndex.value == 3
-                                          ? kPrimaryColor
-                                          : kWhiteColor,
-                                ),
+                                color: menuController.selectedIndex.value == 3 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
+                                border: Border.all(color: menuController.selectedIndex.value == 3 ? kPrimaryColor : kWhiteColor),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
@@ -316,32 +216,17 @@ class _SideMenuState extends State<SideMenu> {
                                       kRfqIcon,
                                       height: 20,
                                       width: 20,
-                                      color:
-                                          menuController.selectedIndex.value ==
-                                                  3
-                                              ? kPrimaryColor
-                                              : kGreyColor5,
+                                      color: menuController.selectedIndex.value == 3 ? kPrimaryColor : kGreyColor5,
                                     ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                     Flexible(
                                       child: Text(
                                         CommonCode().t(LocaleKeys.rfqs),
-                                        style: AppStyles.blackTextStyle()
-                                            .copyWith(
-                                              color:
-                                                  menuController
-                                                              .selectedIndex
-                                                              .value ==
-                                                          3
-                                                      ? kPrimaryColor
-                                                      : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                        style: AppStyles.blackTextStyle().copyWith(
+                                          color: menuController.selectedIndex.value == 3 ? kPrimaryColor : kGreyColor5,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -364,16 +249,8 @@ class _SideMenuState extends State<SideMenu> {
                               height: 40,
                               width: 190,
                               decoration: BoxDecoration(
-                                color:
-                                    menuController.selectedIndex.value == 4
-                                        ? kPrimaryColor.withOpacity(0.05)
-                                        : kWhiteColor,
-                                border: Border.all(
-                                  color:
-                                      menuController.selectedIndex.value == 4
-                                          ? kPrimaryColor
-                                          : kWhiteColor,
-                                ),
+                                color: menuController.selectedIndex.value == 4 ? kPrimaryColor.withOpacity(0.05) : kWhiteColor,
+                                border: Border.all(color: menuController.selectedIndex.value == 4 ? kPrimaryColor : kWhiteColor),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Padding(
@@ -385,34 +262,17 @@ class _SideMenuState extends State<SideMenu> {
                                       kClicksIcon,
                                       height: 20,
                                       width: 20,
-                                      color:
-                                          menuController.selectedIndex.value ==
-                                                  4
-                                              ? kPrimaryColor
-                                              : kGreyColor5,
+                                      color: menuController.selectedIndex.value == 4 ? kPrimaryColor : kGreyColor5,
                                     ),
-                                    SizedBox(
-                                      width:
-                                          MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
+                                    SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                     Flexible(
                                       child: Text(
-                                        CommonCode().t(
-                                          LocaleKeys.clicksTracking,
+                                        CommonCode().t(LocaleKeys.clicksTracking),
+                                        style: AppStyles.blackTextStyle().copyWith(
+                                          color: menuController.selectedIndex.value == 4 ? kPrimaryColor : kGreyColor5,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        style: AppStyles.blackTextStyle()
-                                            .copyWith(
-                                              color:
-                                                  menuController
-                                                              .selectedIndex
-                                                              .value ==
-                                                          4
-                                                      ? kPrimaryColor
-                                                      : kGreyColor5,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            ),
                                       ),
                                     ),
                                   ],
@@ -437,30 +297,17 @@ class _SideMenuState extends State<SideMenu> {
                     child: Container(
                       height: 49,
                       width: 180,
-                      decoration: BoxDecoration(
-                        color: kWhiteColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+                      decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.circular(8)),
                       child: Padding(
                         padding: const EdgeInsets.only(left: 12),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SvgPicture.asset(
-                              kLogoutIcon,
-                              height: 20,
-                              width: 20,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.01,
-                            ),
+                            SvgPicture.asset(kLogoutIcon, height: 20, width: 20),
+                            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                             Text(
                               CommonCode().t(LocaleKeys.logout),
-                              style: AppStyles.blackTextStyle().copyWith(
-                                color: kRedColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
+                              style: AppStyles.blackTextStyle().copyWith(color: kRedColor, fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),

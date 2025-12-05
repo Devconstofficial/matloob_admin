@@ -1,3 +1,5 @@
+import 'package:matloob_admin/models/rfq_categories_model.dart';
+import 'package:matloob_admin/models/rfq_sub_categories_model.dart';
 import 'package:matloob_admin/models/store_model.dart';
 
 class MedicalProducts {
@@ -5,8 +7,8 @@ class MedicalProducts {
   String storeId = "";
   String brand = "";
   String country = "";
-  String? category;
-  String? subCategory;
+  dynamic category;
+  dynamic subCategory;
   String title = "No available";
   bool isContactForPrice = false;
   List<String> images = [];
@@ -47,8 +49,8 @@ class MedicalProducts {
     String? storeId,
     String? brand,
     String? country,
-    String? category,
-    String? subCategory,
+    dynamic category,
+    dynamic subCategory,
     String? title,
     bool? isContactForPrice,
     List<String>? images,
@@ -86,8 +88,19 @@ class MedicalProducts {
     storeId = json["storeId"] ?? storeId;
     brand = json["brand"] ?? brand;
     country = json["country"] ?? country;
-    category = json["category"];
-    subCategory = json["subCategory"];
+    // category = json["category"];
+    // subCategory = json["subCategory"];
+    json["category"] == null
+        ? ""
+        : json["category"] != null && json["category"] is String
+        ? json["category"]
+        : RfqCategoriesModel.fromJson(json["category"]);
+    subCategory =
+        json["subcategory"] == null
+            ? ""
+            : json["subCategory"] != null && json["subCategory"] is String
+            ? json["subCategory"]
+            : RfqSubCategoriesModel.fromJson(json["subCategory"]);
     title = json["title"] ?? title;
     isContactForPrice = json["isContactForPrice"] ?? isContactForPrice;
     images = json["images"] != null ? List<String>.from(json["images"]) : [];
@@ -107,8 +120,6 @@ class MedicalProducts {
     if (json["store"] != null) {
       store = Store.fromJson(json["store"]);
     }
-
-    
   }
 
   Map<String, dynamic> toJson() {

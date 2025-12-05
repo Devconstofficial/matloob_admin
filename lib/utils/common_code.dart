@@ -9,9 +9,7 @@ import 'package:matloob_admin/utils/session_management/session_token_keys.dart';
 
 class CommonCode {
   static bool isValidEmail(String email) {
-    bool emailValid = RegExp(
-      r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
-    ).hasMatch(email);
+    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
     // print('=====================is email valid $emailValid');
     return emailValid;
   }
@@ -48,13 +46,35 @@ class CommonCode {
   static Future<void> logout() async {
     Get.offNamedUntil(kAuthScreenRoute, (predicate) => false);
     SessionManagement sessionManagement = SessionManagement();
-    await sessionManagement.removeSession(
-      token: SessionTokenKeys.kUserModelKey,
-    );
-    await sessionManagement.removeSession(
-      token: SessionTokenKeys.kUserTokenKey,
-    );
+    await sessionManagement.removeSession(token: SessionTokenKeys.kUserModelKey);
+    await sessionManagement.removeSession(token: SessionTokenKeys.kUserTokenKey);
   }
 
   String t(String key) => lt.tr(key);
+
+  bool isEnglish(String text) {
+    if (text.isEmpty) return false;
+
+    // Remove spaces and check the actual characters
+    final textWithoutSpaces = text.replaceAll(' ', '');
+    if (textWithoutSpaces.isEmpty) return false;
+
+    // English Unicode range: Basic Latin (0000-007F) and Latin-1 Supplement (0080-00FF)
+    final englishRegex = RegExp(r'^[a-zA-Z\s]+$');
+
+    return englishRegex.hasMatch(text);
+  }
+}
+
+extension StringCaseExtension on String {
+  // Title Case
+  String toTitleCase() {
+    if (isEmpty) return this;
+    return split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1).toLowerCase();
+        })
+        .join(' ');
+  }
 }

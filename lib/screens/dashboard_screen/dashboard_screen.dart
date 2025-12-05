@@ -324,7 +324,8 @@ class DashboardScreen extends GetView<DashboardController> {
                 child: GestureDetector(
                   onTap: () {
                     controller.selectedCountry.value = store.storeStatus.name;
-                    controller.specialityController.value = store.speciality;
+                    controller.specialityController.value =
+                        CommonCode().isEnglish(store.speciality) ? store.speciality.toTitleCase() : store.speciality;
                     Get.dialog(
                       barrierDismissible: false,
                       ViewStoreDetailModel(showEditApprove: true, onEdit: () {}, selectedStatus: controller.selectedCountry, store: store),

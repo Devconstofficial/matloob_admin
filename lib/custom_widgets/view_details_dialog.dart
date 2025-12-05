@@ -58,7 +58,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
     titleController = TextEditingController(text: widget.rfq.title);
     descriptionController = TextEditingController(text: widget.rfq.description);
     priceController = TextEditingController(text: widget.rfq.price > 0 ? widget.rfq.price.toStringAsFixed(0) : "");
-    selectedDelivery = (widget.rfq.isWantDelivery ? "Yes" : "No").obs;
+    selectedDelivery = (widget.rfq.isWantDelivery ? "نعم" : "لا").obs;
     selectedCondition = widget.rfq.condition.obs;
     selectedStatus = widget.rfq.status.name.obs;
 
@@ -250,7 +250,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                     child:
                         hasProfileImage
                             ? Image.network(
-                              profileImageUrl,
+                              widget.rfq.user?.profileImage ?? '',
                               fit: BoxFit.cover,
                               loadingBuilder: (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
@@ -271,7 +271,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                Text(CommonCode().t(LocaleKeys.userName), style: AppStyles.blackTextStyle().copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(userName ?? '', style: AppStyles.blackTextStyle().copyWith(fontSize: 14, fontWeight: FontWeight.w500)),
               ],
             ),
             SizedBox(height: 18.h),
@@ -301,7 +301,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.delivery), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(selected: selectedDelivery, items: const ["Yes", "No"], hint: "Delivery Required"),
+            CustomDropdown(selected: selectedDelivery, items: const ["نعم", "لا"], hint: "Delivery Required"),
 
             SizedBox(height: 16.h),
             Text(kLocation, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
@@ -311,7 +311,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 16.h),
             Text(kCondition, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(selected: selectedCondition, items: const ["New", "Used", "Refurbished"], hint: "Select Condition"),
+            CustomDropdown(selected: selectedCondition, items: const ["جديد", "مستعمل", "Refurbished"], hint: "Select Condition", height: 54),
 
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.status), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
@@ -402,7 +402,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                       controller.isUpdatingRFQ.value
                           ? const Center(child: CircularProgressIndicator())
                           : CustomButton(
-                            title: CommonCode().t(LocaleKeys.edit),
+                            title: CommonCode().t(LocaleKeys.update),
                             onTap: () async {
                               double parsedPrice = double.tryParse(priceController.text) ?? 0;
 

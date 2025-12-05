@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:matloob_admin/models/response_model.dart';
 import 'package:matloob_admin/models/store_model.dart';
 import 'package:matloob_admin/utils/session_management/session_management.dart';
@@ -26,31 +27,24 @@ class StoreServices {
     String sortField = "createdAt",
     String sortOrder = "desc",
   }) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
-    final url =
-        "${WebUrls.kGetAllStoresUrl}?q=${q ?? ''}&status=${status ?? ''}&page=$page&limit=$limit&sortField=$sortField&sortOrder=$sortOrder";
+    final url = "${WebUrls.kGetAllStoresUrl}?q=${q ?? ''}&status=${status ?? ''}&page=$page&limit=$limit&sortField=$sortField&sortOrder=$sortOrder";
 
     ResponseModel responseModel = await _client.customRequest(
       'GET',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("getStores==================> $responseModel");
+    print("getStores==================> Data ${responseModel.data}");
 
     if (responseModel.statusCode >= 200 && responseModel.statusCode <= 230) {
       final storesJson = responseModel.data["data"]["stores"] ?? [];
       final metaJson = responseModel.data["data"]["meta"] ?? {};
 
-      List<Store> stores = List<Store>.from(
-        storesJson.map((e) => Store.fromJson(e)),
-      );
+      List<Store> stores = List<Store>.from(storesJson.map((e) => Store.fromJson(e)));
 
       return {"stores": stores, "meta": metaJson};
     }
@@ -59,19 +53,14 @@ class StoreServices {
   }
 
   Future<Store> getStoreDetail(String storeId) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kGetStoreDetailsUrl}/$storeId";
 
     ResponseModel responseModel = await _client.customRequest(
       'GET',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("getStoreDetail==================> $responseModel");
@@ -84,13 +73,8 @@ class StoreServices {
     throw Exception(responseModel.data["message"] ?? "Failed to fetch store");
   }
 
-  Future<Store> updateStore(
-    String storeId,
-    Map<String, dynamic> updateData,
-  ) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+  Future<Store> updateStore(String storeId, Map<String, dynamic> updateData) async {
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kUpdateStoreUrl}/$storeId";
 
@@ -98,10 +82,7 @@ class StoreServices {
       'PATCH',
       url: url,
       requestBody: updateData,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("updateStore==================> $responseModel");
@@ -115,9 +96,7 @@ class StoreServices {
   }
 
   Future<Store> updateStoreStatus(String storeId, String status) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kUpdateStoreStatusUrl}/$storeId";
 
@@ -125,10 +104,7 @@ class StoreServices {
       'PATCH',
       url: url,
       requestBody: {"storeStatus": status},
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("updateStoreStatus==================> $responseModel");
@@ -138,25 +114,18 @@ class StoreServices {
       return Store.fromJson(storeJson);
     }
 
-    throw Exception(
-      responseModel.data["message"] ?? "Failed to update store status",
-    );
+    throw Exception(responseModel.data["message"] ?? "Failed to update store status");
   }
 
   Future<String> deleteStore(String storeId) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kDeleteStoreUrl}/$storeId";
 
     ResponseModel responseModel = await _client.customRequest(
       'DELETE',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("deleteStore==================> $responseModel");
@@ -177,9 +146,7 @@ class StoreServices {
     required String speciality,
     String storeStatus = 'Accepted',
   }) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = WebUrls.kAddStoreUrl;
 
@@ -197,10 +164,7 @@ class StoreServices {
       'POST',
       url: url,
       requestBody: requestBody,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("addStore==================> $responseModel");
@@ -212,5 +176,4 @@ class StoreServices {
 
     throw Exception(responseModel.data["message"] ?? "Failed to create store");
   }
-  
 }

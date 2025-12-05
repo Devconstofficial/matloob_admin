@@ -49,8 +49,7 @@ class DashboardController extends GetxController {
     try {
       final fetchedUsers = await userServices.getAllUsers();
 
-      final nonAdminUsers =
-          fetchedUsers.where((u) => u.roles.toLowerCase() != "admin").toList();
+      final nonAdminUsers = fetchedUsers.where((u) => u.roles.toLowerCase() != "admin").toList();
 
       users.assignAll(nonAdminUsers);
       totalUsers.value = users.length;
@@ -65,13 +64,9 @@ class DashboardController extends GetxController {
       final allStores = List<Store>.from(response["stores"]);
       storeRequests.clear();
       totalStores.value = allStores.length;
-      totalPendingStores.value =
-          allStores.where((s) => s.storeStatus == StoreStatus.Pending).length;
-      totalActiveStores.value =
-          allStores.where((s) => s.storeStatus == StoreStatus.Accepted).length;
-      storeRequests.assignAll(
-        allStores.where((s) => s.storeStatus == StoreStatus.Pending).toList(),
-      );
+      totalPendingStores.value = allStores.where((s) => s.storeStatus == StoreStatus.Pending).length;
+      totalActiveStores.value = allStores.where((s) => s.storeStatus == StoreStatus.Accepted).length;
+      storeRequests.assignAll(allStores.where((s) => s.storeStatus == StoreStatus.Pending).toList());
     } catch (e) {
       log("Error fetching stores: $e");
     }
@@ -83,31 +78,20 @@ class DashboardController extends GetxController {
       final allRfqs = List<RfqModel>.from(response["items"]);
 
       totalRfqs.value = allRfqs.length;
-      totalPendingRfqs.value =
-          allRfqs.where((r) => r.status == RfqStatus.Pending).length;
+      totalPendingRfqs.value = allRfqs.where((r) => r.status == RfqStatus.Pending).length;
 
-      rfqs.assignAll(
-        allRfqs.where((r) => r.status == RfqStatus.Pending).toList(),
-      );
+      rfqs.assignAll(allRfqs.where((r) => r.status == RfqStatus.Pending).toList());
 
-      log(
-        "Total RFQs: ${totalRfqs.value}, Pending RFQs: ${totalPendingRfqs.value}",
-      );
+      log("Total RFQs: ${totalRfqs.value}, Pending RFQs: ${totalPendingRfqs.value}");
     } catch (e) {
       log("Error fetching rfqs: $e");
     }
   }
 
-  Future<void> updateStoreStatusAction({
-    required String storeId,
-    required String newStatus,
-  }) async {
+  Future<void> updateStoreStatusAction({required String storeId, required String newStatus}) async {
     try {
       isLoading1(true);
-      final updatedStore = await storeServices.updateStoreStatus(
-        storeId,
-        newStatus,
-      );
+      final updatedStore = await storeServices.updateStoreStatus(storeId, newStatus);
       int index = storeRequests.indexWhere((s) => s.id == updatedStore.id);
       if (index != -1) {
         storeRequests[index] = updatedStore;
@@ -124,25 +108,16 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> updateStoreDetails({
-    required String storeId,
-    required Map<String, dynamic> updateData,
-  }) async {
+  Future<void> updateStoreDetails({required String storeId, required Map<String, dynamic> updateData}) async {
     try {
       isLoading2(true);
       final updatedStore = await storeServices.updateStore(storeId, updateData);
-
-      
 
       await fetchStores();
       StoreController control = Get.put(StoreController());
       await control.fetchStores();
       Get.back();
-      showCustomSnackbar(
-        "Success",
-        "Store details updated successfully",
-        backgroundColor: kGreenColor,
-      );
+      showCustomSnackbar("Success", "Store details updated successfully", backgroundColor: kGreenColor);
     } catch (e) {
       log("Error updating store details: $e");
       showCustomSnackbar("Error", "Failed to update store details");
@@ -151,10 +126,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> rejectStore({
-    required String storeId,
-    String reason = "",
-  }) async {
+  Future<void> rejectStore({required String storeId, String reason = ""}) async {
     try {
       isLoading3(true);
       await storeServices.updateStoreStatus(storeId, "Rejected");
@@ -194,10 +166,7 @@ class DashboardController extends GetxController {
       for (var img in imageList) {
         if (!img.isNetwork && img.fileBytes != null) {
           String extension = img.path.split('.').last;
-          String url = await imagePickerService.uploadRfqImagesToFirebase(
-            img.fileBytes!,
-            extension,
-          );
+          String url = await imagePickerService.uploadRfqImagesToFirebase(img.fileBytes!, extension);
           updatedImageUrls.add(url);
         } else {
           updatedImageUrls.add(img.path);
@@ -207,10 +176,7 @@ class DashboardController extends GetxController {
       List<String> updatedFileUrls = [];
       for (var file in fileList) {
         if (!file.isNetwork && file.fileBytes != null) {
-          String url = await imagePickerService.uploadRfqFileToFirebase(
-            file.fileBytes!,
-            file.displayName,
-          );
+          String url = await imagePickerService.uploadRfqFileToFirebase(file.fileBytes!, file.displayName);
           updatedFileUrls.add(url);
         } else {
           updatedFileUrls.add(file.path);
@@ -234,12 +200,8 @@ class DashboardController extends GetxController {
       await fetchRFQs();
       RfqController control = Get.put(RfqController());
       await control.fetchRFQs();
-      Get.back();
-      showCustomSnackbar(
-        "Success",
-        "RFQ updated successfully",
-        backgroundColor: kGreenColor,
-      );
+      // Get.back();
+      showCustomSnackbar("Success", "RFQ updated successfully", backgroundColor: kGreenColor);
     } catch (e) {
       log("Error updating RFQ: $e");
       showCustomSnackbar("Error", "Failed to update RFQ");
@@ -248,10 +210,7 @@ class DashboardController extends GetxController {
     }
   }
 
-  Future<void> updateRFQStatusAction({
-    required String rfqId,
-    required String status,
-  }) async {
+  Future<void> updateRFQStatusAction({required String rfqId, required String status}) async {
     try {
       isLoadingRFQStatus(true);
       RfqModel updatedRfq = await rfqServices.updateRFQStatus(rfqId, status);

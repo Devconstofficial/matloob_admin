@@ -1,14 +1,10 @@
 class WebUrls extends _BaseUrl {
   WebUrls._();
   static const String kSignInUrl = "${_BaseUrl._kBaseUrl}/login";
-  static const String kResetRequestUrl =
-      "${_BaseUrl._kBaseUrl}/forgot-password/request";
-  static const String kVerifyOtpUrl =
-      "${_BaseUrl._kBaseUrl}/forgot-password/verify";
-  static const String kResendOtpUrl =
-      "${_BaseUrl._kBaseUrl}/forgot-password/resend";
-  static const String kCreatePasswordUrl =
-      "${_BaseUrl._kBaseUrl}/forgot-password/reset";
+  static const String kResetRequestUrl = "${_BaseUrl._kBaseUrl}/forgot-password/request";
+  static const String kVerifyOtpUrl = "${_BaseUrl._kBaseUrl}/forgot-password/verify";
+  static const String kResendOtpUrl = "${_BaseUrl._kBaseUrl}/forgot-password/resend";
+  static const String kCreatePasswordUrl = "${_BaseUrl._kBaseUrl}/forgot-password/reset";
   static const String kGetProfileUrl = "${_BaseUrl._kBaseUrl}/me";
   static const String kUpdateProfileUrl = "${_BaseUrl._kBaseUrl}/me";
   static const String kGetAllStoresUrl = "${_BaseUrl._kBaseUrl}/stores";
@@ -23,8 +19,7 @@ class WebUrls extends _BaseUrl {
   static const String kGetRFQDetailsUrl = "${_BaseUrl._kBaseUrl}/rfq";
   static const String kDeleteRFQUrl = "${_BaseUrl._kBaseUrl}/rfq";
   static const String kGetAllUsersUrl = "${_BaseUrl._kBaseUrl}/users";
-  static const String kGetAllUsersAnalyticsUrl =
-      "${_BaseUrl._kBaseUrl}/users/analytics";
+  static const String kGetAllUsersAnalyticsUrl = "${_BaseUrl._kBaseUrl}/users/analytics";
   static const String kUpdateUserStatusUrl = "${_BaseUrl._kBaseUrl}/user";
   static const String kUpdateUserUrl = "${_BaseUrl._kBaseUrl}/user";
   static const String kAddUserUrl = "${_BaseUrl._kBaseUrl}/user";
@@ -34,6 +29,7 @@ class WebUrls extends _BaseUrl {
   static const String kGetRFQClickUrl = "${_BaseUrl._kBaseUrl}/rfq-clicks";
   static const String kCreateProductUrl = "${_BaseUrl._kBaseUrl}/product";
   static const String kDeleteProductUrl = "${_BaseUrl._kBaseUrl}/product";
+  static const String kGetRfqCategoriesUrl = "https://backend.mtloobapp.com/api/public/categories";
 }
 
 abstract class _BaseUrl {

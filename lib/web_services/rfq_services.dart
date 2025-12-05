@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:matloob_admin/models/response_model.dart';
 import 'package:matloob_admin/models/rfq_model.dart';
 import 'package:matloob_admin/utils/session_management/session_management.dart';
@@ -28,9 +29,7 @@ class RfqServices {
     String sortField = "createdAt",
     String sortOrder = "desc",
   }) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url =
         "${WebUrls.kGetAllRFQSUrl}?q=${q ?? ''}&status=${status ?? ''}&startDate=${startDate ?? ''}&endDate=${endDate ?? ''}&page=$page&limit=$limit&sortField=$sortField&sortOrder=$sortOrder";
@@ -38,10 +37,7 @@ class RfqServices {
     ResponseModel responseModel = await _client.customRequest(
       'GET',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("getRFQs==================> $responseModel");
@@ -50,32 +46,23 @@ class RfqServices {
       final itemsJson = responseModel.data["data"]["items"] ?? [];
       final metaJson = responseModel.data["data"]["meta"] ?? {};
 
-      List<RfqModel> rfqs =
-          List<RfqModel>.from(itemsJson.map((e) => RfqModel.fromJson(e)));
+      List<RfqModel> rfqs = List<RfqModel>.from(itemsJson.map((e) => RfqModel.fromJson(e)));
 
-      return {
-        "items": rfqs,
-        "meta": metaJson,
-      };
+      return {"items": rfqs, "meta": metaJson};
     }
 
     throw Exception(responseModel.data["message"] ?? "Failed to fetch RFQs");
   }
 
   Future<RfqModel> getRFQDetail(String rfqId) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kGetRFQDetailsUrl}/$rfqId";
 
     ResponseModel responseModel = await _client.customRequest(
       'GET',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("getRFQDetail==================> $responseModel");
@@ -89,9 +76,7 @@ class RfqServices {
   }
 
   Future<RfqModel> updateRFQ(String rfqId, Map<String, dynamic> updateData) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kUpdateRFQUrl}/$rfqId";
 
@@ -99,10 +84,7 @@ class RfqServices {
       'PATCH',
       url: url,
       requestBody: updateData,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("updateRFQ==================> $responseModel");
@@ -116,9 +98,7 @@ class RfqServices {
   }
 
   Future<RfqModel> updateRFQStatus(String rfqId, String status) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kUpdateRFQStatusUrl}/$rfqId/status";
 
@@ -126,10 +106,7 @@ class RfqServices {
       'PATCH',
       url: url,
       requestBody: {"status": status},
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("updateRFQStatus==================> $responseModel");
@@ -141,21 +118,16 @@ class RfqServices {
 
     throw Exception(responseModel.data["message"] ?? "Failed to update RFQ status");
   }
-  
+
   Future<String> deleteRFQ(String rfqId) async {
-    final token = await _sessionManagement.getSessionToken(
-      tokenKey: SessionTokenKeys.kUserTokenKey,
-    );
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kDeleteRFQUrl}/$rfqId";
 
     ResponseModel responseModel = await _client.customRequest(
       'DELETE',
       url: url,
-      requestHeader: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
     );
 
     log("deleteRFQ==================> $responseModel");

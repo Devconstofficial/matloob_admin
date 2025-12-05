@@ -88,9 +88,11 @@ const String kContactForPrice = "Contact for price";
 const String kContactForPriceHint = "SAR X.XX";
 const String kProductImages = "Product images";
 const String kProjectDescription = "Project Description";
-const String kProjectDescriptionHint = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+const String kProjectDescriptionHint =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 const String kReject = "Reject";
 const String kEdit = "Edit";
+const String kUpdate = "Update";
 const String kApprove = "Approve";
 const String kEditApprove = "Edit & Approve";
 const String kCancel = "Cancel";
@@ -126,15 +128,8 @@ const String kMedicalProducts = "Medical Products";
 const String kMedicalServices = "Medical Services";
 const String kLaboratoriesEquipment = "Laboratories and equipment";
 
-
-
-
-
-
-
-
-
 //Routs
+const String kNotFoundRoute = '/404';
 const String kAuthScreenRoute = "/AuthScreenRoute";
 const String kSendOtpScreenRoute = "/SendOtpScreenRoute";
 const String kVerifyOtpScreenRoute = "/VerifyOtpScreenRoute";
