@@ -42,6 +42,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   late TextEditingController priceController;
+  late TextEditingController deliveryController;
 
   late RxString selectedDelivery;
   late RxString selectedCondition;
@@ -59,6 +60,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
     descriptionController = TextEditingController(text: widget.rfq.description);
     priceController = TextEditingController(text: widget.rfq.price > 0 ? widget.rfq.price.toStringAsFixed(0) : "");
     selectedDelivery = (widget.rfq.isWantDelivery ? "نعم" : "لا").obs;
+    deliveryController = TextEditingController(text: widget.rfq.isWantDelivery ? "نعم" : "لا");
     selectedCondition = widget.rfq.condition.obs;
     selectedStatus = widget.rfq.status.name.obs;
 
@@ -72,6 +74,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
     titleController.dispose();
     descriptionController.dispose();
     priceController.dispose();
+    deliveryController.dispose();
     super.dispose();
   }
 
@@ -128,12 +131,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
       if (isImage) {
         result = await FilePicker.platform.pickFiles(type: FileType.image, allowMultiple: true, withData: true);
       } else {
-        result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx'],
-          allowMultiple: true,
-          withData: true,
-        );
+        result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx'], allowMultiple: true, withData: true);
       }
 
       if (result != null && result.files.isNotEmpty) {
@@ -176,12 +174,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                                   Image.asset(fileIconAsset, height: 20.h, width: 20.w),
                                   SizedBox(width: 5.w),
                                   Expanded(
-                                    child: Text(
-                                      item.displayName,
-                                      style: AppStyles.blackTextStyle().copyWith(fontSize: 10.sp),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
+                                    child: Text(item.displayName, style: AppStyles.blackTextStyle().copyWith(fontSize: 10.sp), overflow: TextOverflow.ellipsis, maxLines: 1),
                                   ),
                                 ],
                               ),
@@ -207,11 +200,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             child: Container(
               height: isImage ? 80.h : 40.h,
               width: isImage ? 80.w : 150.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: kBlackColor.withOpacity(0.1)),
-                color: kWhiteColor,
-              ),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), border: Border.all(color: kBlackColor.withOpacity(0.1)), color: kWhiteColor),
               child: Center(child: Icon(isImage ? Icons.add_a_photo : Icons.add, color: kBlackColor.withOpacity(0.5))),
             ),
           ),
@@ -232,12 +221,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Text(
-                CommonCode().t(LocaleKeys.rfqInformation),
-                style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300),
-              ),
-            ),
+            Center(child: Text(CommonCode().t(LocaleKeys.rfqInformation), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300))),
             SizedBox(height: 11.h),
             Row(
               children: [
@@ -256,10 +240,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                                 if (loadingProgress == null) return child;
                                 return Center(
                                   child: CircularProgressIndicator(
-                                    value:
-                                        loadingProgress.expectedTotalBytes != null
-                                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                            : null,
+                                    value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
                                   ),
                                 );
                               },
@@ -295,14 +276,17 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
                   : Get.locale?.languageCode == 'ar'
                   ? widget.rfq.subSubcategory.arName
                   : widget.rfq.subSubcategory.enName}",
-              style: AppStyles.blackTextStyle().copyWith(fontSize: 14.sp, fontWeight: FontWeight.w400, color: kBlackColor.withOpacity(0.6)),
+              style: GoogleFonts.roboto(fontSize: 15.sp, fontWeight: FontWeight.w400, color: kBlackColor),
             ),
 
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.delivery), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(selected: selectedDelivery, items: const ["نعم", "لا"], hint: "Delivery Required"),
 
+            // Text(selectedDelivery.value, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
+            _customTextField(controller: deliveryController, hintText: CommonCode().t(LocaleKeys.delivery), readOnly: true),
+
+            // CustomDropdown(selected: selectedDelivery, items: const ["نعم", "لا"], hint: "Delivery Required"),
             SizedBox(height: 16.h),
             Text(kLocation, style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
@@ -316,11 +300,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.status), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            CustomDropdown(
-              selected: selectedStatus,
-              items: const ["Pending", "Accepted", "Rejected", "Completed", "Cancelled"],
-              hint: "Select Status",
-            ),
+            CustomDropdown(selected: selectedStatus, items: const ["Pending", "Accepted", "Rejected", "Completed", "Cancelled"], hint: "Select Status"),
 
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.targetPrice), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
@@ -335,12 +315,7 @@ class _ViewDetailModelState extends State<ViewDetailModel> {
             SizedBox(height: 16.h),
             Text(CommonCode().t(LocaleKeys.description), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
             SizedBox(height: 8.h),
-            _customTextField(
-              controller: descriptionController,
-              hintText: CommonCode().t(LocaleKeys.enterRfqDescription),
-              maxLines: 6,
-              readOnly: false,
-            ),
+            _customTextField(controller: descriptionController, hintText: CommonCode().t(LocaleKeys.enterRfqDescription), maxLines: 6, readOnly: false),
 
             SizedBox(height: 32.h),
             Text(CommonCode().t(LocaleKeys.productImage), style: AppStyles.blackTextStyle().copyWith(fontSize: 16, fontWeight: FontWeight.w300)),
