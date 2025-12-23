@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:matloob_admin/custom_widgets/custom_snackbar.dart';
 import 'package:matloob_admin/custom_widgets/view_details_dialog.dart';
@@ -13,6 +14,11 @@ import 'package:matloob_admin/utils/image_picker_services.dart';
 import 'package:matloob_admin/web_services/rfq_services.dart';
 import 'package:matloob_admin/web_services/store_services.dart';
 import 'package:matloob_admin/web_services/user_services.dart';
+
+import '../../../models/rfq_categories_model.dart';
+import '../../../models/rfq_sub_categories_model.dart';
+import '../../../models/rfq_sub_sub_categories_model.dart';
+import '../../../web_services/medical_products_services.dart';
 
 class DashboardController extends GetxController {
   final RxList<Store> storeRequests = <Store>[].obs;
@@ -35,10 +41,28 @@ class DashboardController extends GetxController {
   RxInt totalRfqs = 0.obs;
   RxInt totalPendingRfqs = 0.obs;
 
+  final MedicalProductsServices productServices = MedicalProductsServices();
+  final RxString rfqSelectedCategory = "".obs;
+  final RxString rfqSelectedCategoryId = "".obs;
+
+  final RxString rfqSelectedSubCategory = "".obs;
+  final RxString rfqSelectedSubCategoryId = "".obs;
+  final RxString rfqSelectedSubSubCategory = "".obs;
+  final RxString rfqSelectedSubSubCategoryId = "".obs;
+
+  RxList<RfqCategoriesModel> rfqCategoriesList = RxList();
+  Rx<RfqCategoriesModel?> rfqSelectedCategoriesObj = Rx(RfqCategoriesModel());
+  RxList<RfqSubCategoriesModel> rfqSubcategoriesList = RxList();
+  Rx<RfqSubCategoriesModel?> rfqSelectedSubCategoriesObj = Rx(RfqSubCategoriesModel());
+  RxList<RfqSubSubCategoriesModel> rfqSubSubcategoriesModelList = RxList();
+  Rx<RfqSubSubCategoriesModel?> rfqSelectedSubSubCategoriesObj = Rx(RfqSubSubCategoriesModel());
+  RxList<String> subSubcategoriesList = RxList();
+
   @override
   void onInit() {
     super.onInit();
     fetchDashboardData();
+    getRfqCategories();
   }
 
   Future<void> fetchDashboardData() async {
@@ -225,6 +249,101 @@ class DashboardController extends GetxController {
       showCustomSnackbar("Error", "Failed to update RFQ status");
     } finally {
       isLoadingRFQStatus(false);
+    }
+  }
+
+  Future getRfqCategories() async {
+    try {
+      var result = await productServices.getProductCategories();
+
+      if (result is List<RfqCategoriesModel> && result.isNotEmpty) {
+        rfqCategoriesList.assignAll(result);
+        rfqCategoriesList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+      } else {}
+    } catch (e) {
+      print("getRfqCategories Exception $e");
+      showCustomSnackbar("Error", "Something went wrong, please try again");
+      return false;
+    }
+  }
+
+  Future getRfqSubCategories({required String categoryId, bool isFromDropDown = false, RfqCategoriesModel? previousCategory, bool isEdit = false}) async {
+    try {
+      rfqSubcategoriesList.clear();
+      rfqSubSubcategoriesModelList.clear();
+
+      var result = await productServices.getProductSubCategories(categoryId: categoryId);
+
+      if (result is List<RfqSubCategoriesModel> && result.isNotEmpty) {
+        rfqSubcategoriesList.assignAll(result);
+        rfqSubcategoriesList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+
+        if (isEdit) {
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubCategoriesObj.value?.arName : rfqSelectedSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubCategory.value = categoryName;
+          rfqSelectedSubCategoryId.value = rfqSelectedSubCategoriesObj.value?.id ?? "";
+          return true;
+        } else {
+          rfqSelectedSubCategoriesObj.value = null;
+          // selectedSubCategoriesObj.value = subcategoriesList[0];
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubCategoriesObj.value?.arName : rfqSelectedSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubCategory.value = categoryName;
+          rfqSelectedSubCategoryId.value = rfqSelectedSubCategoriesObj.value?.id ?? "";
+          return true;
+        }
+      } else if (result is String && result.toLowerCase() == "coming soon") {
+        // Revert to previous category selection
+        if (previousCategory != null) {
+          rfqSelectedCategoriesObj.value = previousCategory;
+          String categoryName = (Get.locale?.languageCode == 'ar' ? previousCategory.arName : previousCategory.enName) ?? "";
+          rfqSelectedCategory.value = categoryName;
+          rfqSelectedCategoryId.value = previousCategory.id ?? '';
+        }
+
+        rfqSelectedSubCategoryId.value = '';
+        rfqSelectedSubSubCategoryId.value = '';
+        showCustomSnackbar("Coming Soon", "We're working hard to bring you something amazing.Stay tuned for the launch!", backgroundColor: Colors.orange);
+      } else {}
+      return false;
+    } catch (e) {
+      print("getRfqSubCategories Exception $e");
+      showCustomSnackbar("Error", "Something went wrong, please try again");
+      return false;
+    }
+  }
+
+  Future getRfqSubSubCategories({required String categoryId, required String subCategoryId, bool isFromDropDown = false, bool isEdit = false}) async {
+    try {
+      rfqSubSubcategoriesModelList.clear();
+
+      var result = await productServices.getRfqsSubSubCategories(categoryId: categoryId, subCategoryId: subCategoryId);
+
+      if (result is List<RfqSubSubCategoriesModel> && result.isNotEmpty) {
+        rfqSubSubcategoriesModelList.assignAll(result);
+        rfqSubSubcategoriesModelList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+
+        if (isEdit) {
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubSubCategoriesObj.value?.arName : rfqSelectedSubSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubSubCategory.value = categoryName;
+          rfqSelectedSubSubCategoryId.value = rfqSelectedSubSubCategoriesObj.value?.id ?? "";
+          return true;
+        } else {
+          rfqSelectedSubSubCategoriesObj.value = null;
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubSubCategoriesObj.value?.arName : rfqSelectedSubSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubSubCategory.value = categoryName;
+          rfqSelectedSubSubCategoryId.value = rfqSelectedSubSubCategoriesObj.value?.id ?? "";
+          return true;
+        }
+      } else if (result is String && result.toLowerCase() == "coming soon") {
+        rfqSelectedSubSubCategoryId.value = '';
+        showCustomSnackbar("Coming Soon", "We're working hard to bring you something amazing.Stay tuned for the launch!", backgroundColor: Colors.orange);
+      } else {}
+
+      return false;
+    } catch (e) {
+      print("getRfqSubSubCategories Exception $e");
+      showCustomSnackbar("Error", "Something went wrong, please try again");
+      return false;
     }
   }
 }

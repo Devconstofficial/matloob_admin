@@ -19,23 +19,12 @@ class StoreServices {
   final HTTPRequestClient _client = HTTPRequestClient();
   final SessionManagement _sessionManagement = SessionManagement();
 
-  Future<Map<String, dynamic>> getStores({
-    String? q,
-    String? status,
-    int page = 1,
-    int limit = 10,
-    String sortField = "createdAt",
-    String sortOrder = "desc",
-  }) async {
+  Future<Map<String, dynamic>> getStores({String? q, String? status, int page = 1, int limit = 10, String sortField = "createdAt", String sortOrder = "desc"}) async {
     final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
     final url = "${WebUrls.kGetAllStoresUrl}?q=${q ?? ''}&status=${status ?? ''}&page=$page&limit=$limit&sortField=$sortField&sortOrder=$sortOrder";
 
-    ResponseModel responseModel = await _client.customRequest(
-      'GET',
-      url: url,
-      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-    );
+    ResponseModel responseModel = await _client.customRequest('GET', url: url, requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
 
     log("getStores==================> $responseModel");
     print("getStores==================> Data ${responseModel.data}");
@@ -57,11 +46,7 @@ class StoreServices {
 
     final url = "${WebUrls.kGetStoreDetailsUrl}/$storeId";
 
-    ResponseModel responseModel = await _client.customRequest(
-      'GET',
-      url: url,
-      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-    );
+    ResponseModel responseModel = await _client.customRequest('GET', url: url, requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
 
     log("getStoreDetail==================> $responseModel");
 
@@ -122,11 +107,7 @@ class StoreServices {
 
     final url = "${WebUrls.kDeleteStoreUrl}/$storeId";
 
-    ResponseModel responseModel = await _client.customRequest(
-      'DELETE',
-      url: url,
-      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-    );
+    ResponseModel responseModel = await _client.customRequest('DELETE', url: url, requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
 
     log("deleteStore==================> $responseModel");
 
@@ -141,10 +122,15 @@ class StoreServices {
     required String userId,
     required String logo,
     required String companyName,
+    required String bio,
     required String companyNumber,
     required String location,
     required String speciality,
     String storeStatus = 'Accepted',
+
+    required String categoryId,
+    required String subcategoryId,
+    required String subSubcategoryId,
   }) async {
     final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
 
@@ -154,10 +140,14 @@ class StoreServices {
       "userId": userId,
       "logo": logo,
       "companyName": companyName,
+      "bio": bio,
       "companyNumber": companyNumber,
       "location": location,
       "speciality": speciality,
       "storeStatus": storeStatus,
+      "categoryId": categoryId,
+      "subcategoryId": subcategoryId,
+      "subSubcategoryId": subSubcategoryId,
     };
 
     ResponseModel responseModel = await _client.customRequest(

@@ -9,6 +9,7 @@ import 'package:matloob_admin/web_services/web_urls.dart';
 
 import '../models/rfq_categories_model.dart';
 import '../models/rfq_sub_categories_model.dart';
+import '../models/rfq_sub_sub_categories_model.dart';
 
 class MedicalProductsServices {
   MedicalProductsServices._();
@@ -73,11 +74,7 @@ class MedicalProductsServices {
 
     final url = "${WebUrls.kDeleteProductUrl}/$productId";
 
-    ResponseModel responseModel = await _client.customRequest(
-      'DELETE',
-      url: url,
-      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
-    );
+    ResponseModel responseModel = await _client.customRequest('DELETE', url: url, requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'});
 
     log("deleteProduct==================> $responseModel");
 
@@ -110,6 +107,19 @@ class MedicalProductsServices {
     );
     if (responseModel.statusCode >= 200 && responseModel.statusCode <= 230 && (responseModel.data['data']['items'] as List).isNotEmpty) {
       return (responseModel.data['data']['items'] as List).map((json) => RfqSubCategoriesModel.fromJson(json)).toList();
+    }
+    return responseModel.data["message"] ?? responseModel.statusDescription;
+  }
+
+  Future<dynamic> getRfqsSubSubCategories({required String categoryId, required String subCategoryId}) async {
+    final token = await _sessionManagement.getSessionToken(tokenKey: SessionTokenKeys.kUserTokenKey);
+    ResponseModel responseModel = await _client.customRequest(
+      'GET',
+      url: "${WebUrls.kGetRfqCategoriesUrl}?category=$categoryId&subcategory=$subCategoryId",
+      requestHeader: {'Content-Type': 'application/json', 'Authorization': 'Baerer $token'},
+    );
+    if (responseModel.statusCode >= 200 && responseModel.statusCode <= 230 && (responseModel.data['data']['items'] as List).isNotEmpty) {
+      return (responseModel.data['data']['items'] as List).map((json) => RfqSubSubCategoriesModel.fromJson(json)).toList();
     }
     return responseModel.data["message"] ?? responseModel.statusDescription;
   }

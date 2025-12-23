@@ -42,6 +42,7 @@
   "pendingStoreRequests": "طلبات المتاجر المعلقة",
   "pendingRFQRequests": "طلبات عروض الأسعار المعلقة",
   "companyName": "اسم الشركة",
+  "companyBio": "bio",
   "companyNumber": "رقم الشركة",
   "location": "الموقع",
   "speciality": "التخصص",

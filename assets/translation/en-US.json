@@ -42,6 +42,7 @@
   "pendingStoreRequests": "Pending Store Requests",
   "pendingRFQRequests": "Pending RFQ Requests",
   "companyName": "Company Name",
+  "companyBio": "Bio",
   "companyNumber": "Company Number",
   "location": "Location",
   "speciality": "Speciality",

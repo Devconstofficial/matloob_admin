@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,9 @@ import 'package:matloob_admin/utils/app_strings.dart';
 import 'package:matloob_admin/utils/app_styles.dart';
 import 'package:matloob_admin/utils/common_code.dart';
 
+import '../models/rfq_categories_model.dart';
+import '../models/rfq_sub_categories_model.dart';
+import '../models/rfq_sub_sub_categories_model.dart';
 import '../utils/app_colors.dart';
 import 'custom_dropdown.dart';
 
@@ -24,14 +28,7 @@ class ViewStoreDetailModel extends StatefulWidget {
   RxString selectedStatus;
   Store store;
 
-  ViewStoreDetailModel({
-    super.key,
-    this.showEditApprove = false,
-    this.onEdit,
-    this.showStoreEdit = false,
-    required this.selectedStatus,
-    required this.store,
-  });
+  ViewStoreDetailModel({super.key, this.showEditApprove = false, this.onEdit, this.showStoreEdit = false, required this.selectedStatus, required this.store});
 
   @override
   State<ViewStoreDetailModel> createState() => _ViewStoreDetailModelState();
@@ -50,8 +47,18 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
     companyNameController = TextEditingController(text: widget.store.companyName);
     contactNumberController = TextEditingController(text: widget.store.companyNumber);
     locationController = TextEditingController(text: widget.store.location);
-    controller.specialityController.value =
-        CommonCode().isEnglish(widget.store.speciality) ? widget.store.speciality.toTitleCase() : widget.store.speciality;
+    controller.specialityController.value = CommonCode().isEnglish(widget.store.speciality) ? widget.store.speciality.toTitleCase() : widget.store.speciality;
+    controller.getRfqCategories();
+    controller.rfqSelectedCategory.value = widget.store.category is String ? widget.store.category : widget.store.category.arName;
+    controller.rfqSelectedCategoriesObj.value = widget.store.category;
+
+    controller.rfqSelectedSubCategory.value = widget.store.subcategory is String ? widget.store.subcategory : widget.store.subcategory.arName;
+    controller.rfqSelectedSubCategoriesObj.value = widget.store.subcategory;
+    controller.getRfqSubCategories(categoryId: widget.store.category.id, isFromDropDown: true, isEdit: true);
+
+    controller.rfqSelectedSubSubCategory.value = widget.store.subSubcategory is String ? widget.store.subSubcategory : widget.store.subSubcategory.arName;
+    controller.rfqSelectedSubSubCategoriesObj.value = widget.store.subSubcategory;
+    controller.getRfqSubSubCategories(subCategoryId: widget.store.subcategory.id, categoryId: widget.store.category.id, isFromDropDown: true, isEdit: true);
   }
 
   Widget customTextField({
@@ -88,38 +95,123 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
             SizedBox(height: 11.h),
             Row(
               children: [
-                Expanded(
-                  child: SizedBox(height: 48.h, child: customTextField(hintText: kCompanyName, controller: companyNameController, readOnly: true)),
-                ),
+                Expanded(child: SizedBox(height: 48.h, child: customTextField(hintText: kCompanyName, controller: companyNameController, readOnly: true))),
                 SizedBox(width: 11.w),
-                Expanded(
-                  child: SizedBox(
-                    height: 48.h,
-                    child: customTextField(hintText: kContactNumber, controller: contactNumberController, readOnly: true),
-                  ),
-                ),
+                Expanded(child: SizedBox(height: 48.h, child: customTextField(hintText: kContactNumber, controller: contactNumberController, readOnly: true))),
               ],
             ),
-            SizedBox(height: 11.h),
+            /*SizedBox(height: 11.h),
             Row(
               children: [
-                Expanded(
-                  child: SizedBox(
-                    height: 48.h,
-                    child: customTextField(hintText: CommonCode().t(LocaleKeys.location), controller: locationController, readOnly: false),
-                  ),
-                ),
+                Expanded(child: SizedBox(height: 48.h, child: customTextField(hintText: CommonCode().t(LocaleKeys.location), controller: locationController, readOnly: false))),
                 SizedBox(width: 11.w),
                 Expanded(
                   child: SizedBox(
                     height: 56.h,
                     child: CustomDropdown(
                       selected: controller.specialityController,
-                      items:
-                          CommonCode().isEnglish(controller.specialityController.value)
-                              ? ["Services", "Product", "Both"]
-                              : ["الخدمات", "المنتج", "كلاهما"],
+                      items: CommonCode().isEnglish(controller.specialityController.value) ? ["Services", "Product", "Both"] : ["الخدمات", "المنتج", "كلاهما"],
                       hint: CommonCode().t(LocaleKeys.updateStoreStatus),
+                    ),
+                  ),
+                ),
+              ],
+            ),*/
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Expanded(child: SizedBox(height: 48.h, child: customTextField(hintText: CommonCode().t(LocaleKeys.location), controller: locationController, readOnly: false))),
+                SizedBox(width: 11.w),
+                Expanded(
+                  child: SizedBox(
+                    height: 56.h,
+                    child: CustomDropdownWithModel<RfqCategoriesModel>(
+                      selected: controller.rfqSelectedCategoriesObj,
+                      items: controller.rfqCategoriesList,
+                      hint: "",
+                      itemLabel: (category) => (context.locale.languageCode == 'ar' ? category.arName : category.enName) ?? "",
+                      onChanged: (value) async {
+                        // Optional: Do something when selection changes
+
+                        if (value != null) {
+                          String? categoryName = context.locale.languageCode == 'ar' ? value.arName : value.enName;
+
+                          bool hasData = await controller.getRfqSubCategories(
+                            categoryId: value.id!,
+                            isFromDropDown: true,
+                            previousCategory: controller.rfqSelectedCategoriesObj.value,
+                          );
+                          if (hasData) {
+                            controller.rfqSelectedCategory.value = categoryName ?? '';
+                            controller.rfqSelectedCategoryId.value = value.id ?? '';
+                            controller.rfqSelectedCategoriesObj.value = value;
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ) /*Expanded(
+                  child: SizedBox(
+                    height: 56.h,
+                    child: CustomDropdown(
+                      selected: controller.specialityController,
+                      items: CommonCode().isEnglish(controller.specialityController.value) ? ["Services", "Product", "Both"] : ["الخدمات", "المنتج", "كلاهما"],
+                      hint: CommonCode().t(LocaleKeys.updateStoreStatus),
+                    ),
+                  ),
+                ),*/,
+              ],
+            ),
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 56.h,
+                    child: CustomDropdownWithModel<RfqSubCategoriesModel>(
+                      selected: controller.rfqSelectedSubCategoriesObj,
+                      items: controller.rfqSubcategoriesList,
+                      hint: "Select Category",
+                      itemLabel: (category) => (context.locale.languageCode == 'ar' ? category.arName : category.enName) ?? "",
+                      onChanged: (value) async {
+                        // Optional: Do something when selection changes
+
+                        if (value != null) {
+                          String? categoryName = context.locale.languageCode == 'ar' ? value.arName : value.enName;
+
+                          bool hasData = await controller.getRfqSubSubCategories(categoryId: value.categoryId!, subCategoryId: value.id!, isFromDropDown: true);
+                          if (hasData) {
+                            controller.rfqSelectedCategory.value = categoryName ?? '';
+                            controller.rfqSelectedSubCategoryId.value = value.id ?? '';
+
+                            controller.rfqSelectedSubCategoriesObj.value = value;
+                          }
+                          print("Selected: ${value.id} - ${categoryName}");
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(width: 11.w),
+                Expanded(
+                  child: SizedBox(
+                    height: 56.h,
+                    child: CustomDropdownWithModel<RfqSubSubCategoriesModel>(
+                      selected: controller.rfqSelectedSubSubCategoriesObj,
+                      items: controller.rfqSubSubcategoriesModelList,
+                      hint: "Select Category",
+                      itemLabel: (category) => (context.locale.languageCode == 'ar' ? category.arName : category.enName) ?? "",
+                      onChanged: (value) {
+                        // Optional: Do something when selection changes
+
+                        if (value != null) {
+                          String? categoryName = context.locale.languageCode == 'ar' ? value.arName : value.enName;
+
+                          controller.rfqSelectedSubCategory.value = categoryName ?? '';
+                          controller.rfqSelectedSubSubCategoryId.value = value.id ?? '';
+                          controller.rfqSelectedSubSubCategoriesObj.value = value;
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -188,12 +280,20 @@ class _ViewStoreDetailModelState extends State<ViewStoreDetailModel> {
                           : CustomButton(
                             title: CommonCode().t(LocaleKeys.update),
                             onTap: () async {
+                              if (controller.rfqSelectedSubCategoryId.value.isEmpty || controller.rfqSelectedSubSubCategoryId.value.isEmpty) {
+                                showCustomSnackbar("Error", "Sub Category and sub sub category not selected");
+                                return;
+                              }
                               final Map<String, dynamic> updateData = {
                                 "companyName": companyNameController.text,
                                 "companyNumber": contactNumberController.text,
                                 "location": locationController.text,
                                 "speciality": controller.specialityController.value,
                                 "storeStatus": widget.selectedStatus.value,
+
+                                "categoryId": controller.rfqSelectedCategoryId.value,
+                                "subcategoryId": controller.rfqSelectedSubCategoryId.value,
+                                "subSubcategoryId": controller.rfqSelectedSubSubCategoryId.value,
                               };
 
                               await controller.updateStoreDetails(storeId: widget.store.id, updateData: updateData);

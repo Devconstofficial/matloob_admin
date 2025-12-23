@@ -22,6 +22,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../models/rfq_categories_model.dart';
 import '../../../models/rfq_sub_categories_model.dart';
+import '../../../models/rfq_sub_sub_categories_model.dart';
 
 class StoreController extends GetxController {
   final StoreServices storeServices = StoreServices();
@@ -53,6 +54,22 @@ class StoreController extends GetxController {
   final RxString selectedSubCategory = "".obs;
   final RxString selectedSubCategoryId = "".obs;
 
+  final RxString rfqSelectedCategory = "".obs;
+  final RxString rfqSelectedCategoryId = "".obs;
+
+  final RxString rfqSelectedSubCategory = "".obs;
+  final RxString rfqSelectedSubCategoryId = "".obs;
+  final RxString rfqSelectedSubSubCategory = "".obs;
+  final RxString rfqSelectedSubSubCategoryId = "".obs;
+
+  RxList<RfqCategoriesModel> rfqCategoriesList = RxList();
+  Rx<RfqCategoriesModel?> rfqSelectedCategoriesObj = Rx(RfqCategoriesModel());
+  RxList<RfqSubCategoriesModel> rfqSubcategoriesList = RxList();
+  Rx<RfqSubCategoriesModel?> rfqSelectedSubCategoriesObj = Rx(RfqSubCategoriesModel());
+  RxList<RfqSubSubCategoriesModel> rfqSubSubcategoriesModelList = RxList();
+  Rx<RfqSubSubCategoriesModel?> rfqSelectedSubSubCategoriesObj = Rx(RfqSubSubCategoriesModel());
+  RxList<String> subSubcategoriesList = RxList();
+
   Future<void> fetchUsersBasic() async {
     try {
       isFetchingUsers.value = true;
@@ -72,20 +89,7 @@ class StoreController extends GetxController {
 
       var excel = Excel.createExcel();
       Sheet sheet = excel[excel.getDefaultSheet() ?? 'Stores'];
-      final headers = [
-        "Store ID",
-        "Company Name",
-        "Company Number",
-        "Location",
-        "Speciality",
-        "Status",
-        "Clicks",
-        "Views",
-        "Created At",
-        "Updated At",
-        "User Info",
-        "Products",
-      ];
+      final headers = ["Store ID", "Company Name", "Company Number", "Location", "Speciality", "Status", "Clicks", "Views", "Created At", "Updated At", "User Info", "Products"];
       sheet.appendRow(headers.map((h) => TextCellValue(h)).toList());
 
       for (var store in storeRequests) {
@@ -153,6 +157,7 @@ class StoreController extends GetxController {
     await fetchStores();
     await fetchUsersBasic();
     getProductCategories();
+    getRfqCategories();
     searchController.addListener(() {
       searchText.value = searchController.text;
       currentPage.value = 1;
@@ -229,10 +234,14 @@ class StoreController extends GetxController {
     required String userId,
     required String logo,
     required String companyName,
+    required String bio,
     required String companyNumber,
     required String location,
     required String speciality,
     String storeStatus = 'Accepted',
+    required String categoryId,
+    required String subcategoryId,
+    required String subSubcategoryId,
   }) async {
     try {
       isAdding.value = true;
@@ -240,10 +249,14 @@ class StoreController extends GetxController {
         userId: userId,
         logo: logo,
         companyName: companyName,
+        bio: bio,
         companyNumber: companyNumber,
         location: location,
         speciality: speciality,
         storeStatus: storeStatus,
+        categoryId: categoryId,
+        subcategoryId: subcategoryId,
+        subSubcategoryId: subSubcategoryId,
       );
       await fetchStores();
       Get.back();
@@ -435,11 +448,7 @@ class StoreController extends GetxController {
       } else if (result is String && result.toLowerCase() == "coming soon") {
         isDataLoading.value = false;
 
-        showCustomSnackbar(
-          "Coming Soon",
-          "We're working hard to bring you something amazing.Stay tuned for the launch!",
-          backgroundColor: Colors.orange,
-        );
+        showCustomSnackbar("Coming Soon", "We're working hard to bring you something amazing.Stay tuned for the launch!", backgroundColor: Colors.orange);
         // Get.dialog(ComingSoonDialog(image: kComingSoonImage, text: lt.tr('kComingSoon'), details: lt.tr('kComingSoonMsg')));
       } else {
         isDataLoading.value = false;
@@ -465,5 +474,104 @@ class StoreController extends GetxController {
   void selectSub(RfqSubCategoriesModel value) {
     selectedSubCategory.value = value.arName ?? '';
     selectedSubCategoryId.value = value.id ?? '';
+  }
+
+  Future getRfqCategories() async {
+    try {
+      isListLoading.value = true;
+      var result = await productServices.getProductCategories();
+
+      if (result is List<RfqCategoriesModel> && result.isNotEmpty) {
+        rfqCategoriesList.assignAll(result);
+        rfqCategoriesList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+        isListLoading.value = false;
+      } else {
+        isListLoading.value = false;
+      }
+    } catch (e) {
+      isListLoading.value = false;
+    }
+  }
+
+  Future getRfqSubCategories({required String categoryId, bool isFromDropDown = false, RfqCategoriesModel? previousCategory, bool isEdit = false}) async {
+    try {
+      rfqSubcategoriesList.clear();
+      rfqSubSubcategoriesModelList.clear();
+      isDataLoading.value = true;
+      var result = await productServices.getProductSubCategories(categoryId: categoryId);
+
+      if (result is List<RfqSubCategoriesModel> && result.isNotEmpty) {
+        rfqSubcategoriesList.assignAll(result);
+        rfqSubcategoriesList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+        isDataLoading.value = false;
+        if (isEdit) {
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubCategoriesObj.value?.arName : rfqSelectedSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubCategory.value = categoryName;
+          rfqSelectedSubCategoryId.value = rfqSelectedSubCategoriesObj.value?.id ?? "";
+          return true;
+        } else {
+          rfqSelectedSubCategoriesObj.value = null;
+          // selectedSubCategoriesObj.value = subcategoriesList[0];
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubCategoriesObj.value?.arName : rfqSelectedSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubCategory.value = categoryName;
+          rfqSelectedSubCategoryId.value = rfqSelectedSubCategoriesObj.value?.id ?? "";
+          return true;
+        }
+      } else if (result is String && result.toLowerCase() == "coming soon") {
+        // Revert to previous category selection
+        if (previousCategory != null) {
+          rfqSelectedCategoriesObj.value = previousCategory;
+          String categoryName = (Get.locale?.languageCode == 'ar' ? previousCategory.arName : previousCategory.enName) ?? "";
+          rfqSelectedCategory.value = categoryName;
+          rfqSelectedCategoryId.value = previousCategory.id ?? '';
+        }
+        showCustomSnackbar("Coming Soon", "We're working hard to bring you something amazing.Stay tuned for the launch!", backgroundColor: Colors.orange);
+      } else {
+        isDataLoading.value = false;
+      }
+      return false;
+    } catch (e) {
+      isDataLoading.value = false;
+      showCustomSnackbar("Error", "Something went wrong, please try again");
+      return false;
+    }
+  }
+
+  Future getRfqSubSubCategories({required String categoryId, required String subCategoryId, bool isFromDropDown = false, bool isEdit = false}) async {
+    try {
+      rfqSubSubcategoriesModelList.clear();
+      isDataLoading.value = true;
+      var result = await productServices.getRfqsSubSubCategories(categoryId: categoryId, subCategoryId: subCategoryId);
+
+      if (result is List<RfqSubSubCategoriesModel> && result.isNotEmpty) {
+        rfqSubSubcategoriesModelList.assignAll(result);
+        rfqSubSubcategoriesModelList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+        isDataLoading.value = false;
+        if (isEdit) {
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubSubCategoriesObj.value?.arName : rfqSelectedSubSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubSubCategory.value = categoryName;
+          rfqSelectedSubSubCategoryId.value = rfqSelectedSubSubCategoriesObj.value?.id ?? "";
+          return true;
+        } else {
+          rfqSelectedSubSubCategoriesObj.value = null;
+          String categoryName = (Get.locale?.languageCode == 'ar' ? rfqSelectedSubSubCategoriesObj.value?.arName : rfqSelectedSubSubCategoriesObj.value?.enName) ?? "";
+          rfqSelectedSubSubCategory.value = categoryName;
+          rfqSelectedSubSubCategoryId.value = rfqSelectedSubSubCategoriesObj.value?.id ?? "";
+          return true;
+        }
+      } else if (result is String && result.toLowerCase() == "coming soon") {
+        isDataLoading.value = false;
+
+        showCustomSnackbar("Coming Soon", "We're working hard to bring you something amazing.Stay tuned for the launch!", backgroundColor: Colors.orange);
+      } else {
+        isDataLoading.value = false;
+      }
+
+      return false;
+    } catch (e) {
+      isDataLoading.value = false;
+      showCustomSnackbar("Error", "Something went wrong, please try again");
+      return false;
+    }
   }
 }

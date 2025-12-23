@@ -30,6 +30,7 @@ class WebUrls extends _BaseUrl {
   static const String kCreateProductUrl = "${_BaseUrl._kBaseUrl}/product";
   static const String kDeleteProductUrl = "${_BaseUrl._kBaseUrl}/product";
   static const String kGetRfqCategoriesUrl = "https://backend.mtloobapp.com/api/public/categories";
+  // static const String kGetRfqCategoriesUrl = "https://9ec6241ddb56.ngrok-free.app/api/public/categories";
 }
 
 abstract class _BaseUrl {

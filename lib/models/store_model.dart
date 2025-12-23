@@ -1,18 +1,18 @@
 import 'package:matloob_admin/models/medical_product_model.dart';
+import 'package:matloob_admin/models/rfq_categories_model.dart';
+import 'package:matloob_admin/models/rfq_sub_categories_model.dart';
+import 'package:matloob_admin/models/rfq_sub_sub_categories_model.dart';
 import 'package:matloob_admin/models/store_click_model.dart';
+
 import 'user_model.dart';
 
-enum StoreStatus { Pending,
-  Accepted,
-  RevisonRequested,
-  Rejected,
-  Completed,
-  Cancelled }
+enum StoreStatus { Pending, Accepted, RevisonRequested, Rejected, Completed, Cancelled }
 
 class Store {
   String id = "";
   String logo = "";
   String companyName = "";
+  String bio = "";
   String companyNumber = "";
   String location = "";
   StoreStatus storeStatus = StoreStatus.Pending;
@@ -26,23 +26,31 @@ class Store {
   UserModel? user;
   List<StoreClick> storeClicks = [];
 
+  dynamic category = "";
+  dynamic subcategory = "";
+  dynamic subSubcategory = "";
+
   Store.empty();
 
   Store({
     required this.logo,
     required this.companyName,
+    required this.bio,
     required this.companyNumber,
     required this.location,
     this.storeStatus = StoreStatus.Pending,
     required this.speciality,
     this.clicks = 0,
-    this.views=0,
+    this.views = 0,
     this.createdAt,
     this.updatedAt,
     required this.userId,
     this.user,
     this.medicalProducts = const [],
     this.storeClicks = const [],
+    required this.category,
+    required this.subcategory,
+    required this.subSubcategory,
   }) {
     id = id;
   }
@@ -51,6 +59,7 @@ class Store {
     String? id,
     String? logo,
     String? companyName,
+    String? bio,
     String? companyNumber,
     String? location,
     StoreStatus? storeStatus,
@@ -63,10 +72,14 @@ class Store {
     UserModel? user,
     List<MedicalProducts>? medicalProducts,
     List<StoreClick>? storeClicks,
+    dynamic category = "",
+    dynamic subcategory = "",
+    dynamic subSubcategory = "",
   }) {
     return Store(
       logo: logo ?? this.logo,
       companyName: companyName ?? this.companyName,
+      bio: bio ?? this.bio,
       companyNumber: companyNumber ?? this.companyNumber,
       location: location ?? this.location,
       storeStatus: storeStatus ?? this.storeStatus,
@@ -79,6 +92,10 @@ class Store {
       user: user ?? this.user,
       medicalProducts: medicalProducts ?? this.medicalProducts,
       storeClicks: storeClicks ?? this.storeClicks,
+
+      category: category ?? this.category,
+      subcategory: subcategory ?? this.subcategory,
+      subSubcategory: subSubcategory ?? this.subSubcategory,
     )..id = id ?? this.id;
   }
 
@@ -86,6 +103,7 @@ class Store {
     id = json["_id"] ?? json["id"] ?? id;
     logo = json["logo"] ?? logo;
     companyName = json["companyName"] ?? companyName;
+    bio = json["bio"] ?? bio;
     companyNumber = json["companyNumber"] ?? companyNumber;
     location = json["location"] ?? location;
     speciality = json["speciality"] ?? speciality;
@@ -94,8 +112,7 @@ class Store {
 
     if (json["storeStatus"] != null) {
       storeStatus = StoreStatus.values.firstWhere(
-        (e) => e.toString().split('.').last.toLowerCase() ==
-            json["storeStatus"].toString().toLowerCase(),
+        (e) => e.toString().split('.').last.toLowerCase() == json["storeStatus"].toString().toLowerCase(),
         orElse: () => StoreStatus.Pending,
       );
     }
@@ -117,16 +134,30 @@ class Store {
     List<dynamic>? productsJson = json["MedicalProducts"] ?? json["medicalProducts"];
 
     if (productsJson != null) {
-      medicalProducts = List<MedicalProducts>.from(
-        productsJson.map((e) => MedicalProducts.fromJson(e)),
-      );
+      medicalProducts = List<MedicalProducts>.from(productsJson.map((e) => MedicalProducts.fromJson(e)));
     }
 
     if (json["storeClicks"] != null) {
-      storeClicks = List<StoreClick>.from(
-        json["storeClicks"].map((e) => StoreClick.fromJson(e)),
-      );
+      storeClicks = List<StoreClick>.from(json["storeClicks"].map((e) => StoreClick.fromJson(e)));
     }
+    category =
+        json["category"] == null
+            ? ""
+            : json["category"] != null && json["category"] is String
+            ? json["category"]
+            : RfqCategoriesModel.fromJson(json["category"]);
+    subcategory =
+        json["subcategory"] == null
+            ? ""
+            : json["subcategory"] != null && json["subcategory"] is String
+            ? json["subcategory"]
+            : RfqSubCategoriesModel.fromJson(json["subcategory"]);
+    subSubcategory =
+        json["subSubcategory"] == null
+            ? ""
+            : json["subSubcategory"] != null && json["subSubcategory"] is String
+            ? json["subSubcategory"]
+            : RfqSubSubCategoriesModel.fromJson(json["subSubcategory"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -134,6 +165,7 @@ class Store {
       "_id": id,
       "logo": logo,
       "companyName": companyName,
+      "bio": bio,
       "companyNumber": companyNumber,
       "location": location,
       "storeStatus": storeStatus.toString().split('.').last,
@@ -146,6 +178,9 @@ class Store {
       "user": user?.toJson(),
       "medicalProducts": medicalProducts.map((e) => e.toJson()).toList(),
       "storeClicks": storeClicks.map((e) => e.toJson()).toList(),
+      "category": category,
+      "subcategory": subcategory,
+      "subSubcategory": subSubcategory,
     };
   }
 
@@ -155,6 +190,7 @@ class Store {
         'id: $id, '
         'logo: $logo, '
         'companyName: $companyName, '
+        'bio: $bio, '
         'companyNumber: $companyNumber, '
         'location: $location, '
         'storeStatus: $storeStatus, '

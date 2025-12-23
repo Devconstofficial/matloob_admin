@@ -46,6 +46,7 @@ abstract class LocaleKeys {
   static const pendingStoreRequests = 'pendingStoreRequests';
   static const pendingRFQRequests = 'pendingRFQRequests';
   static const companyName = 'companyName';
+  static const companyBio = 'companyBio';
   static const companyNumber = 'companyNumber';
   static const location = 'location';
   static const speciality = 'speciality';

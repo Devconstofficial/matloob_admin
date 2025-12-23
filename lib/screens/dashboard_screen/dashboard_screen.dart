@@ -49,14 +49,7 @@ class DashboardScreen extends GetView<DashboardController> {
                     spacing: 6.h,
                     children: [
                       Text(title, style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500, fontSize: 19.sp)),
-                      Text(
-                        detail,
-                        style: AppStyles.blackTextStyle().copyWith(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 13.sp,
-                          color: kBlackShade7Color.withOpacity(0.8),
-                        ),
-                      ),
+                      Text(detail, style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w300, fontSize: 13.sp, color: kBlackShade7Color.withOpacity(0.8))),
                     ],
                   ),
                 ),
@@ -90,65 +83,18 @@ class DashboardScreen extends GetView<DashboardController> {
                         spacing: 15.w,
                         runSpacing: 15.w,
                         children: [
-                          Obx(
-                            () => insightContainer(
-                              kDoubleUserIcon,
-                              controller.totalUsers.value.toString(),
-                              CommonCode().t(LocaleKeys.totalUsers),
-                              kGreenColor,
-                            ),
-                          ),
-                          Obx(
-                            () => insightContainer(
-                              kAddStoreIcon,
-                              controller.totalStores.value.toString(),
-                              CommonCode().t(LocaleKeys.totalStores),
-                              kPrimaryColor,
-                            ),
-                          ),
-                          Obx(
-                            () => insightContainer(
-                              kAddStoreIcon,
-                              controller.totalPendingStores.value.toString(),
-                              CommonCode().t(LocaleKeys.pendingStores),
-                              kGreenColor,
-                            ),
-                          ),
-                          Obx(
-                            () => insightContainer(
-                              kAddStoreIcon,
-                              controller.totalActiveStores.value.toString(),
-                              CommonCode().t(LocaleKeys.liveStores),
-                              kPrimaryColor,
-                            ),
-                          ),
-                          Obx(
-                            () => insightContainer(
-                              kAddRfqIcon,
-                              controller.totalRfqs.value.toString(),
-                              CommonCode().t(LocaleKeys.totalRFQs),
-                              kGreenColor,
-                            ),
-                          ),
-                          Obx(
-                            () => insightContainer(
-                              kAddRfqIcon,
-                              controller.totalPendingRfqs.value.toString(),
-                              CommonCode().t(LocaleKeys.pendingRFQs),
-                              kPrimaryColor,
-                            ),
-                          ),
+                          Obx(() => insightContainer(kDoubleUserIcon, controller.totalUsers.value.toString(), CommonCode().t(LocaleKeys.totalUsers), kGreenColor)),
+                          Obx(() => insightContainer(kAddStoreIcon, controller.totalStores.value.toString(), CommonCode().t(LocaleKeys.totalStores), kPrimaryColor)),
+                          Obx(() => insightContainer(kAddStoreIcon, controller.totalPendingStores.value.toString(), CommonCode().t(LocaleKeys.pendingStores), kGreenColor)),
+                          Obx(() => insightContainer(kAddStoreIcon, controller.totalActiveStores.value.toString(), CommonCode().t(LocaleKeys.liveStores), kPrimaryColor)),
+                          Obx(() => insightContainer(kAddRfqIcon, controller.totalRfqs.value.toString(), CommonCode().t(LocaleKeys.totalRFQs), kGreenColor)),
+                          Obx(() => insightContainer(kAddRfqIcon, controller.totalPendingRfqs.value.toString(), CommonCode().t(LocaleKeys.pendingRFQs), kPrimaryColor)),
                         ],
                       ),
                       SizedBox(height: 20.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            CommonCode().t(LocaleKeys.pendingStoreRequests),
-                            style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500, fontSize: 18.sp),
-                          ),
-                        ],
+                        children: [Text(CommonCode().t(LocaleKeys.pendingStoreRequests), style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500, fontSize: 18.sp))],
                       ),
                       SizedBox(height: 12.h),
 
@@ -159,10 +105,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           padding: const EdgeInsets.all(24),
                           child: Stack(
                             children: [
-                              Container(
-                                height: 44,
-                                decoration: BoxDecoration(color: kLightBlueColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                              ),
+                              Container(height: 44, decoration: BoxDecoration(color: kLightBlueColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10))),
                               SizedBox(
                                 width: Get.width,
                                 child: Obx(() {
@@ -212,14 +155,7 @@ class DashboardScreen extends GetView<DashboardController> {
                       ),
 
                       SizedBox(height: 20.h),
-                      Row(
-                        children: [
-                          Text(
-                            CommonCode().t(LocaleKeys.pendingRFQs),
-                            style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500, fontSize: 18.sp),
-                          ),
-                        ],
-                      ),
+                      Row(children: [Text(CommonCode().t(LocaleKeys.pendingRFQs), style: AppStyles.blackTextStyle().copyWith(fontWeight: FontWeight.w500, fontSize: 18.sp))]),
                       SizedBox(height: 12.h),
 
                       Container(
@@ -229,10 +165,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           padding: const EdgeInsets.all(24),
                           child: Stack(
                             children: [
-                              Container(
-                                height: 44,
-                                decoration: BoxDecoration(color: kLightBlueColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                              ),
+                              Container(height: 44, decoration: BoxDecoration(color: kLightBlueColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10))),
                               SizedBox(
                                 width: Get.width,
                                 child: Obx(() {
@@ -259,10 +192,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                       DataColumn(label: ColumnRowWidget(title: CommonCode().t(LocaleKeys.submittedBy))),
                                       DataColumn(label: ColumnRowWidget(title: CommonCode().t(LocaleKeys.category))),
                                       DataColumn(label: ColumnRowWidget(title: CommonCode().t(LocaleKeys.city))),
-                                      DataColumn(
-                                        headingRowAlignment: MainAxisAlignment.center,
-                                        label: ColumnRowWidget(title: CommonCode().t(LocaleKeys.action)),
-                                      ),
+                                      DataColumn(headingRowAlignment: MainAxisAlignment.center, label: ColumnRowWidget(title: CommonCode().t(LocaleKeys.action))),
                                     ],
                                     rows: controller.rfqs.map((rfq) => _buildRfqDataRow(rfq, context)).toList(),
                                   );
@@ -324,18 +254,13 @@ class DashboardScreen extends GetView<DashboardController> {
                 child: GestureDetector(
                   onTap: () {
                     controller.selectedCountry.value = store.storeStatus.name;
-                    controller.specialityController.value =
-                        CommonCode().isEnglish(store.speciality) ? store.speciality.toTitleCase() : store.speciality;
-                    Get.dialog(
-                      barrierDismissible: false,
-                      ViewStoreDetailModel(showEditApprove: true, onEdit: () {}, selectedStatus: controller.selectedCountry, store: store),
-                    );
+                    controller.specialityController.value = CommonCode().isEnglish(store.speciality) ? store.speciality.toTitleCase() : store.speciality;
+                    controller.rfqSelectedCategoriesObj.value = store.category;
+                    controller.rfqSelectedSubCategoriesObj.value = store.subcategory;
+                    controller.rfqSelectedSubSubCategoriesObj.value = store.subSubcategory;
+                    Get.dialog(barrierDismissible: false, ViewStoreDetailModel(showEditApprove: true, onEdit: () {}, selectedStatus: controller.selectedCountry, store: store));
                   },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(child: SvgPicture.asset(kEditIcon, height: 16.h, width: 16.w)),
-                  ),
+                  child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: SvgPicture.asset(kEditIcon, height: 16.h, width: 16.w))),
                 ),
               ),
               Obx(
@@ -363,11 +288,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               );
                             },
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundColor: kPrimaryColor,
-                              child: Center(child: Icon(Icons.close, color: kWhiteColor, size: 14)),
-                            ),
+                            child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: Icon(Icons.close, color: kWhiteColor, size: 14))),
                           ),
                         ),
               ),
@@ -395,11 +316,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               );
                             },
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundColor: kPrimaryColor,
-                              child: Center(child: SvgPicture.asset(kCheckIcon, height: 16.h, width: 16.w)),
-                            ),
+                            child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: SvgPicture.asset(kCheckIcon, height: 16.h, width: 16.w))),
                           ),
                         ),
               ),
@@ -458,11 +375,7 @@ class DashboardScreen extends GetView<DashboardController> {
                   onTap: () {
                     Get.dialog(barrierDismissible: false, ViewDetailModel(rfq: rfq));
                   },
-                  child: CircleAvatar(
-                    radius: 14,
-                    backgroundColor: kPrimaryColor,
-                    child: Center(child: SvgPicture.asset(kEditIcon, height: 16.h, width: 16.w)),
-                  ),
+                  child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: SvgPicture.asset(kEditIcon, height: 16.h, width: 16.w))),
                 ),
               ),
               MouseRegion(
@@ -495,11 +408,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ),
                               );
                             },
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundColor: kPrimaryColor,
-                              child: Center(child: Icon(Icons.close, color: kWhiteColor, size: 14)),
-                            ),
+                            child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: Icon(Icons.close, color: kWhiteColor, size: 14))),
                           ),
                 ),
               ),
@@ -528,11 +437,7 @@ class DashboardScreen extends GetView<DashboardController> {
                               );
                             },
 
-                            child: CircleAvatar(
-                              radius: 14,
-                              backgroundColor: kPrimaryColor,
-                              child: Center(child: SvgPicture.asset(kCheckIcon, height: 16.h, width: 16.w)),
-                            ),
+                            child: CircleAvatar(radius: 14, backgroundColor: kPrimaryColor, child: Center(child: SvgPicture.asset(kCheckIcon, height: 16.h, width: 16.w))),
                           ),
                 ),
               ),
